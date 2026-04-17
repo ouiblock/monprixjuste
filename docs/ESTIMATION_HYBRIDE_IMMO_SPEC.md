@@ -1,6 +1,6 @@
 # Système d'Estimation Hybride Immobilière — Spécification Technique
 
-**Projet** : MonPrixJuste → Intégration Je Partage Immo  
+**Projet** : MonPrixJuste  
 **Version** : 2.0  
 **Date** : Février 2026  
 **Auteur** : Équipe MonPrixJuste
@@ -434,7 +434,7 @@ function calculateImmoPrice(
 
 ---
 
-## 7. Guide d'intégration pour Je Partage Immo
+## 7. Guide d'intégration pour Mon Prix Juste
 
 ### Option A — Intégration directe TypeScript
 

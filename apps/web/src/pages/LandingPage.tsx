@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Building2, Car, CheckCircle2 } from 'lucide-react';
+import { Building2, Car, CheckCircle2, FileText } from 'lucide-react';
 
 export default function LandingPage() {
   return (
@@ -14,7 +14,7 @@ export default function LandingPage() {
             className="w-full h-full object-cover"
           />
           {/* Overlay avec opacité */}
-          <div className="absolute inset-0 bg-gray-900/70"></div>
+          <div className="absolute inset-0 bg-gray-900/30"></div>
         </div>
 
         {/* Content */}
@@ -94,6 +94,34 @@ export default function LandingPage() {
               </div>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Générateur d'annonces */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <Link to="/annonces">
+            <div className="bg-gradient-to-r from-[#ff6d11] to-[#E65A00] rounded-2xl p-8 md:p-10 hover:shadow-xl transition-shadow">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-10 h-10 text-white" />
+                </div>
+                <div className="text-center md:text-left flex-1">
+                  <h3 className="text-2xl font-black text-white mb-2">
+                    Facilitez-vous la vie avec notre générateur d'annonce immobilière
+                  </h3>
+                  <p className="text-white/90 text-base font-medium">
+                    Pour les particuliers et les professionnels. Pour les particuliers : pas de conformité DGCCRF ni Loi ALUR requise. Pour les professionnels : conformité Loi Hoguet, Loi ALUR et Loi Climat. DPE, copropriété, mentions obligatoires : tout est pris en charge.
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="inline-block px-6 py-3 bg-white text-[#ff6d11] font-bold text-lg rounded-lg hover:bg-gray-100 transition-colors">
+                    Créer mon annonce
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 

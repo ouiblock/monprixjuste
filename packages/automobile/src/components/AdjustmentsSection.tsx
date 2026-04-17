@@ -34,11 +34,11 @@ export default function AdjustmentsSection() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {(['Très bon / comme neuf', 'Bon', 'Moyen / usure visible', 'À réviser / gros travaux'] as EtatGeneral[]).map((etat) => {
               const isSelected = ajustements.etatGeneral === etat;
-              const impacts: Record<EtatGeneral, string> = { 
-                'Très bon / comme neuf': '+8%', 
-                'Bon': '0%', 
-                'Moyen / usure visible': '-10%', 
-                'À réviser / gros travaux': '-20%' 
+              const impacts: Record<EtatGeneral, string> = {
+                'Très bon / comme neuf': '+4%',
+                'Bon': '0%',
+                'Moyen / usure visible': '-5%',
+                'À réviser / gros travaux': '-10%'
               };
               
               return (
@@ -87,6 +87,15 @@ export default function AdjustmentsSection() {
           <h3 className="text-lg font-black text-gray-900 mb-4">
             Options et équipements
           </h3>
+          <div className="mb-4 p-3 bg-amber-50 rounded-lg border-l-4 border-amber-500">
+            <div className="flex items-start gap-2">
+              <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800 leading-relaxed">
+                <strong>Important :</strong> Ne cochez que les équipements <strong>en option</strong> sur votre véhicule. 
+                Les équipements de série (ex: Tesla, Mercedes, BMW haut de gamme) sont déjà inclus dans la cote de base et ne doivent pas être comptabilisés deux fois.
+              </p>
+            </div>
+          </div>
           <div className="grid md:grid-cols-2 gap-4">
             <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-100 cursor-pointer transition-colors">
               <input
@@ -99,7 +108,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Toit panoramique
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+5%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -114,7 +123,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Caméra 360°
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+4%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -129,7 +138,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   GPS intégré / grand écran
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
               </div>
             </label>
 
@@ -144,7 +153,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Sièges cuir / alcantara
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+5%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -159,7 +168,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Sièges chauffants / ventilés
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
               </div>
             </label>
 
@@ -174,7 +183,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Régulateur adaptatif + maintien voie
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+4%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -189,7 +198,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Phares full LED / Matrix
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+4%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -204,7 +213,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Jantes alliage 17" ou plus
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
               </div>
             </label>
 
@@ -219,7 +228,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Équipements hiver inclus
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
               </div>
             </label>
           </div>
@@ -242,7 +251,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Carnet d'entretien complet
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+5%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -257,7 +266,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Dernière révision en concession
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+6%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
               </div>
             </label>
 
@@ -272,7 +281,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Contrôle technique valide
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+4%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
 
@@ -285,10 +294,10 @@ export default function AdjustmentsSection() {
                 onChange={(e) => setAjustements({ nombreProprietaires: Number(e.target.value) as 1 | 2 | 3 | 4 })}
                 className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6d11]"
               >
-                <option value="1">1 (+4%)</option>
+                <option value="1">1 (+2%)</option>
                 <option value="2">2 (0%)</option>
-                <option value="3">3 (-4%)</option>
-                <option value="4">4+ (-10%)</option>
+                <option value="3">3 (-2%)</option>
+                <option value="4">4+ (-5%)</option>
               </select>
             </div>
 
@@ -303,7 +312,7 @@ export default function AdjustmentsSection() {
                 <span className="text-sm font-medium text-gray-900">
                   Première main
                 </span>
-                <span className="text-xs text-[#ff6d11] ml-2">+4%</span>
+                <span className="text-xs text-[#ff6d11] ml-2">+2%</span>
               </div>
             </label>
           </div>
@@ -320,9 +329,9 @@ export default function AdjustmentsSection() {
             className="w-full md:w-1/2 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6d11] focus:border-[#ff6d11] bg-white text-gray-900"
           >
             <option value="Aucun">Aucun (0%)</option>
-            <option value="Léger cosmétique">Léger cosmétique (-8%)</option>
-            <option value="Moyen / structure">Moyen / structure (-18%)</option>
-            <option value="Grave / économique">Grave / économique (-35%)</option>
+            <option value="Léger cosmétique">Léger cosmétique (-5%)</option>
+            <option value="Moyen / structure">Moyen / structure (-10%)</option>
+            <option value="Grave / économique">Grave / économique (-20%)</option>
           </select>
           {ajustements.accidentDeclare !== 'Aucun' && (
             <p className="mt-2 text-xs text-red-600">
@@ -344,17 +353,17 @@ export default function AdjustmentsSection() {
               </label>
               <input
                 type="range"
-                min="-5"
-                max="4"
-                step="1"
+                min="-3"
+                max="2"
+                step="0.5"
                 value={ajustements.couleurBonus}
                 onChange={(e) => setAjustements({ couleurBonus: Number(e.target.value) })}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
               />
               <div className="flex justify-between text-xs text-gray-600 mt-1">
-                <span>Vive/originale (-5%)</span>
+                <span>Vive/originale (-3%)</span>
                 <span>Standard (0%)</span>
-                <span>Recherchée (+4%)</span>
+                <span>Recherchée (+2%)</span>
               </div>
             </div>
 
@@ -370,7 +379,7 @@ export default function AdjustmentsSection() {
                   <span className="text-sm font-medium text-gray-900">
                     Pneumatiques récents
                   </span>
-                  <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                  <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
                 </div>
               </label>
 
@@ -385,7 +394,7 @@ export default function AdjustmentsSection() {
                   <span className="text-sm font-medium text-gray-900">
                     Garantie constructeur restante
                   </span>
-                  <span className="text-xs text-[#ff6d11] ml-2">+8%</span>
+                  <span className="text-xs text-[#ff6d11] ml-2">+4%</span>
                 </div>
               </label>
 
@@ -400,7 +409,7 @@ export default function AdjustmentsSection() {
                   <span className="text-sm font-medium text-gray-900">
                     État intérieur impeccable
                   </span>
-                  <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                  <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
                 </div>
               </label>
 
@@ -415,7 +424,7 @@ export default function AdjustmentsSection() {
                   <span className="text-sm font-medium text-gray-900">
                     État extérieur impeccable
                   </span>
-                  <span className="text-xs text-[#ff6d11] ml-2">+3%</span>
+                  <span className="text-xs text-[#ff6d11] ml-2">+1.5%</span>
                 </div>
               </label>
             </div>

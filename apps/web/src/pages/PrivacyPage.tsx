@@ -240,15 +240,75 @@ export default function PrivacyPage() {
           <Card>
             <div className="p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                9. Contact
+                9. Mentions légales
               </h2>
               <div className="max-w-none">
                 <p className="text-gray-600 mb-4">
-                  Pour toute question sur cette politique de confidentialité ou sur MonPrixJuste :
+                  Conformément à la loi pour la confiance dans l'économie numérique (LCEN) :
+                </p>
+                <div className="bg-orange-50 p-4 rounded-lg mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Éditeur : Association HERRICHAIN</h3>
+                  <ul className="list-none space-y-1 text-gray-600">
+                    <li><strong>Type :</strong> Association Loi 1901</li>
+                    <li><strong>RNA :</strong> W641015204</li>
+                    <li><strong>Site web :</strong> <a href="https://www.herrichain.org" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">herrichain.org</a></li>
+                    <li><strong>Président :</strong> Xavier CHAUMET-NICOLAS</li>
+                    <li><strong>Mission :</strong> Promouvoir l'accès à des outils numériques gratuits et transparents</li>
+                  </ul>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Développement : Artean Digital</h3>
+                  <ul className="list-none space-y-1 text-gray-600">
+                    <li><strong>Site web :</strong> <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">arteandigital.fr</a></li>
+                    <li><strong>Description :</strong> Cabinet de conseil en stratégie digitale et IA fondé par Xavier CHAUMET-NICOLAS</li>
+                    <li><strong>Rôle :</strong> Développement technique et maintenance de MonPrixJuste pour l'association HERRICHAIN</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                10. Données personnelles (RGPD)
+              </h2>
+              <div className="max-w-none">
+                <p className="text-gray-600 mb-4">
+                  Conformément au Règlement Général sur la Protection des Données (RGPD - UE 2016/679) :
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-600 mb-4">
+                  <li><strong>Aucune collecte de données personnelles :</strong> MonPrixJuste ne collecte, ne stocke et ne transmet aucune donnée à caractère personnel</li>
+                  <li><strong>Traitement 100% local :</strong> Toutes les données sont traitées exclusivement dans votre navigateur (client-side)</li>
+                  <li><strong>Pas de transfert hors UE :</strong> Aucune donnée ne quitte votre appareil, donc aucun transfert</li>
+                  <li><strong>Pas de base de données :</strong> Nous n'avons pas de serveur backend ni de base de données</li>
+                  <li><strong>Base légale :</strong> Pas de traitement de données personnelles = RGPD non applicable par principe</li>
+                </ul>
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <h3 className="text-lg font-bold text-green-900 mb-2">DPO (Délégué à la Protection des Données)</h3>
+                  <p className="text-green-800">
+                    Pour toute question relative à la protection des données personnelles :<br />
+                    <strong>Email :</strong> <a href="mailto:contact@herrichain.org" className="text-[#ff6d11] hover:underline">contact@herrichain.org</a><br />
+                    <strong>Association :</strong> HERRICHAIN (Loi 1901, RNA : W641015204)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                11. Contact
+              </h2>
+              <div className="max-w-none">
+                <p className="text-gray-600 mb-4">
+                  Pour toute question sur cette politique de confidentialité, sur MonPrixJuste ou sur vos droits :
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-600">
-                  <li><strong>Association HERRICHAIN</strong> - RNA : W641015204</li>
-                  <li><strong>Développement technique :</strong> <a href="https://arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">Artean Digital Studio</a></li>
+                  <li><strong>DPO (Protection des données) :</strong> <a href="mailto:contact@herrichain.org" className="text-[#ff6d11] hover:underline">contact@herrichain.org</a></li>
+                  <li><strong>Association HERRICHAIN</strong> - RNA : W641015204 - <a href="https://www.herrichain.org" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">herrichain.org</a></li>
+                  <li><strong>Développement technique :</strong> <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">Artean Digital</a></li>
                   <li><strong>Transparence :</strong> Consultez le code source (open-source) pour vérifier nos affirmations</li>
                 </ul>
               </div>

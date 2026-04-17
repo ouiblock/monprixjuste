@@ -56,6 +56,16 @@ export default function Layout({ children }: LayoutProps) {
               >
                 Automobile
               </Link>
+              <Link
+                to="/annonces"
+                className={`px-5 py-2 rounded-lg text-base font-bold transition-all ${
+                  isActive('/annonces') 
+                    ? 'bg-white text-[#ff6d11]' 
+                    : 'text-white hover:bg-white/20'
+                }`}
+              >
+                Générateur d'annonces
+              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -110,6 +120,17 @@ export default function Layout({ children }: LayoutProps) {
               >
                 Automobile
               </Link>
+              <Link
+                to="/annonces"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-4 py-3 rounded-lg text-base font-bold transition-all ${
+                  isActive('/annonces') 
+                    ? 'bg-white text-[#ff6d11]' 
+                    : 'text-white hover:bg-white/20'
+                }`}
+              >
+                Générateur d'annonces
+              </Link>
             </nav>
           </div>
         )}
@@ -123,20 +144,15 @@ export default function Layout({ children }: LayoutProps) {
       {/* Footer Simple - Orange */}
       <footer className="bg-[#ff6d11] mt-20">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
-          {/* Disclaimer */}
+          {/* Mise en garde */}
           <div className="bg-white/10 rounded-lg p-6 mb-6">
+            <h3 className="text-sm font-bold text-white mb-2">⚠️ Mise en garde</h3>
             <p className="text-sm text-white leading-relaxed">
-              <strong className="font-bold">⚠️ Avertissement :</strong> MonPrixJuste est un outil indicatif. Les estimations ne constituent pas un avis de valeur professionnel. 
-              Pour toute transaction importante, consultez un professionnel qualifié. Outil développé par{' '}
-              <a
-                href="https://www.arteandigital.fr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:no-underline"
-              >
-                www.arteandigital.fr
-              </a>{' '}
-              pour l'association HERRICHAIN.
+              MonPrixJuste est un outil indicatif. Les estimations ne constituent pas un avis de valeur professionnel. 
+              Pour toute transaction importante, consultez un professionnel qualifié.
+            </p>
+            <p className="text-sm text-white leading-relaxed mt-2">
+              <strong>Gratuit pour usage personnel.</strong> Toute utilisation commerciale sans autorisation de l'association HERRICHAIN est interdite.
             </p>
           </div>
 
@@ -145,17 +161,28 @@ export default function Layout({ children }: LayoutProps) {
             <p className="text-sm text-white font-medium">
               © 2026 MonPrixJuste - Tous droits réservés
             </p>
-            <p className="text-sm text-white font-medium">
-              Développé par{' '}
+            <div className="flex gap-6 text-sm text-white font-medium">
+              <Link
+                to="/cgu"
+                className="underline hover:no-underline"
+              >
+                CGU
+              </Link>
+              <Link
+                to="/privacy"
+                className="underline hover:no-underline"
+              >
+                Confidentialité
+              </Link>
               <a
                 href="https://www.arteandigital.fr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:no-underline"
               >
-                Artean Digital Studio
+                Artean Digital
               </a>
-            </p>
+            </div>
           </div>
         </div>
       </footer>

@@ -122,13 +122,27 @@ export function calculateImmoPrice(
     totalPourcentageAjustements += dpeBonus;
   }
 
-  // Équipements essentiels
+  // Exposition
+  const expositionBonus: Record<string, number> = { 'Sud': 2, 'Double': 1.5, 'Triple': 2, 'Est': 0.5, 'Ouest': 0.5, 'Nord': -1.5, 'Non renseignée': 0 };
+  const expBonus = expositionBonus[ajustements.exposition] ?? 0;
+  if (expBonus !== 0) {
+    ajustementsAppliques.push({ nom: `Exposition: ${ajustements.exposition}`, valeur: expBonus, impact: prixBase * (expBonus / 100) });
+    totalPourcentageAjustements += expBonus;
+  }
+
+  // Équipements + Environnement + Autres
   const equipements: { condition: boolean; nom: string; pct: number }[] = [
-    { condition: ajustements.terrasse, nom: 'Terrasse', pct: 5 },
-    { condition: ajustements.jardin, nom: 'Jardin', pct: 7 },
-    { condition: ajustements.parking, nom: 'Parking', pct: 4 },
-    { condition: ajustements.cave, nom: 'Cave', pct: 2 },
-    { condition: ajustements.travauxRecents, nom: 'Travaux récents', pct: 6 },
+    { condition: ajustements.balcon, nom: 'Balcon', pct: 1 },
+    { condition: ajustements.terrasse, nom: 'Terrasse', pct: 1.5 },
+    { condition: ajustements.jardin, nom: 'Jardin', pct: 2 },
+    { condition: ajustements.parking, nom: 'Parking', pct: 1 },
+    { condition: ajustements.cave, nom: 'Cave', pct: 0.5 },
+    { condition: ajustements.vueDegagee, nom: 'Vue dégagée', pct: 1 },
+    { condition: ajustements.calme, nom: 'Calme', pct: 0.5 },
+    { condition: ajustements.proximiteTransports, nom: 'Proximité transports', pct: 1 },
+    { condition: ajustements.proximiteCommerce, nom: 'Proximité commerces', pct: 0.5 },
+    { condition: ajustements.travauxRecents, nom: 'Travaux récents', pct: 1.5 },
+    { condition: ajustements.coproprieteEntretenue, nom: 'Copropriété entretenue', pct: 0.5 },
   ];
 
   for (const eq of equipements) {

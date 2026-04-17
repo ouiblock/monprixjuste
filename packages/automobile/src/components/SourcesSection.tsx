@@ -1,22 +1,33 @@
 import { Card, Button, Input } from '@monprixjuste/ui';
 import { useAutoStore } from '../stores/autoStore';
-import { Plus, Trash2, Check, X } from 'lucide-react';
+import { Plus, Trash2, Check, X, Edit2, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import type { CoteOfficielle, AnnonceParticulier, AnnoncePro, RachatCash } from '../types';
 
 export default function SourcesSection() {
   const { 
     sources, 
-    addCoteOfficielle, removeCoteOfficielle,
-    addAnnonceParticulier, removeAnnonceParticulier,
-    addAnnoncePro, removeAnnoncePro,
-    addRachatCash, removeRachatCash
+    addCoteOfficielle, removeCoteOfficielle, updateCoteOfficielle,
+    addAnnonceParticulier, removeAnnonceParticulier, updateAnnonceParticulier,
+    addAnnoncePro, removeAnnoncePro, updateAnnoncePro,
+    addRachatCash, removeRachatCash, updateRachatCash,
+    calculate
   } = useAutoStore();
   
   const [showAddCote, setShowAddCote] = useState(false);
   const [showAddParticulier, setShowAddParticulier] = useState(false);
   const [showAddPro, setShowAddPro] = useState(false);
   const [showAddRachat, setShowAddRachat] = useState(false);
+  
+  const [editingCoteId, setEditingCoteId] = useState<string | null>(null);
+  const [editingParticulierId, setEditingParticulierId] = useState<string | null>(null);
+  const [editingProId, setEditingProId] = useState<string | null>(null);
+  const [editingRachatId, setEditingRachatId] = useState<string | null>(null);
+  
+  const [editCotePrix, setEditCotePrix] = useState(0);
+  const [editParticulierPrix, setEditParticulierPrix] = useState(0);
+  const [editProPrix, setEditProPrix] = useState(0);
+  const [editRachatPrix, setEditRachatPrix] = useState(0);
   
   const [newCote, setNewCote] = useState<Partial<CoteOfficielle>>({ source: 'La Centrale', prix: 0, commentaire: '' });
   const [newParticulier, setNewParticulier] = useState<Partial<AnnonceParticulier>>({ prix: 0, kilometrage: 0, annee: 2020, lien: '', commentaire: '' });
@@ -50,6 +61,75 @@ export default function SourcesSection() {
     addRachatCash(newRachat as RachatCash);
     setNewRachat({ societe: 'Aramisauto', prix: 0, date: new Date().toISOString().split('T')[0], conditions: '' });
     setShowAddRachat(false);
+  };
+
+  // Handlers édition
+  const startEditCote = (cote: CoteOfficielle) => {
+    setEditingCoteId(cote.id!);
+    setEditCotePrix(cote.prix);
+  };
+
+  const saveEditCote = () => {
+    if (editingCoteId) {
+      updateCoteOfficielle(editingCoteId, { prix: editCotePrix });
+      setEditingCoteId(null);
+    }
+  };
+
+  const cancelEditCote = () => {
+    setEditingCoteId(null);
+    setEditCotePrix(0);
+  };
+
+  const startEditParticulier = (annonce: AnnonceParticulier) => {
+    setEditingParticulierId(annonce.id!);
+    setEditParticulierPrix(annonce.prix);
+  };
+
+  const saveEditParticulier = () => {
+    if (editingParticulierId) {
+      updateAnnonceParticulier(editingParticulierId, { prix: editParticulierPrix });
+      setEditingParticulierId(null);
+    }
+  };
+
+  const cancelEditParticulier = () => {
+    setEditingParticulierId(null);
+    setEditParticulierPrix(0);
+  };
+
+  const startEditPro = (annonce: AnnoncePro) => {
+    setEditingProId(annonce.id!);
+    setEditProPrix(annonce.prix);
+  };
+
+  const saveEditPro = () => {
+    if (editingProId) {
+      updateAnnoncePro(editingProId, { prix: editProPrix });
+      setEditingProId(null);
+    }
+  };
+
+  const cancelEditPro = () => {
+    setEditingProId(null);
+    setEditProPrix(0);
+  };
+
+  const startEditRachat = (rachat: RachatCash) => {
+    setEditingRachatId(rachat.id!);
+    setEditRachatPrix(rachat.prix);
+  };
+
+  const saveEditRachat = () => {
+    if (editingRachatId) {
+      updateRachatCash(editingRachatId, { prix: editRachatPrix });
+      setEditingRachatId(null);
+    }
+  };
+
+  const cancelEditRachat = () => {
+    setEditingRachatId(null);
+    setEditRachatPrix(0);
   };
 
   return (
@@ -116,17 +196,45 @@ export default function SourcesSection() {
           {sources.coteOfficielle.map((cote, index) => (
             <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg mb-2">
               <div className="flex items-center justify-between">
-                <div>
+                <div className="flex-1">
                   <span className="font-semibold text-gray-900">{cote.source}</span>
-                  <span className="text-[#ff6d11] font-bold ml-3">{cote.prix.toLocaleString('fr-FR')} €</span>
+                  {editingCoteId === cote.id ? (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Input
+                        type="number"
+                        value={editCotePrix}
+                        onChange={(e) => setEditCotePrix(Number(e.target.value))}
+                        className="w-32"
+                      />
+                      <Button onClick={saveEditCote} variant="primary" size="sm">
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button onClick={cancelEditCote} variant="outline" size="sm">
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <span className="text-[#ff6d11] font-bold ml-3">{cote.prix.toLocaleString('fr-FR')} €</span>
+                  )}
                 </div>
-                <Button
-                  onClick={() => removeCoteOfficielle(cote.id!)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex gap-2">
+                  {editingCoteId !== cote.id && (
+                    <Button
+                      onClick={() => startEditCote(cote)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => removeCoteOfficielle(cote.id!)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -191,18 +299,48 @@ export default function SourcesSection() {
           {sources.annoncesParticulier.map((annonce, index) => (
             <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg mb-2">
               <div className="flex items-center justify-between">
-                <div>
+                <div className="flex-1">
                   <span className="font-semibold text-gray-900">Particulier</span>
-                  <span className="text-[#ff6d11] font-bold ml-3">{annonce.prix.toLocaleString('fr-FR')} €</span>
-                  <span className="text-sm text-gray-600 ml-3">{annonce.kilometrage.toLocaleString('fr-FR')} km</span>
+                  {editingParticulierId === annonce.id ? (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Input
+                        type="number"
+                        value={editParticulierPrix}
+                        onChange={(e) => setEditParticulierPrix(Number(e.target.value))}
+                        className="w-32"
+                      />
+                      <Button onClick={saveEditParticulier} variant="primary" size="sm">
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button onClick={cancelEditParticulier} variant="outline" size="sm">
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <span className="text-[#ff6d11] font-bold ml-3">{annonce.prix.toLocaleString('fr-FR')} €</span>
+                      <span className="text-sm text-gray-600 ml-3">{annonce.kilometrage.toLocaleString('fr-FR')} km</span>
+                    </>
+                  )}
                 </div>
-                <Button
-                  onClick={() => removeAnnonceParticulier(annonce.id!)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex gap-2">
+                  {editingParticulierId !== annonce.id && (
+                    <Button
+                      onClick={() => startEditParticulier(annonce)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => removeAnnonceParticulier(annonce.id!)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -266,18 +404,48 @@ export default function SourcesSection() {
           {sources.annoncesPro.map((annonce, index) => (
             <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg mb-2">
               <div className="flex items-center justify-between">
-                <div>
+                <div className="flex-1">
                   <span className="font-semibold text-gray-900">{annonce.source}</span>
-                  <span className="text-[#ff6d11] font-bold ml-3">{annonce.prix.toLocaleString('fr-FR')} €</span>
-                  <span className="text-sm text-gray-600 ml-3">{annonce.kilometrage.toLocaleString('fr-FR')} km</span>
+                  {editingProId === annonce.id ? (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Input
+                        type="number"
+                        value={editProPrix}
+                        onChange={(e) => setEditProPrix(Number(e.target.value))}
+                        className="w-32"
+                      />
+                      <Button onClick={saveEditPro} variant="primary" size="sm">
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button onClick={cancelEditPro} variant="outline" size="sm">
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <span className="text-[#ff6d11] font-bold ml-3">{annonce.prix.toLocaleString('fr-FR')} €</span>
+                      <span className="text-sm text-gray-600 ml-3">{annonce.kilometrage.toLocaleString('fr-FR')} km</span>
+                    </>
+                  )}
                 </div>
-                <Button
-                  onClick={() => removeAnnoncePro(annonce.id!)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex gap-2">
+                  {editingProId !== annonce.id && (
+                    <Button
+                      onClick={() => startEditPro(annonce)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => removeAnnoncePro(annonce.id!)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -341,22 +509,66 @@ export default function SourcesSection() {
           {sources.rachatCash.map((rachat, index) => (
             <div key={index} className="p-3 bg-white border border-gray-200 rounded-lg mb-2">
               <div className="flex items-center justify-between">
-                <div>
+                <div className="flex-1">
                   <span className="font-semibold text-gray-900">{rachat.societe}</span>
-                  <span className="text-[#ff6d11] font-bold ml-3">{rachat.prix.toLocaleString('fr-FR')} €</span>
-                  <span className="text-sm text-gray-600 ml-3">{new Date(rachat.date).toLocaleDateString('fr-FR')}</span>
+                  {editingRachatId === rachat.id ? (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Input
+                        type="number"
+                        value={editRachatPrix}
+                        onChange={(e) => setEditRachatPrix(Number(e.target.value))}
+                        className="w-32"
+                      />
+                      <Button onClick={saveEditRachat} variant="primary" size="sm">
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button onClick={cancelEditRachat} variant="outline" size="sm">
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <span className="text-[#ff6d11] font-bold ml-3">{rachat.prix.toLocaleString('fr-FR')} €</span>
+                      <span className="text-sm text-gray-600 ml-3">{new Date(rachat.date).toLocaleDateString('fr-FR')}</span>
+                    </>
+                  )}
                 </div>
-                <Button
-                  onClick={() => removeRachatCash(rachat.id!)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex gap-2">
+                  {editingRachatId !== rachat.id && (
+                    <Button
+                      onClick={() => startEditRachat(rachat)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => removeRachatCash(rachat.id!)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Bouton Mettre à jour l'estimation */}
+        {totalSources > 0 && (
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <Button
+              onClick={calculate}
+              variant="primary"
+              className="w-full"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Mettre à jour l'estimation
+            </Button>
+          </div>
+        )}
       </div>
     </Card>
   );

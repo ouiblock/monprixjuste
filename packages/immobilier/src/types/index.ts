@@ -3,7 +3,7 @@
 export type TypeBien = 'Appartement' | 'Maison' | 'Terrain' | 'Immeuble' | 'Local commercial' | 'Parking/Garage';
 export type EtatGeneral = 'Neuf / récent' | 'Bon' | 'À rafraîchir' | 'À rénover';
 export type ClasseDPE = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'Non renseigné';
-export type Exposition = 'Nord' | 'Sud' | 'Est' | 'Ouest' | 'Double' | 'Triple';
+export type Exposition = 'Nord' | 'Sud' | 'Est' | 'Ouest' | 'Double' | 'Triple' | 'Non renseignée';
 
 // Données du bien
 export interface PropertyData {
@@ -63,17 +63,28 @@ export interface Ponderations {
   estimations: number; // %
 }
 
-// Ajustements qualitatifs (réduits aux éléments les plus impactants)
+// Ajustements qualitatifs
 export interface Ajustements {
   etatGeneral: EtatGeneral;
   dpe: ClasseDPE;
-  
-  // Équipements essentiels uniquement
-  terrasse: boolean; // +5%
-  jardin: boolean; // +7%
-  parking: boolean; // +4%
-  cave: boolean; // +2%
-  travauxRecents: boolean; // +6%
+  exposition: Exposition;
+
+  // Équipements
+  balcon: boolean; // +1%
+  terrasse: boolean; // +1.5%
+  jardin: boolean; // +2%
+  parking: boolean; // +1%
+  cave: boolean; // +0.5%
+
+  // Environnement
+  vueDegagee: boolean; // +1%
+  calme: boolean; // +0.5%
+  proximiteTransports: boolean; // +1%
+  proximiteCommerce: boolean; // +0.5%
+
+  // Autres
+  travauxRecents: boolean; // +1.5%
+  coproprieteEntretenue: boolean; // +0.5%
 }
 
 // Résultat du calcul

@@ -34,12 +34,19 @@ const defaultPonderations: Ponderations = {
 
 const defaultAjustements: Ajustements = {
   etatGeneral: 'Bon',
-  dpe: 'D',
+  dpe: 'Non renseigné',
+  exposition: 'Non renseignée',
+  balcon: false,
   terrasse: false,
   jardin: false,
   parking: false,
   cave: false,
+  vueDegagee: false,
+  calme: false,
+  proximiteTransports: false,
+  proximiteCommerce: false,
   travauxRecents: false,
+  coproprieteEntretenue: false,
 };
 
 // Génération d'ID unique
