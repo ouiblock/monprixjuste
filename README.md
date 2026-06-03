@@ -8,8 +8,8 @@ Une plateforme d'estimation hybride transparente pour différents marchés. Cont
 
 ## 🎯 Verticaux Disponibles
 
-- **🏠 Immobilier** - Estimation de biens immobiliers (disponible)
-- **🚗 Automobile** - Estimation de véhicules (bientôt disponible)
+- **🏠 Immobilier** - Estimation de biens immobiliers
+- **🚗 Automobile** - Estimation de véhicules
 
 ## 🏗️ Architecture Monorepo
 
@@ -104,13 +104,14 @@ pnpm clean      # Nettoyer tous les node_modules et builds
 - [ ] Mode hors-ligne (PWA)
 - [ ] API backend (optionnel)
 
-## 📄 Licence
+## 📄 Lice
+nce
 
 © 2026 MonPrixJuste - Tous droits réservés
 
 ## 🤝 Support
 
-Pour toute question ou suggestion, contactez [Artean Digital Studio](https://www.arteandigital.fr).
+Pour toute question ou suggestion, contactez (https://www.arteandigital.fr).
 
 ---
 
