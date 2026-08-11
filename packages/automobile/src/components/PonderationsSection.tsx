@@ -1,6 +1,7 @@
 import { Card } from '@monprixjuste/ui';
 import { useAutoStore } from '../stores/autoStore';
 import { Info } from 'lucide-react';
+import Tooltip from '../../../../apps/web/src/components/Tooltip';
 
 export default function PonderationsSection() {
   const { ponderations, setPonderations } = useAutoStore();
@@ -31,9 +32,15 @@ export default function PonderationsSection() {
           {/* Cote Officielle */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-base font-bold text-gray-900">
-                📊 Cote officielle (La Centrale / Argus)
-              </label>
+              <div className="flex items-center gap-2">
+                <label className="text-base font-bold text-gray-900">
+                  📊 Cote officielle (La Centrale / Argus)
+                </label>
+                <Tooltip
+                  content="La cote officielle (La Centrale, L'Argus, Autosphere) est calculée à partir de millions de transactions réelles et reste la référence la plus fiable. Recommandé : 40-50% de pondération."
+                  position="right"
+                />
+              </div>
               <span className="text-lg font-black text-[#ff6d11]">
                 {ponderations.coteOfficielle}%
               </span>
@@ -52,9 +59,15 @@ export default function PonderationsSection() {
           {/* Annonces Particulier */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-base font-bold text-gray-900">
-                👤 Annonces Particulier
-              </label>
+              <div className="flex items-center gap-2">
+                <label className="text-base font-bold text-gray-900">
+                  👤 Annonces Particulier
+                </label>
+                <Tooltip
+                  content="Les annonces de particuliers (LeBonCoin, ParuVendu) reflètent le prix demandé, souvent légèrement supérieur au prix de vente final. Elles donnent une bonne image du marché réel."
+                  position="right"
+                />
+              </div>
               <span className="text-lg font-black text-[#ff6d11]">
                 {ponderations.annoncesParticulier}%
               </span>
@@ -73,9 +86,15 @@ export default function PonderationsSection() {
           {/* Annonces Pro */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-base font-bold text-gray-900">
-                🏢 Annonces Pro / Concession
-              </label>
+              <div className="flex items-center gap-2">
+                <label className="text-base font-bold text-gray-900">
+                  🏢 Annonces Pro / Concession
+                </label>
+                <Tooltip
+                  content="Les prix professionnels incluent la marge du vendeur et les services associés (garantie, financement). Un malus de -5% est automatiquement appliqué dans le calcul pour corriger cet écart."
+                  position="right"
+                />
+              </div>
               <span className="text-lg font-black text-[#ff6d11]">
                 {ponderations.annoncesPro}%
               </span>
@@ -94,9 +113,15 @@ export default function PonderationsSection() {
           {/* Rachat Cash */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-base font-bold text-gray-900">
-                💰 Prix de rachat cash
-              </label>
+              <div className="flex items-center gap-2">
+                <label className="text-base font-bold text-gray-900">
+                  💰 Prix de rachat cash
+                </label>
+                <Tooltip
+                  content="Le rachat cash (Aramisauto, Cardoen, Autobiz...) est la valeur de reprise immédiate. C'est le prix plancher : si votre véhicule est estimé sous ce seuil, le résultat n'est pas réaliste. Recommandé : 10-15%."
+                  position="right"
+                />
+              </div>
               <span className="text-lg font-black text-[#ff6d11]">
                 {ponderations.rachatCash}%
               </span>

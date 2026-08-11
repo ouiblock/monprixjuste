@@ -83,12 +83,15 @@ export const useAutoStore = create<AutoEstimationState>()(
         set((state) => {
           const newVehicleData = { ...state.vehicleData, ...data };
           
-          // Recalculer automatiquement le bonus kilométrage si le km change
+          // Recalculer automatiquement le bonus kilométrage si le km ou la motorisation change
           let newAjustements = state.ajustements;
-          if (data.kilometrage !== undefined) {
+          if (data.kilometrage !== undefined || data.motorisation !== undefined) {
             newAjustements = {
               ...state.ajustements,
-              kilometrageBonus: calculateKilometrageBonus(data.kilometrage)
+              kilometrageBonus: calculateKilometrageBonus(
+                data.kilometrage ?? state.vehicleData.kilometrage,
+                data.motorisation ?? state.vehicleData.motorisation
+              )
             };
           }
           

@@ -7,6 +7,8 @@ import AutoPage from './pages/AutoPage';
 import AnnonceGeneratorPage from './pages/AnnonceGeneratorPage';
 import PrivacyPage from './pages/PrivacyPage';
 import CGUPage from './pages/CGUPage';
+import MentionsLegalesPage from './pages/MentionsLegalesPage';
+import AnnonceAutoPage from './pages/AnnonceAutoPage';
 import CookieBanner from './components/CookieBanner';
 import CGUConsentModal from './components/CGUConsentModal';
 import './index.css';
@@ -27,6 +29,8 @@ function App() {
           <Route path="/annonces" element={<AnnonceGeneratorPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/cgu" element={<CGUPage />} />
+          <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
+          <Route path="/annonces-auto" element={<AnnonceAutoPage />} />
         </Routes>
       </Layout>
       <CGUConsentModal />

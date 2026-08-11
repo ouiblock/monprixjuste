@@ -141,48 +141,30 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
 
-      {/* Footer Simple - Orange */}
-      <footer className="bg-[#ff6d11] mt-20">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          {/* Mise en garde */}
-          <div className="bg-white/10 rounded-lg p-6 mb-6">
-            <h3 className="text-sm font-bold text-white mb-2">⚠️ Mise en garde</h3>
-            <p className="text-sm text-white leading-relaxed">
-              MonPrixJuste est un outil indicatif. Les estimations ne constituent pas un avis de valeur professionnel. 
-              Pour toute transaction importante, consultez un professionnel qualifié.
-            </p>
-            <p className="text-sm text-white leading-relaxed mt-2">
-              <strong>Gratuit pour usage personnel.</strong> Toute utilisation commerciale sans autorisation de l'association HERRICHAIN est interdite.
-            </p>
-          </div>
-
-          {/* Bottom */}
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 border-t border-white/20 pt-6">
-            <p className="text-sm text-white font-medium">
-              © 2026 MonPrixJuste - Tous droits réservés
-            </p>
-            <div className="flex gap-6 text-sm text-white font-medium">
-              <Link
-                to="/cgu"
-                className="underline hover:no-underline"
-              >
-                CGU
-              </Link>
-              <Link
-                to="/privacy"
-                className="underline hover:no-underline"
-              >
-                Confidentialité
-              </Link>
-              <a
-                href="https://www.arteandigital.fr"
-                target="_blank"
+      {/* Footer Simple */}
+      <footer className="py-8 bg-gray-50 border-t border-gray-200 mt-auto">
+        <div className="container mx-auto px-4 max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
+            <div className="text-gray-400 text-sm font-semibold">
+              &copy; {new Date().getFullYear()} MonPrixJuste. Tous droits réservés.
+            </div>
+            <div className="text-gray-400 text-xs font-medium">
+              Powered by{' '}
+              <a 
+                href="https://www.arteandigital.fr" 
+                target="_blank" 
                 rel="noopener noreferrer"
-                className="underline hover:no-underline"
+                className="hover:text-[#ff6d11] transition-colors"
+                style={{ backgroundColor: 'transparent' }}
               >
                 Artean Digital
               </a>
             </div>
+          </div>
+          <div className="flex flex-wrap justify-center gap-6 text-gray-500 text-sm font-medium">
+            <Link to="/cgu" className="hover:text-gray-900 transition-colors">CGU</Link>
+            <Link to="/privacy" className="hover:text-gray-900 transition-colors">Confidentialité</Link>
+            <Link to="/mentions-legales" className="hover:text-gray-900 transition-colors">Mentions légales</Link>
           </div>
         </div>
       </footer>

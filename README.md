@@ -104,14 +104,26 @@ pnpm clean      # Nettoyer tous les node_modules et builds
 - [ ] Mode hors-ligne (PWA)
 - [ ] API backend (optionnel)
 
-## 📄 Lice
-nce
+## 📄 Licence & Propriété Intellectuelle
 
-© 2026 MonPrixJuste - Tous droits réservés
+© 2026 **Artean Digital** (SAS BASK'IN BIARRITZ) - SIRET : 92991521300011
+
+**Propriété exclusive** : Le code source, l'architecture et l'intégralité du projet MonPrixJuste sont la propriété intellectuelle d'Artean Digital.
+
+**Projet porté par** : L'association HERRICHAIN (Loi 1901, RNA : W641015204)
+
+### Conditions d'utilisation
+- ✅ **Gratuit** pour les particuliers à titre personnel
+- ✅ **Autorisé** pour l'association HERRICHAIN
+- ❌ **Interdit** : utilisation commerciale, revente, redistribution, modification sans autorisation écrite
+
+Voir le fichier [LICENSE](./LICENSE) pour les conditions complètes.
 
 ## 🤝 Support
 
-Pour toute question ou suggestion, contactez (https://www.arteandigital.fr).
+Pour toute question ou demande d'autorisation, contactez :
+- **[Artean Digital Studio](https://www.arteandigital.fr)** (développeur & propriétaire)
+- **[Association HERRICHAIN](https://herrichain.org)** (porteur du projet)
 
 ---
 

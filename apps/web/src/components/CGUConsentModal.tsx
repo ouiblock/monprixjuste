@@ -97,8 +97,12 @@ export default function CGUConsentModal() {
             <p className="mb-2">
               <strong>Éditeur :</strong> Association HERRICHAIN (Loi 1901, RNA : W641015204)
             </p>
-            <p>
-              <strong>Développement :</strong> Artean Digital - <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">arteandigital.fr</a>
+            <p className="mb-2">
+              <strong>Développement :</strong> Artean Digital - <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">www.arteandigital.fr</a>
+            </p>
+            <p className="text-xs text-gray-500">
+              Propriété intellectuelle exclusive d'Artean Digital (SAS BASK'IN BIARRITZ, SIRET : 92991521300011).<br/>
+              Toute utilisation commerciale ou reproduction sans autorisation est interdite.
             </p>
           </div>
 

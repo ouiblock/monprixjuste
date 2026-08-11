@@ -29,7 +29,7 @@ function getDPEBonus(dpe: ClasseDPE): number {
     case 'D': return 0;
     case 'E': return -4;
     case 'F': return -8;
-    case 'G': return -15;
+    case 'G': return -12; // -15% était excessif sur les marchés tendus
     case 'Non renseigné': return 0;
     default: return 0;
   }
@@ -60,8 +60,10 @@ export function calculateImmoPrice(
   });
   const dvfAvg = calculateCategoryAverage(dvfPricesM2) * propertyData.surface;
 
+  // Application d'une décote annonce → vente de -5% (les annonces sont affichées plus haut que le prix de vente réel)
+  const DECOTE_ANNONCE = 0.95;
   const annoncesAvg = calculateCategoryAverage(
-    sources.annonces.map(a => a.prix / a.surface)
+    sources.annonces.map(a => (a.prix * DECOTE_ANNONCE) / a.surface)
   ) * propertyData.surface;
 
   const estimationsAvg = calculateCategoryAverage(
@@ -247,7 +249,7 @@ function calculateConfidenceScore(
   coefficientVariation: number,
   nbAjustements: number
 ): number {
-  let score = 40;
+  let score = 35; // Base conservatrice : un score élevé doit être mérité
   
   score += Math.min(nbSources * 6, 30);
   

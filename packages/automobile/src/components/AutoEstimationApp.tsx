@@ -21,82 +21,54 @@ export default function AutoEstimationApp() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero avec image */}
-      <section className="relative h-[700px] md:h-[850px] overflow-hidden">
-        {/* Background Image */}
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="relative h-[680px] md:h-[820px] overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src="/voiture.svg" 
             alt="" 
             className="w-full h-full object-cover" 
           />
-          {/* Overlay avec opacité */}
-          <div className="absolute inset-0 bg-gray-900/70"></div>
+          {/* White Overlay */}
+          <div className="absolute inset-0 bg-white/50"></div>
         </div>
 
-        {/* Content */}
-        <div className="container mx-auto px-4 h-full max-w-7xl relative z-10">
-          <div className="flex items-center justify-center h-full">
-            <div className="max-w-4xl text-center">
-              {/* Icon */}
-              <div className="flex justify-center mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#ff6d11] to-[#E65A00] rounded-2xl flex items-center justify-center shadow-lg">
-                  <Car className="w-10 h-10 text-white" />
-                </div>
-              </div>
-
-              {/* H1 */}
-              <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
-                Estimation Automobile
+        <div className="relative z-10 h-full flex items-center justify-center text-center">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-5">
+                Outil d'estimation — Automobile
+              </p>
+              <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+                Ne bradez plus<br />
+                <span className="text-[#ff6d11]">votre véhicule.</span>
               </h1>
-
-              {/* H2 */}
-              <h2 className="text-3xl md:text-4xl text-white font-black mb-8">
-                Ne bradez plus votre véhicule
-              </h2>
-
-              {/* H3 */}
-              <h3 className="text-xl md:text-2xl text-white mb-10 leading-relaxed max-w-3xl mx-auto font-medium">
+              <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
                 Combinez la cote officielle, les annonces du marché et les offres de rachat pour vendre au prix juste, pas en dessous.
-              </h3>
+              </p>
 
-              {/* Hero Proof */}
-              <div className="flex flex-wrap justify-center gap-4 mb-16">
-                <div className="flex items-center gap-2 text-sm font-bold text-white bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20">
-                  <CheckCircle2 className="w-5 h-5 text-[#ff6d11]" />
-                  <span>Cote officielle + marché</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-bold text-white bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20">
-                  <CheckCircle2 className="w-5 h-5 text-[#ff6d11]" />
-                  <span>Ajustements kilométrage & état</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-bold text-white bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20">
-                  <CheckCircle2 className="w-5 h-5 text-[#ff6d11]" />
-                  <span>Estimation détaillée</span>
-                </div>
+              <div className="flex flex-wrap justify-center gap-3 mb-10">
+                {['Cote officielle + marché', 'Ajustements kilométrage & état', 'Zéro algorithme opaque', '100% privé & gratuit'].map((label) => (
+                  <span key={label} className="text-xs font-semibold text-gray-700 bg-gray-900/5 border border-gray-300 px-3 py-1.5 rounded-full">
+                    {label}
+                  </span>
+                ))}
               </div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button
+                  onClick={() => window.scrollTo({ top: document.getElementById('vehicule-form')?.offsetTop || 800, behavior: 'smooth' })}
+                  className="flex items-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
+                >
+                  Démarrer l'estimation <Calculator className="w-5 h-5" />
+                </button>
+                <button
                   onClick={reset}
-                  variant="outline"
-                  size="lg"
-                  className="bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20"
+                  className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors rounded-lg hover:bg-gray-900/5"
                 >
-                  <RotateCcw className="w-5 h-5 mr-2" />
+                  <RotateCcw className="w-4 h-4" />
                   Réinitialiser
-                </Button>
-                <Button
-                  onClick={calculate}
-                  variant="primary"
-                  size="lg"
-                  disabled={!canCalculate}
-                  className="bg-gradient-to-r from-[#ff6d11] to-[#E65A00] hover:from-[#E65A00] hover:to-[#D54E00]"
-                >
-                  <Calculator className="w-5 h-5 mr-2" />
-                  Calculer l'estimation
-                </Button>
+                </button>
               </div>
             </div>
           </div>

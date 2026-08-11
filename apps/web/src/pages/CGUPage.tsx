@@ -95,9 +95,10 @@ export default function CGUPage() {
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h3 className="text-lg font-bold text-gray-900 mb-2">Développement technique</h3>
                   <ul className="list-none space-y-1 text-gray-600">
-                    <li><strong>Artean Digital</strong> - Cabinet de conseil en stratégie digitale et IA</li>
-                    <li><strong>Site web :</strong> <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">arteandigital.fr</a></li>
-                    <li><strong>Rôle :</strong> Développement et maintenance de MonPrixJuste pour l'association HERRICHAIN</li>
+                    <li><strong>Artean Digital</strong> (SAS BASK'IN BIARRITZ)</li>
+                    <li><strong>SIRET :</strong> 92991521300011</li>
+                    <li><strong>Site web :</strong> <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">www.arteandigital.fr</a></li>
+                    <li><strong>Rôle :</strong> Développement, maintenance et propriété intellectuelle de MonPrixJuste pour l'association HERRICHAIN</li>
                   </ul>
                 </div>
               </div>
@@ -244,17 +245,39 @@ export default function CGUPage() {
                 7. Propriété intellectuelle
               </h2>
               <div className="max-w-none">
+                <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-4">
+                  <h3 className="text-base font-bold text-blue-900 mb-2">Propriété exclusive</h3>
+                  <p className="text-blue-800 text-sm mb-2">
+                    Le code source, l'architecture, l'intégralité du projet MonPrixJuste et tous ses composants sont la <strong>propriété intellectuelle exclusive</strong> d'Artean Digital (SAS BASK'IN BIARRITZ, SIRET : 92991521300011).
+                  </p>
+                  <p className="text-blue-800 text-sm">
+                    Site web : <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">www.arteandigital.fr</a>
+                  </p>
+                </div>
+
                 <p className="text-gray-600 mb-4">
-                  Le code source de MonPrixJuste est open-source. Le design, l'interface utilisateur et les fonctionnalités 
-                  sont la propriété de l'association HERRICHAIN.
+                  Le projet est <strong>porté par l'association HERRICHAIN</strong> (Loi 1901, RNA : W641015204) qui en assure la mise à disposition gratuite auprès du public.
                 </p>
+
+                <p className="text-gray-600 mb-4">
+                  <strong>Interdictions strictes :</strong>
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-600 mb-4">
+                  <li>Toute utilisation commerciale ou lucrative du code ou du service</li>
+                  <li>La reproduction, copie, vente, location ou sous-licence du logiciel</li>
+                  <li>La modification, adaptation ou création d'œuvres dérivées du code source</li>
+                  <li>La distribution ou redistribution du code ou des composants</li>
+                  <li>L'utilisation dans un contexte professionnel rémunéré sans autorisation</li>
+                </ul>
+
                 <p className="text-gray-600 mb-4">
                   Les données publiques utilisées (DVF, annonces du marché) proviennent de sources officielles et ne sont 
                   pas la propriété de MonPrixJuste.
                 </p>
+
                 <p className="text-gray-600">
                   Toute reproduction partielle ou totale du service, par quelque procédé que ce soit, sans l'autorisation 
-                  de l'association HERRICHAIN, est interdite.
+                  écrite préalable d'Artean Digital et de l'association HERRICHAIN, est strictement interdite.
                 </p>
               </div>
             </div>
@@ -367,9 +390,13 @@ export default function CGUPage() {
           <h3 className="text-lg font-bold text-[#ff6d11] mb-2">
             📜 Acceptation des CGU
           </h3>
-          <p className="text-sm text-gray-700 leading-relaxed">
-            En utilisant MonPrixJuste, vous reconnaissez avoir lu, compris et accepté les présentes Conditions Générales d'Utilisation. 
-            Service gratuit fourni par l'association HERRICHAIN (Loi 1901, RNA : W641015204), développé par Artean Digital.
+          <p className="text-sm text-gray-700 leading-relaxed mb-3">
+            En utilisant MonPrixJuste, vous reconnaissez avoir lu, compris et accepté les présentes Conditions Générales d'Utilisation.
+          </p>
+          <p className="text-xs text-gray-600">
+            <strong>Propriété intellectuelle :</strong> Code source et projet propriété exclusive d'Artean Digital (SAS BASK'IN BIARRITZ, SIRET : 92991521300011).<br/>
+            <strong>Porteur du projet :</strong> Association HERRICHAIN (Loi 1901, RNA : W641015204).<br/>
+            Toute utilisation commerciale, reproduction ou distribution sans autorisation écrite est strictement interdite.
           </p>
         </div>
       </div>

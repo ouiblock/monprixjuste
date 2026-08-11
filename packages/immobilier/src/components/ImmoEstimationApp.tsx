@@ -3,6 +3,7 @@ import { Calculator, AlertCircle, Building2, Plus, X, ExternalLink, Download, Ch
 import type { TypeBien, EtatGeneral, ClasseDPE, Exposition, CalculationResult, DVFTransaction, AnnoncePAP, EstimationAgence, Ponderations, Ajustements } from '../types';
 import { calculateImmoPrice } from '../calculation/calculatePrice';
 import { generateImmoPDF } from '../pdf/pdfImmo';
+import Tooltip from '../../../../apps/web/src/components/Tooltip';
 
 interface AddressSuggestion { label: string; city: string; postcode: string; context: string; }
 
@@ -131,69 +132,53 @@ export default function ImmoEstimationApp() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="relative h-[700px] md:h-[850px] overflow-hidden">
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="relative h-[680px] md:h-[820px] overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="/appartement.svg"
             alt="" 
             className="w-full h-full object-cover" 
           />
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-gray-900/30"></div>
+          {/* White Overlay */}
+          <div className="absolute inset-0 bg-white/50"></div>
         </div>
 
-        {/* Content */}
-        <div className="container mx-auto px-4 h-full max-w-7xl relative z-10">
-          <div className="flex items-center justify-center h-full">
-            <div className="max-w-4xl text-center">
-              {/* Icon */}
-              <div className="flex justify-center mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#ff6d11] to-[#E65A00] rounded-2xl flex items-center justify-center shadow-lg">
-                  <Building2 className="w-10 h-10 text-white" />
-                </div>
-              </div>
-
-              {/* H1 */}
-              <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
-                Estimation Immobilière
+        <div className="relative z-10 h-full flex items-center justify-center text-center">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-5">
+                Outil d'estimation — Immobilier
+              </p>
+              <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+                Estimez votre bien.<br />
+                <span className="text-[#ff6d11]">Vendez au juste prix.</span>
               </h1>
+              <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+                Combinez les ventes réelles DVF, les annonces du marché et les estimations professionnelles pour obtenir une estimation précise et argumentée.
+              </p>
 
-              {/* H2 */}
-              <h2 className="text-3xl md:text-4xl text-white font-bold mb-8">
-                Vendez votre bien au juste prix
-              </h2>
-
-              {/* H3 */}
-              <h3 className="text-xl md:text-2xl text-white mb-10 leading-relaxed max-w-3xl mx-auto">
-                Combinez les ventes réelles, les annonces du marché et les estimations professionnelles pour obtenir une estimation précise et argumentée.
-              </h3>
-
-              {/* Hero Proof */}
-              <div className="flex flex-wrap justify-center gap-4 mb-16">
-                <div className="flex items-center gap-2 text-sm font-semibold text-white bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20">
-                  <CheckCircle2 className="w-5 h-5 text-[#ff6d11]" />
-                  <span>Données du marché réel</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-semibold text-white bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20">
-                  <CheckCircle2 className="w-5 h-5 text-[#ff6d11]" />
-                  <span>Ajustements personnalisés</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-semibold text-white bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/20">
-                  <CheckCircle2 className="w-5 h-5 text-[#ff6d11]" />
-                  <span>Rapport détaillé</span>
-                </div>
+              <div className="flex flex-wrap justify-center gap-3 mb-10">
+                {['Ventes DVF (État français)', 'Décote annonce → vente (−5%)', 'Ajustements qualitatifs (DPE, état)', '100% privé & gratuit'].map((label) => (
+                  <span key={label} className="text-xs font-semibold text-gray-700 bg-gray-900/5 border border-gray-300 px-3 py-1.5 rounded-full">
+                    {label}
+                  </span>
+                ))}
               </div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <button onClick={handleReset} className="inline-flex items-center px-6 py-3 rounded-xl border border-white/30 text-white font-semibold hover:bg-white/20 bg-white/10 backdrop-blur-md transition-colors">
-                  <RotateCcw className="w-5 h-5 mr-2" />
-                  Réinitialiser
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button
+                  onClick={() => window.scrollTo({ top: document.getElementById('calculateur')?.offsetTop || 800, behavior: 'smooth' })}
+                  className="flex items-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
+                >
+                  Démarrer l'estimation <ChevronDown className="w-5 h-5" />
                 </button>
-                <button onClick={handleCalculate} disabled={!canCalculate} className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-[#ff6d11] to-[#E65A00] text-white font-semibold hover:from-[#E65A00] hover:to-[#cc4e00] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-                  <Calculator className="w-5 h-5 mr-2" />
-                  Calculer l'estimation
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors rounded-lg hover:bg-gray-900/5"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Réinitialiser
                 </button>
               </div>
             </div>
@@ -292,12 +277,20 @@ export default function ImmoEstimationApp() {
             <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
               <Calculator className="w-5 h-5 text-[#ff6d11]" />
               Sources de prix
+              <Tooltip
+                content="Vous pouvez combiner jusqu'à 3 types de sources : DVF (ventes notariées officielles), annonces du marché, et estimations professionnelles. Chaque source est pondérée selon votre choix pour calculer un prix hybride."
+                position="right"
+              />
             </h2>
 
             {/* Pondérations */}
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
-              <p className="text-sm font-semibold text-orange-800 mb-3">
+              <p className="text-sm font-semibold text-orange-800 mb-3 flex items-center gap-2">
                 ⚖️ Pondérations — Total : {totalPond}%{totalPond !== 100 ? ' ⚠️' : ' ✓'}
+                <Tooltip
+                  content="La pondération détermine l'importance relative de chaque source dans le calcul final. DVF = données les plus fiables (ventes réelles). Annonces = marché actuel (décote -5% appliquée automatiquement). Estimations pro = avis d'experts. Le total doit faire 100%."
+                  position="right"
+                />
               </p>
               <div className="grid gap-3 md:grid-cols-3">
                 {([['dvf', 'DVF (ventes réelles)'], ['annonces', 'Annonces'], ['estimations', 'Estimations pro']] as const).map(([key, label]) => (
@@ -311,7 +304,12 @@ export default function ImmoEstimationApp() {
 
             {/* DVF */}
             <div className="space-y-3 mb-6">
-              <h3 className="font-semibold text-base text-gray-900">Ventes réelles DVF <span className="text-xs text-gray-500 font-normal">(prix notariés)</span></h3>
+              <h3 className="font-semibold text-base text-gray-900">Ventes réelles DVF <span className="text-xs text-gray-500 font-normal">(prix notariés)</span>
+                <Tooltip
+                  content="DVF = Demandes de Valeurs Foncières. Base de données officielle de l'État recensées toutes les ventes notariées. Source la plus fiable car ce sont des transactions réelles, pas des prix demandés. Disponible sur app.dvf.etalab.gouv.fr"
+                  position="right"
+                />
+              </h3>
               {dvfRows.length === 0 && <p className="text-sm text-gray-400 italic">Aucune vente ajoutée.</p>}
               {dvfRows.map(row => (
                 <div key={row.id} className="flex gap-2 items-center flex-wrap">
@@ -326,7 +324,12 @@ export default function ImmoEstimationApp() {
 
             {/* Annonces */}
             <div className="space-y-3 mb-6">
-              <h3 className="font-semibold text-base text-gray-900">Annonces immobilières <span className="text-xs text-gray-500 font-normal">(décote annonce → vente appliquée)</span></h3>
+              <h3 className="font-semibold text-base text-gray-900">Annonces immobilières <span className="text-xs text-gray-500 font-normal">(décote annonce → vente appliquée)</span>
+                <Tooltip
+                  content="Les annonces affichent un prix demandé. Dans la réalité, la négociation abaisse le prix de 3 à 8%. Notre algorithme applique automatiquement une décote de -5% sur vos annonces pour refléter le prix de vente estimé."
+                  position="right"
+                />
+              </h3>
               {annoncesRows.length === 0 && <p className="text-sm text-gray-400 italic">Aucune annonce ajoutée.</p>}
               {annoncesRows.map(row => (
                 <div key={row.id} className="flex gap-2 items-center flex-wrap">
@@ -344,7 +347,12 @@ export default function ImmoEstimationApp() {
 
             {/* Estimations pro */}
             <div className="space-y-3">
-              <h3 className="font-semibold text-base text-gray-900">Estimations professionnelles <span className="text-xs text-gray-500 font-normal">(Meilleurs Agents, agences locales…)</span></h3>
+              <h3 className="font-semibold text-base text-gray-900">Estimations professionnelles <span className="text-xs text-gray-500 font-normal">(Meilleurs Agents, agences locales…)</span>
+                <Tooltip
+                  content="Les estimations de Meilleurs Agents, notaires ou agences locales intègrent leur connaissance du terrain. Utilisées comme signal de confiance mais avec une pondération modérée car elles peuvent être motivées commercialement."
+                  position="right"
+                />
+              </h3>
               {estimationsRows.length === 0 && <p className="text-sm text-gray-400 italic">Aucune estimation ajoutée.</p>}
               {estimationsRows.map(row => (
                 <div key={row.id} className="flex gap-2 items-center flex-wrap">
@@ -363,26 +371,50 @@ export default function ImmoEstimationApp() {
           {/* Ajustements qualitatifs */}
           <div className={card + ' p-6'}>
             <button className="w-full flex items-center justify-between" onClick={() => setShowAjust(v => !v)}>
-              <h2 className="text-xl font-bold text-gray-900">🎯 Ajustements qualitatifs</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-bold text-gray-900">🎯 Ajustements qualitatifs</h2>
+                <Tooltip
+                  content="Les ajustements qualitatifs s'appliquent sur le prix de base pondéré. Ils sont plafonnés à ±20% au total pour éviter les dérives. Utilisez-les si votre bien diffère significativement des comparables de vos sources."
+                  position="right"
+                />
+              </div>
               {showAjust ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
             </button>
             {showAjust && (
               <div className="mt-5 space-y-5">
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700">État général</label>
+                    <label className="block text-sm font-medium text-gray-700 flex items-center gap-1">
+                      État général
+                      <Tooltip
+                        content="L'état général est l'un des facteurs les plus influents. 'Neuf/récent' = +5%. 'Bon' = 0%. 'À rafraîchir' = -5%. 'À rénover' = -10% à -15%. Les travaux de rénovation sont souvent sous-évalués par les vendeurs."
+                        position="right"
+                      />
+                    </label>
                     <select className={inp} value={ajustements.etatGeneral} onChange={e => setAjust({ etatGeneral: e.target.value as EtatGeneral })}>
                       {['Neuf / récent','Bon','À rafraîchir','À rénover'].map(v => <option key={v}>{v}</option>)}
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700">DPE</label>
+                    <label className="block text-sm font-medium text-gray-700 flex items-center gap-1">
+                      DPE
+                      <Tooltip
+                        content="Le DPE (Diagnostic de Performance Énergétique) impacte de plus en plus la valeur depuis la loi Climat 2021. DPE A/B : +3%. C : +1%. D/E : 0% et -4%. F : -8%. G : -12% (logements interdits à la location dès 2025). Sur les marchés très tendus, la décote G peut être absorbée."
+                        position="right"
+                      />
+                    </label>
                     <select className={inp} value={ajustements.dpe} onChange={e => setAjust({ dpe: e.target.value as ClasseDPE })}>
                       {['A','B','C','D','E','F','G','Non renseigné'].map(v => <option key={v}>{v}</option>)}
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700">Exposition</label>
+                    <label className="block text-sm font-medium text-gray-700 flex items-center gap-1">
+                      Exposition
+                      <Tooltip
+                        content="L'exposition désigne la direction principale des pièces de vie. Sud/Sud-Ouest : luminosité maximum (+1%). Double/Triple : polyvalence (+1.5%). Nord : manque de lumière naturelle (-1%). En France, l'exposition est le 2ème critère après la localisation."
+                        position="right"
+                      />
+                    </label>
                     <select className={inp} value={ajustements.exposition} onChange={e => setAjust({ exposition: e.target.value as Exposition })}>
                       {['Sud','Double','Triple','Est','Ouest','Nord','Non renseignée'].map(v => <option key={v}>{v}</option>)}
                     </select>
@@ -510,6 +542,12 @@ export default function ImmoEstimationApp() {
                   <div className="inline-block px-6 py-3 rounded-lg" style={{ background: scoreStyle(resultat.scoreConfiance) }}>
                     <p className="text-3xl font-bold text-white">{resultat.scoreConfiance}/100</p>
                     <p className="text-xs text-white/80">Score de confiance</p>
+                  </div>
+                  <div className="mt-2 flex justify-center">
+                    <Tooltip
+                      content={`Score de confiance : ${resultat.scoreConfiance}/100. Ce score reflète la qualité et la cohérence de vos sources. 70-100 : excellent (sources variées et cohérentes). 50-69 : correct. < 50 : sources insuffisantes ou très dispersées. Il ne mesure pas la précision absolue mais la fiabilité relative de l'estimation.`}
+                      position="top"
+                    />
                   </div>
                 </div>
                 <div className="flex items-center justify-center">

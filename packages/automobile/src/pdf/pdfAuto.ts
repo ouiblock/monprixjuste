@@ -8,11 +8,13 @@ const LIGHT_GRAY = '#F3F4F6';
 const WHITE = '#FFFFFF';
 
 const DISCLAIMER =
-  'AVERTISSEMENT BÊTA — Cette estimation est fournie à titre purement indicatif par MonPrixJuste (version bêta). ' +
-  'Elle ne constitue en aucun cas un avis professionnel, une expertise automobile ou une garantie de valeur. ' +
-  'MonPrixJuste est un projet open source porté par l\'association HERRICHAIN (Loi 1901, RNA : W641015204), développé par www.arteandigital.fr pour l\'association HERRICHAIN. ' +
-  'L\'association et ses contributeurs déclinent toute responsabilité quant à l\'usage qui pourrait être fait de cette estimation. ' +
-  'Consultez un professionnel de l\'automobile pour toute décision d\'achat ou de vente.';
+  'AVIS DE VALEUR INDICATIF — Document à usage strictement privé et indicatif. ' +
+  'Cette estimation, réalisée avec l\'outil MonPrixJuste (version bêta), ne constitue ni un avis de valeur professionnel, ni un rapport d\'expertise, ni une garantie de prix d\'achat ou de vente. ' +
+  'Elle n\'est pas opposable en justice. La valeur estimée est valable uniquement à la date indiquée et pour les caractéristiques déclarées par l\'utilisateur (kilométrage, état, équipements). ' +
+  'Toute déclaration inexacte invalide la présente estimation. MonPrixJuste n\'engage pas sa responsabilité en cas d\'erreur de saisie ou de données inexactes. ' +
+  'Pour toute transaction, consultez un expert automobile agréé ou un professionnel de l\'automobile. ' +
+  'MonPrixJuste est un projet porté par l\'association HERRICHAIN (Loi 1901, RNA : W641015204). ' +
+  'Artean Digital (SAS BASK\'IN BIARRITZ, SIRET 92991521300011) décline toute responsabilité quant à l\'usage de cette estimation.';
 
 function formatPrice(n: number): string {
   return n.toLocaleString('fr-FR') + ' €';
@@ -137,11 +139,12 @@ export function generateAutoPDF(
   const infos: [string, string][] = [
     ['Marque / Modèle', `${vehicleData.marque} ${vehicleData.modele}${vehicleData.version ? ` — ${vehicleData.version}` : ''}`],
     ['Année', String(vehicleData.annee)],
-    ['Kilométrage', `${vehicleData.kilometrage.toLocaleString('fr-FR')} km`],
+    ['Kilométrage déclaré', `${vehicleData.kilometrage.toLocaleString('fr-FR')} km`],
     ['Motorisation', vehicleData.motorisation],
     ['Boîte de vitesses', vehicleData.boite],
     ['Carrosserie', vehicleData.carrosserie],
     ['Couleur', vehicleData.couleur || 'Non renseignée'],
+    ['État déclaré', ajustements.etatGeneral],
   ];
   for (const [label, value] of infos) {
     y = addRow(doc, label, value, y);
@@ -152,12 +155,18 @@ export function generateAutoPDF(
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(DARK);
-  doc.text(`Score de confiance : ${result.scoreConfiance}%`, 16, y);
+  const scoreLabel = result.scoreConfiance >= 70 ? 'Excellent' : result.scoreConfiance >= 50 ? 'Correct' : 'Insuffisant';
+  doc.text(`Score de confiance : ${result.scoreConfiance}% — ${scoreLabel}`, 16, y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(GRAY);
+  doc.text('Date de valeur : ' + new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }), 16, y + 7);
+  doc.text('Kilométrage à la date : ' + vehicleData.kilometrage.toLocaleString('fr-FR') + ' km (état déclaré : ' + ajustements.etatGeneral + ')', 16, y + 12);
   doc.setFillColor(230, 230, 230);
-  doc.roundedRect(16, y + 3, w - 32, 5, 2, 2, 'F');
+  doc.roundedRect(16, y + 15, w - 32, 5, 2, 2, 'F');
   const scoreColor = result.scoreConfiance >= 70 ? '#10b981' : result.scoreConfiance >= 50 ? ORANGE : '#ef4444';
   doc.setFillColor(scoreColor);
-  doc.roundedRect(16, y + 3, (w - 32) * result.scoreConfiance / 100, 5, 2, 2, 'F');
+  doc.roundedRect(16, y + 15, (w - 32) * result.scoreConfiance / 100, 5, 2, 2, 'F');
 
   addPageFooter(doc);
 

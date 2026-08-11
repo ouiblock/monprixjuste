@@ -1,13 +1,16 @@
 import type { Sources, Ponderations, Ajustements, CalculationResult, VehicleData, EtatGeneral, AccidentGravite } from '../types';
 
 // Calcule le bonus/malus kilométrage automatique
-export function calculateKilometrageBonus(km: number): number {
-  if (km < 30000) return 5;
+// Pour les véhicules électriques, le kilométrage est moins pénalisant (batterie = vraie usure)
+export function calculateKilometrageBonus(km: number, motorisation?: string): number {
+  // Réduction de 40% de la pénalité pour les électriques
+  const facteurElec = motorisation === 'Électrique' ? 0.6 : 1.0;
+  if (km < 30000) return 4; // +5% était trop fort pour les véhicules jeunes
   if (km < 60000) return 2;
   if (km < 100000) return 0;
-  if (km < 150000) return -4;
-  if (km < 200000) return -8;
-  return -12;
+  if (km < 150000) return Math.round(-4 * facteurElec);
+  if (km < 200000) return Math.round(-8 * facteurElec);
+  return Math.round(-12 * facteurElec);
 }
 
 // Calcul du multiplicateur d'état général
@@ -51,14 +54,14 @@ function calculateCategoryAverage(prices: number[]): number {
 
 // Coefficient de pondération dégressif pour éviter des ajustements cumulés trop importants
 function getCoefficientPonderation(nombreAjustements: number): number {
-  // Jusqu'à 5 ajustements : 100% de l'impact
-  if (nombreAjustements <= 5) return 1.0;
-  // 6-10 ajustements : réduction progressive à 80%
-  if (nombreAjustements <= 10) return 1.0 - (nombreAjustements - 5) * 0.04;
-  // 11-15 ajustements : réduction progressive à 60%
-  if (nombreAjustements <= 15) return 0.8 - (nombreAjustements - 10) * 0.04;
-  // 16+ ajustements : plafond à 50%
-  return 0.5;
+  // Jusqu'à 8 ajustements : 100% de l'impact (un utilisateur attentif ne doit pas être pénalisé)
+  if (nombreAjustements <= 8) return 1.0;
+  // 9-14 ajustements : réduction progressive à 80%
+  if (nombreAjustements <= 14) return 1.0 - (nombreAjustements - 8) * 0.033;
+  // 15-18 ajustements : réduction progressive à 60%
+  if (nombreAjustements <= 18) return 0.8 - (nombreAjustements - 14) * 0.05;
+  // 19+ ajustements : plafond à 55%
+  return 0.55;
 }
 
 // Ajustement automatique pour les annonces pro (-5%)
@@ -156,21 +159,21 @@ export function calculateAutoPrice(
   
   // Entretien & historique
   if (ajustements.carnetComplet) {
-    const impact = prixAjuste * 0.02;
-    ajustementsAppliques.push({ nom: 'Carnet d\'entretien complet', valeur: 2, impact });
-    prixAjuste *= 1.02;
-  }
-
-  if (ajustements.derniereRevisionMarque) {
     const impact = prixAjuste * 0.03;
-    ajustementsAppliques.push({ nom: 'Dernière révision en concession', valeur: 3, impact });
+    ajustementsAppliques.push({ nom: 'Carnet d\'entretien complet', valeur: 3, impact });
     prixAjuste *= 1.03;
   }
 
+  if (ajustements.derniereRevisionMarque) {
+    const impact = prixAjuste * 0.05;
+    ajustementsAppliques.push({ nom: 'Dernière révision en concession', valeur: 5, impact });
+    prixAjuste *= 1.05;
+  }
+
   if (ajustements.premiereMain) {
-    const impact = prixAjuste * 0.02;
-    ajustementsAppliques.push({ nom: 'Première main', valeur: 2, impact });
-    prixAjuste *= 1.02;
+    const impact = prixAjuste * 0.04;
+    ajustementsAppliques.push({ nom: 'Première main', valeur: 4, impact });
+    prixAjuste *= 1.04;
   }
 
   const proprietairesBonus = getProprietairesBonus(ajustements.nombreProprietaires);
@@ -192,27 +195,27 @@ export function calculateAutoPrice(
   
   // Options & équipements
   if (ajustements.toitPanoramique) {
-    const impact = prixAjuste * 0.02;
-    ajustementsAppliques.push({ nom: 'Toit panoramique', valeur: 2, impact });
-    prixAjuste *= 1.02;
+    const impact = prixAjuste * 0.04;
+    ajustementsAppliques.push({ nom: 'Toit panoramique', valeur: 4, impact });
+    prixAjuste *= 1.04;
   }
 
   if (ajustements.camera360) {
-    const impact = prixAjuste * 0.02;
-    ajustementsAppliques.push({ nom: 'Caméra 360°', valeur: 2, impact });
-    prixAjuste *= 1.02;
+    const impact = prixAjuste * 0.03;
+    ajustementsAppliques.push({ nom: 'Caméra 360°', valeur: 3, impact });
+    prixAjuste *= 1.03;
   }
 
   if (ajustements.gps) {
-    const impact = prixAjuste * 0.015;
-    ajustementsAppliques.push({ nom: 'GPS intégré', valeur: 1.5, impact });
-    prixAjuste *= 1.015;
+    const impact = prixAjuste * 0.02;
+    ajustementsAppliques.push({ nom: 'GPS intégré', valeur: 2, impact });
+    prixAjuste *= 1.02;
   }
 
   if (ajustements.siegesCuir) {
-    const impact = prixAjuste * 0.02;
-    ajustementsAppliques.push({ nom: 'Sièges cuir', valeur: 2, impact });
-    prixAjuste *= 1.02;
+    const impact = prixAjuste * 0.03;
+    ajustementsAppliques.push({ nom: 'Sièges cuir', valeur: 3, impact });
+    prixAjuste *= 1.03;
   }
 
   if (ajustements.siegesChauffants) {
@@ -270,15 +273,15 @@ export function calculateAutoPrice(
   }
 
   if (ajustements.pneumatiquesRecents) {
-    const impact = prixAjuste * 0.015;
-    ajustementsAppliques.push({ nom: 'Pneumatiques récents', valeur: 1.5, impact });
-    prixAjuste *= 1.015;
+    const impact = prixAjuste * 0.02;
+    ajustementsAppliques.push({ nom: 'Pneumatiques récents', valeur: 2, impact });
+    prixAjuste *= 1.02;
   }
 
   if (ajustements.garantieConstructeur) {
-    const impact = prixAjuste * 0.04;
-    ajustementsAppliques.push({ nom: 'Garantie constructeur', valeur: 4, impact });
-    prixAjuste *= 1.04;
+    const impact = prixAjuste * 0.08;
+    ajustementsAppliques.push({ nom: 'Garantie constructeur', valeur: 8, impact });
+    prixAjuste *= 1.08;
   }
 
   if (ajustements.etatInterieurImpeccable) {
@@ -395,7 +398,7 @@ function calculateConfidenceScore(
   nbAjustements: number,
   vehicleData: VehicleData
 ): number {
-  let score = 40; // Base
+  let score = 35; // Base conservatrice : un score élevé doit être mérité
   
   // Bonus nombre de sources (max +30)
   score += Math.min(nbSources * 5, 30);

@@ -8,11 +8,15 @@ const LIGHT_GRAY = '#F3F4F6';
 const WHITE = '#FFFFFF';
 
 const DISCLAIMER =
-  'AVERTISSEMENT BÊTA — Cette estimation est fournie à titre purement indicatif par MonPrixJuste (version bêta). ' +
-  'Elle ne constitue en aucun cas un avis professionnel, une expertise immobilière ou une garantie de valeur. ' +
-  'MonPrixJuste est un projet open source porté par l\'association HERRICHAIN (Loi 1901, RNA : W641015204), développé par www.arteandigital.fr pour l\'association HERRICHAIN. ' +
-  'L\'association et ses contributeurs déclinent toute responsabilité quant à l\'usage qui pourrait être fait de cette estimation. ' +
-  'Consultez un professionnel de l\'immobilier pour toute décision d\'achat ou de vente.';
+  'AVERTISSEMENT IMPORTANT — Document à usage strictement indicatif. ' +
+  'Cette estimation hybride, réalisée avec l\'outil MonPrixJuste (version bêta), ne constitue ni un avis de valeur professionnel, ni une expertise immobilière certifiée, ni un mandat de vente ou d\'achat, ni une offre d\'achat ou de vente. ' +
+  'Elle n\'est pas opposable en justice ni à titre de preuve dans quelque procédure que ce soit. ' +
+  'Les données utilisées sont saisies manuellement par l\'utilisateur ; MonPrixJuste n\'en garantit ni l\'exactitude, ni l\'exhaustivité. ' +
+  'Les prix du marché immobilier évoluent constamment et peuvent différer sensiblement de la présente estimation. ' +
+  'Pour toute décision d\'achat, de vente ou de financement, consultez un professionnel qualifié (notaire, agent immobilier, expert immobilier certifié). ' +
+  'MonPrixJuste est un projet porté par l\'association HERRICHAIN (Loi 1901, RNA : W641015204). ' +
+  'Le code source est la propriété exclusive d\'Artean Digital (SAS BASK\'IN BIARRITZ, SIRET 92991521300011). ' +
+  'L\'association HERRICHAIN et Artean Digital déclinent toute responsabilité quant à l\'usage de cette estimation.';
 
 function isDVFAncienne(dateStr: string): boolean {
   if (!dateStr) return false;
@@ -139,6 +143,12 @@ export function generateImmoPDF(
     `Fourchette : ${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`,
     w / 2, 116, { align: 'center' }
   );
+  // Prix au m² sous le prix final
+  if (propertyData.surface > 0) {
+    doc.setFontSize(9);
+    doc.setTextColor(ORANGE);
+    doc.text(`${Math.round(result.prixFinal / propertyData.surface).toLocaleString('fr-FR')} €/m²`, w / 2, 122, { align: 'center' });
+  }
 
   // Infos bien
   let y = 130;
@@ -160,12 +170,17 @@ export function generateImmoPDF(
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(DARK);
-  doc.text(`Score de confiance : ${result.scoreConfiance}%`, 16, y);
+  const scoreLabel = result.scoreConfiance >= 70 ? 'Excellent' : result.scoreConfiance >= 50 ? 'Correct' : 'Insuffisant';
+  doc.text(`Score de confiance : ${result.scoreConfiance}% — ${scoreLabel}`, 16, y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(GRAY);
+  doc.text('Date de valeur : ' + new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }), 16, y + 7);
   doc.setFillColor(230, 230, 230);
-  doc.roundedRect(16, y + 3, w - 32, 5, 2, 2, 'F');
+  doc.roundedRect(16, y + 10, w - 32, 5, 2, 2, 'F');
   const scoreColor = result.scoreConfiance >= 70 ? '#10b981' : result.scoreConfiance >= 50 ? ORANGE : '#ef4444';
   doc.setFillColor(scoreColor);
-  doc.roundedRect(16, y + 3, (w - 32) * result.scoreConfiance / 100, 5, 2, 2, 'F');
+  doc.roundedRect(16, y + 10, (w - 32) * result.scoreConfiance / 100, 5, 2, 2, 'F');
 
   addPageFooter(doc);
 
