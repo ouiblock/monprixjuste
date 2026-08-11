@@ -99,7 +99,7 @@ export function generateImmoPDF(
   propertyData: PropertyData,
   sources: Sources,
   ponderations: Ponderations,
-  ajustements: Ajustements,
+  _ajustements: Ajustements,
   result: CalculationResult
 ): void {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calculator, AlertCircle, Building2, Plus, X, ExternalLink, Download, ChevronDown, ChevronUp, RotateCcw, CheckCircle2, Home, TrendingUp, TrendingDown } from 'lucide-react';
+import { Calculator, AlertCircle, Plus, X, ExternalLink, Download, ChevronDown, ChevronUp, RotateCcw, Home, TrendingUp, TrendingDown } from 'lucide-react';
 import type { TypeBien, EtatGeneral, ClasseDPE, Exposition, CalculationResult, DVFTransaction, AnnoncePAP, EstimationAgence, Ponderations, Ajustements } from '../types';
 import { calculateImmoPrice } from '../calculation/calculatePrice';
 import { generateImmoPDF } from '../pdf/pdfImmo';

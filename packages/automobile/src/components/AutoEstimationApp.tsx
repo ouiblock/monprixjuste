@@ -1,23 +1,13 @@
-import { Button } from '@monprixjuste/ui';
 import { useAutoStore } from '../stores/autoStore';
 import VehicleForm from './VehicleForm';
 import SourcesSection from './SourcesSection';
 import PonderationsSection from './PonderationsSection';
 import AdjustmentsSection from './AdjustmentsSection';
 import CalculationSummary from './CalculationSummary';
-import { Calculator, RotateCcw, AlertCircle, CheckCircle2, Car } from 'lucide-react';
+import { Calculator, RotateCcw, AlertCircle } from 'lucide-react';
 
 export default function AutoEstimationApp() {
-  const { vehicleData, sources, calculate, reset } = useAutoStore();
-
-  const canCalculate = vehicleData.estimationName && 
-                       vehicleData.marque && 
-                       vehicleData.modele && 
-                       vehicleData.annee &&
-                       (sources.coteOfficielle.length > 0 || 
-                        sources.annoncesParticulier.length > 0 || 
-                        sources.annoncesPro.length > 0 || 
-                        sources.rachatCash.length > 0);
+  const { reset } = useAutoStore();
 
   return (
     <div className="min-h-screen bg-white">

@@ -28,10 +28,7 @@ export default function VehicleForm() {
       return;
     }
     setPlaqueError('');
-    // Format pour l'URL Histovec
-    const plaqueFormatted = raw.length === 7
-      ? `${raw.slice(0, 2)}-${raw.slice(2, 5)}-${raw.slice(5)}`
-      : raw;
+
     // Ouvre Histovec avec la plaque pré-remplie
     window.open(
       `https://histovec.interieur.gouv.fr/histovec/home`,
