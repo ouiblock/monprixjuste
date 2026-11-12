@@ -71,27 +71,27 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative min-h-[520px] md:min-h-[680px] py-12 md:py-20 overflow-hidden flex items-center">
+      <section className="relative py-8 sm:py-12 md:py-16 overflow-hidden flex items-center">
         <div className="absolute inset-0">
           <img src="/header.svg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-white/60" />
+          <div className="absolute inset-0 bg-white/65" />
         </div>
 
         <div className="relative z-10 w-full flex items-center justify-center text-center">
-          <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[#ff6d11] mb-4">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="mx-auto animate-fade-in">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#ff6d11] mb-2 sm:mb-3">
                 Outil d'estimation hybride — Immobilier & Automobile
               </p>
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-5">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-3 sm:mb-4">
                 Vendez au juste prix.<br />
                 <span className="text-[#ff6d11]">Achetez en connaissance de cause.</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-700 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-gray-700 font-medium mb-6 max-w-2xl mx-auto leading-relaxed">
                 Croisez les données officielles (Immo-Data, DVF Etalab, Histovec) et les plateformes de référence (Leboncoin, SeLoger, La Centrale, Vendezvotrevoiture) pour générer un rapport PDF professionnel avec photos et sources cliquables.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+              <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-6">
                 {[
                   'Photos en en-tête PDF',
                   'Sources cliquables dans le PDF',
@@ -100,23 +100,23 @@ export default function LandingPage() {
                 ].map((label) => (
                   <span
                     key={label}
-                    className="text-xs font-semibold text-gray-800 bg-white/80 border border-gray-300 px-3 py-1.5 rounded-full shadow-2xs"
+                    className="text-xs font-semibold text-gray-800 bg-white/90 border border-gray-300 px-2.5 py-1 rounded-full shadow-2xs"
                   >
                     {label}
                   </span>
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
+              <div className="flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3 max-w-md sm:max-w-none mx-auto">
                 <Link to="/immobilier" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl">
-                    <Building2 className="w-5 h-5 flex-shrink-0" />
+                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-md hover:shadow-lg">
+                    <Building2 className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                     Estimer un bien immobilier
                   </button>
                 </Link>
                 <Link to="/auto" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold text-base rounded-xl transition-all shadow-md hover:shadow-lg">
-                    <Car className="w-5 h-5 flex-shrink-0" />
+                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-sm hover:shadow-md">
+                    <Car className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                     Estimer un véhicule
                   </button>
                 </Link>

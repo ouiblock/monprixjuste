@@ -13,31 +13,31 @@ export default function AutoEstimationApp() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative min-h-[500px] md:min-h-[680px] py-14 md:py-24 flex items-center overflow-hidden">
+      <section className="relative py-8 sm:py-12 md:py-16 flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="/voiture.svg"
             alt=""
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-white/60"></div>
+          <div className="absolute inset-0 bg-white/65"></div>
         </div>
 
         <div className="relative z-10 w-full text-center">
-          <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-4">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="mx-auto animate-fade-in">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#ff6d11] mb-2 sm:mb-3">
                 Outil d'estimation hybride — Automobile
               </p>
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-5">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-3 sm:mb-4">
                 Ne bradez plus<br />
                 <span className="text-[#ff6d11]">votre véhicule.</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-700 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-gray-700 font-medium mb-6 max-w-2xl mx-auto leading-relaxed">
                 Croisez la cote La Centrale, les annonces Leboncoin et les offres de reprise type Vendezvotrevoiture.fr pour éditer un rapport PDF complet avec photos et sources cliquables.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+              <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-6">
                 {[
                   'La Centrale & Vendezvotrevoiture',
                   'Photos en tête de page PDF',
@@ -46,27 +46,27 @@ export default function AutoEstimationApp() {
                 ].map((label) => (
                   <span
                     key={label}
-                    className="text-xs font-semibold text-gray-800 bg-white/80 border border-gray-300 px-3 py-1.5 rounded-full shadow-2xs"
+                    className="text-xs font-semibold text-gray-800 bg-white/90 border border-gray-300 px-2.5 py-1 rounded-full shadow-2xs"
                   >
                     {label}
                   </span>
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3">
                 <button
                   type="button"
                   onClick={() =>
                     document.getElementById('vehicule-form')?.scrollIntoView({ behavior: 'smooth' })
                   }
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-md hover:shadow-lg"
                 >
-                  Démarrer l'estimation <Calculator className="w-5 h-5" />
+                  Démarrer l'estimation <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button
                   type="button"
                   onClick={reset}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors rounded-lg hover:bg-gray-900/5"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 text-gray-600 hover:text-gray-900 font-medium text-xs sm:text-sm transition-colors rounded-lg hover:bg-gray-900/5"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Réinitialiser
