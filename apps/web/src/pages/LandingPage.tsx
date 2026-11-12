@@ -70,57 +70,49 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative py-8 sm:py-12 md:py-16 overflow-hidden flex items-center">
-        <div className="absolute inset-0">
-          <img src="/header.svg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-white/65" />
-        </div>
+      {/* ── Hero Ultra-Compact ─────────────────────────────────── */}
+      <section className="relative py-6 sm:py-8 overflow-hidden bg-gradient-to-b from-orange-50/40 via-white to-white border-b border-gray-100">
+        <div className="container mx-auto px-4 max-w-3xl text-center">
+          <div className="mx-auto">
+            <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-[#ff6d11] bg-orange-100/70 border border-orange-200 px-3 py-0.5 rounded-full mb-2.5">
+              Estimation hybride • Immobilier & Automobile
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight mb-2">
+              Vendez au juste prix. <span className="text-[#ff6d11]">Achetez en connaissance de cause.</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-600 font-medium mb-4 max-w-xl mx-auto leading-relaxed">
+              Croisez les données officielles (DVF, Immo-Data, Histovec) et les plateformes de marché (Leboncoin, SeLoger, La Centrale) pour un dossier PDF avec photos et sources cliquables.
+            </p>
 
-        <div className="relative z-10 w-full flex items-center justify-center text-center">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <div className="mx-auto animate-fade-in">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#ff6d11] mb-2 sm:mb-3">
-                Outil d'estimation hybride — Immobilier & Automobile
-              </p>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-3 sm:mb-4">
-                Vendez au juste prix.<br />
-                <span className="text-[#ff6d11]">Achetez en connaissance de cause.</span>
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg text-gray-700 font-medium mb-6 max-w-2xl mx-auto leading-relaxed">
-                Croisez les données officielles (Immo-Data, DVF Etalab, Histovec) et les plateformes de référence (Leboncoin, SeLoger, La Centrale, Vendezvotrevoiture) pour générer un rapport PDF professionnel avec photos et sources cliquables.
-              </p>
+            <div className="flex flex-wrap justify-center gap-1.5 mb-5">
+              {[
+                'Photos en en-tête PDF',
+                'Sources cliquables',
+                '100% privé & local',
+                'Gratuit sans compte',
+              ].map((label) => (
+                <span
+                  key={label}
+                  className="text-[11px] font-semibold text-gray-700 bg-white border border-gray-200 px-2.5 py-0.5 rounded-full shadow-2xs"
+                >
+                  ✓ {label}
+                </span>
+              ))}
+            </div>
 
-              <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-6">
-                {[
-                  'Photos en en-tête PDF',
-                  'Sources cliquables dans le PDF',
-                  '100% indépendant & privé',
-                  'Gratuit sans inscription',
-                ].map((label) => (
-                  <span
-                    key={label}
-                    className="text-xs font-semibold text-gray-800 bg-white/90 border border-gray-300 px-2.5 py-1 rounded-full shadow-2xs"
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3 max-w-md sm:max-w-none mx-auto">
-                <Link to="/immobilier" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-md hover:shadow-lg">
-                    <Building2 className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                    Estimer un bien immobilier
-                  </button>
-                </Link>
-                <Link to="/auto" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-sm hover:shadow-md">
-                    <Car className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                    Estimer un véhicule
-                  </button>
-                </Link>
-              </div>
+            <div className="flex flex-col sm:flex-row justify-center gap-2.5 max-w-md mx-auto">
+              <Link to="/immobilier" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-sm rounded-lg transition-all shadow-xs hover:shadow-sm">
+                  <Building2 className="w-4 h-4 flex-shrink-0" />
+                  Estimer un bien immobilier
+                </button>
+              </Link>
+              <Link to="/auto" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white font-bold text-sm rounded-lg transition-all shadow-xs hover:shadow-sm">
+                  <Car className="w-4 h-4 flex-shrink-0" />
+                  Estimer un véhicule
+                </button>
+              </Link>
             </div>
           </div>
         </div>
