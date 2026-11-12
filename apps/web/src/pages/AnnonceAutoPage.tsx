@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Tooltip from '../components/Tooltip';
 import { 
   Car, Copy, CheckCircle, RotateCcw, ChevronRight, ChevronLeft, 
   Search, ExternalLink, Info, Sparkles, Gauge, Settings2, 
@@ -288,33 +289,33 @@ export default function AnnonceAutoPage() {
   const inp = 'w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff6d11] focus:border-[#ff6d11] bg-white text-base font-medium text-gray-900 transition-colors';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-[#ff6d11] rounded-xl flex items-center justify-center shadow-sm">
-              <Car className="w-6 h-6 text-white" />
+        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-4xl">
+          <div className="flex items-center gap-3 sm:gap-4 mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#ff6d11] rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+              <Car className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-black text-gray-900">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">
                 Générateur d'annonce automobile
               </h1>
-              <p className="text-sm text-gray-500 font-medium">
-                Optimisé pour LeBonCoin, La Centrale, ParuVendu et toutes les marketplaces
+              <p className="text-xs sm:text-sm text-gray-500 font-medium">
+                Optimisé pour LeBonCoin, La Centrale, AutoScout24 et toutes les marketplaces
               </p>
             </div>
           </div>
 
           {/* Stepper */}
-          <div className="flex items-center gap-2 mt-6">
+          <div className="flex items-center gap-1.5 sm:gap-2 mt-6">
             {[
               { n: 1, label: 'Véhicule' },
               { n: 2, label: 'Détails & prix' },
               { n: 3, label: 'Annonce' },
             ].map((s, i) => (
-              <div key={s.n} className="flex items-center gap-2 flex-1">
-                <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors flex-1 justify-center ${
+              <div key={s.n} className="flex items-center gap-1.5 sm:gap-2 flex-1">
+                <div className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors flex-1 justify-center ${
                   step === s.n
                     ? 'bg-[#ff6d11] text-white shadow-sm'
                     : step > s.n
@@ -335,18 +336,19 @@ export default function AnnonceAutoPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-4xl">
 
         {/* ═══════════════ STEP 1: VÉHICULE ═══════════════ */}
         {step === 1 && (
           <div className="space-y-6 animate-fade-in">
 
             {/* Plaque */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-              <div className="flex items-center gap-2 mb-4">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200">
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
                 <Search className="w-5 h-5 text-blue-600" />
                 <h2 className="text-lg font-black text-gray-900">Identification par plaque</h2>
                 <span className="text-xs text-gray-400 font-medium">(facultatif)</span>
+                <Tooltip content="Histovec est le portail officiel et gratuit du Ministère de l'Intérieur permettant de certifier l'historique administratif, le nombre de propriétaires et les relevés de kilométrage." />
               </div>
               <p className="text-sm text-gray-600 mb-4">
                 Consultez <strong>Histovec</strong> pour retrouver les infos exactes de votre véhicule.
@@ -511,7 +513,7 @@ export default function AnnonceAutoPage() {
 
               {/* État général - 3 radios visuels */}
               <label className="block text-sm font-bold text-gray-900 mb-3">État général</label>
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
                 {([
                   { val: 'excellent' as EtatVehicule, label: 'Excellent', sub: 'Comme neuf, aucun défaut', color: 'green' },
                   { val: 'bon' as EtatVehicule, label: 'Bon état', sub: 'Normal pour l\'âge', color: 'blue' },
@@ -520,7 +522,7 @@ export default function AnnonceAutoPage() {
                   <button
                     key={e.val}
                     onClick={() => setVendeur({ ...vendeur, etat: e.val })}
-                    className={`p-4 rounded-xl border-2 text-center transition-all ${
+                    className={`p-3.5 sm:p-4 rounded-xl border-2 text-center transition-all ${
                       vendeur.etat === e.val
                         ? `border-${e.color}-500 bg-${e.color}-50 ring-2 ring-${e.color}-200`
                         : 'border-gray-200 hover:border-gray-300'
@@ -547,13 +549,13 @@ export default function AnnonceAutoPage() {
             </div>
 
             {/* Options */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200">
               <h2 className="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#ff6d11]" />
                 Équipements & options
               </h2>
               <p className="text-sm text-gray-500 mb-4">Sélectionnez les équipements présents sur votre véhicule.</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 {OPTIONS_LIST.map(opt => (
                   <button
                     key={opt.id}

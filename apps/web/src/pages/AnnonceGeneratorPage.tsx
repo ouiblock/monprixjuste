@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@monprixjuste/ui';
+import Tooltip from '../components/Tooltip';
 import { 
   Home, 
   FileText, 
@@ -456,58 +457,59 @@ export default function AnnonceGeneratorPage() {
   const isMaisonVilla = typeBien === 'Maison' || typeBien === 'Villa' || typeBien === 'Immeuble';
   
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-4xl font-black text-gray-900 mb-2">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-8 overflow-x-hidden">
+      <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-black text-gray-900 mb-2">
             📝 Générateur d'Annonces Immobilières
           </h1>
-          <p className="text-lg text-gray-600">
-            Créez des annonces conformes DGCCRF, Loi Hoguet, Loi ALUR, Loi Climat
+          <p className="text-sm sm:text-lg text-gray-600">
+            Créez des annonces conformes DGCCRF, Loi Hoguet, Loi ALUR, Loi Climat (Leboncoin, SeLoger, PAP, Bien'ici)
           </p>
         </div>
         
         {/* Mode de vente */}
-        <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-200">
-          <h2 className="text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 mb-6 shadow-sm border border-gray-200">
+          <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
             🎯 Mode de vente
+            <Tooltip content="Choisissez Particulier à Particulier pour une vente directe (Leboncoin, PAP), ou Agence pour générer automatiquement les mentions d'honoraires obligatoires (arrêté DGCCRF)." />
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <button
               onClick={() => setModeVente('particulier')}
-              className={`p-6 rounded-xl border-2 transition-all ${
+              className={`p-4 sm:p-6 rounded-xl border-2 transition-all ${
                 modeVente === 'particulier'
                   ? 'border-[#ff6d11] bg-orange-50'
                   : 'border-gray-200 hover:border-[#ff6d11]'
               }`}
             >
-              <div className="text-3xl mb-2">👤</div>
-              <div className="font-bold text-gray-900">Particulier à Particulier</div>
-              <div className="text-sm text-gray-600">Pas d'honoraires d'agence</div>
+              <div className="text-2xl sm:text-3xl mb-2">👤</div>
+              <div className="font-bold text-gray-900 text-sm sm:text-base">Particulier à Particulier</div>
+              <div className="text-xs sm:text-sm text-gray-600">Pas d'honoraires d'agence</div>
             </button>
             <button
               onClick={() => setModeVente('agence-hai-vendeur')}
-              className={`p-6 rounded-xl border-2 transition-all ${
+              className={`p-4 sm:p-6 rounded-xl border-2 transition-all ${
                 modeVente === 'agence-hai-vendeur'
                   ? 'border-[#ff6d11] bg-orange-50'
                   : 'border-gray-200 hover:border-[#ff6d11]'
               }`}
             >
-              <div className="text-3xl mb-2">🏢</div>
-              <div className="font-bold text-gray-900">Agence - HAI Vendeur</div>
-              <div className="text-sm text-gray-600">Honoraires à la charge du vendeur</div>
+              <div className="text-2xl sm:text-3xl mb-2">🏢</div>
+              <div className="font-bold text-gray-900 text-sm sm:text-base">Agence - HAI Vendeur</div>
+              <div className="text-xs sm:text-sm text-gray-600">Honoraires à la charge du vendeur</div>
             </button>
             <button
               onClick={() => setModeVente('agence-hai-acquereur')}
-              className={`p-6 rounded-xl border-2 transition-all ${
+              className={`p-4 sm:p-6 rounded-xl border-2 transition-all ${
                 modeVente === 'agence-hai-acquereur'
                   ? 'border-[#ff6d11] bg-orange-50'
                   : 'border-gray-200 hover:border-[#ff6d11]'
               }`}
             >
-              <div className="text-3xl mb-2">🤝</div>
-              <div className="font-bold text-gray-900">Agence - HAI Acquéreur</div>
-              <div className="text-sm text-gray-600">Honoraires à la charge de l'acquéreur</div>
+              <div className="text-2xl sm:text-3xl mb-2">🤝</div>
+              <div className="font-bold text-gray-900 text-sm sm:text-base">Agence - HAI Acquéreur</div>
+              <div className="text-xs sm:text-sm text-gray-600">Honoraires à la charge de l'acquéreur</div>
             </button>
           </div>
         </div>
@@ -738,7 +740,7 @@ export default function AnnonceGeneratorPage() {
               
               {modeVente === 'agence-hai-acquereur' && (
                 <>
-                  <div className="flex gap-2 mb-4">
+                  <div className="flex flex-col sm:flex-row gap-2 mb-4">
                     <button
                       onClick={() => setModeSaisie('net')}
                       className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-colors ${
@@ -764,7 +766,7 @@ export default function AnnonceGeneratorPage() {
                   {/* Mode de calcul des honoraires */}
                   <div className="bg-gray-50 rounded-lg p-4 mb-4">
                     <label className="block text-sm font-bold text-gray-900 mb-2">Mode de calcul des honoraires</label>
-                    <div className="grid grid-cols-3 gap-2 mb-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
                       <button
                         onClick={() => setModeCalcul('dgccrf')}
                         className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors ${

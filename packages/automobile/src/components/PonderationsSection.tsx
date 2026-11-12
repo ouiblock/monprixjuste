@@ -10,38 +10,45 @@ export default function PonderationsSection() {
     setPonderations({ [key]: value });
   };
 
-  const total = ponderations.coteOfficielle + 
-                ponderations.annoncesParticulier + 
-                ponderations.annoncesPro + 
-                ponderations.rachatCash;
+  const total =
+    ponderations.coteOfficielle +
+    ponderations.annoncesParticulier +
+    ponderations.annoncesPro +
+    ponderations.rachatCash;
 
   const isValid = total === 100;
 
   return (
-    <Card className="mb-8">
-      <div className="p-6">
-        <h2 className="text-2xl font-black text-gray-900 mb-6">
-          Pondération des sources
-        </h2>
+    <Card>
+      <div className="p-4 sm:p-6">
+        <div className="flex items-center gap-2 flex-wrap mb-3">
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900">
+            4. Pondération des sources
+          </h2>
+          <Tooltip
+            content="Ajustez l'importance relative de chaque catégorie de sources. Si une catégorie ne contient aucune donnée, son poids est automatiquement redistribué sur les autres."
+            position="top"
+          />
+        </div>
 
-        <p className="text-sm text-gray-700 mb-6">
-          Ajustez l'importance de chaque catégorie de sources. Le total doit être égal à 100%.
+        <p className="text-xs sm:text-sm text-gray-700 mb-6">
+          Ajustez l'importance de chaque catégorie de sources. Le total recommandé est de 100%.
         </p>
 
-        <div className="space-y-6">
+        <div className="space-y-5">
           {/* Cote Officielle */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <label className="text-base font-bold text-gray-900">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                <label className="text-sm sm:text-base font-bold text-gray-900">
                   📊 Cote officielle (La Centrale / Argus)
                 </label>
                 <Tooltip
-                  content="La cote officielle (La Centrale, L'Argus, Autosphere) est calculée à partir de millions de transactions réelles et reste la référence la plus fiable. Recommandé : 40-50% de pondération."
-                  position="right"
+                  content="La cote officielle (La Centrale, L'Argus) est calculée à partir des transactions du marché et constitue la référence principale. Recommandé : 40-45%."
+                  position="top"
                 />
               </div>
-              <span className="text-lg font-black text-[#ff6d11]">
+              <span className="text-base sm:text-lg font-black text-[#ff6d11] flex-shrink-0">
                 {ponderations.coteOfficielle}%
               </span>
             </div>
@@ -58,17 +65,17 @@ export default function PonderationsSection() {
 
           {/* Annonces Particulier */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <label className="text-base font-bold text-gray-900">
-                  👤 Annonces Particulier
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                <label className="text-sm sm:text-base font-bold text-gray-900">
+                  👤 Annonces Particulier (Leboncoin…)
                 </label>
                 <Tooltip
-                  content="Les annonces de particuliers (LeBonCoin, ParuVendu) reflètent le prix demandé, souvent légèrement supérieur au prix de vente final. Elles donnent une bonne image du marché réel."
-                  position="right"
+                  content="Les annonces de particuliers reflètent la concurrence directe entre vendeurs privés sur Leboncoin ou La Centrale. Recommandé : 25-30%."
+                  position="top"
                 />
               </div>
-              <span className="text-lg font-black text-[#ff6d11]">
+              <span className="text-base sm:text-lg font-black text-[#ff6d11] flex-shrink-0">
                 {ponderations.annoncesParticulier}%
               </span>
             </div>
@@ -85,17 +92,17 @@ export default function PonderationsSection() {
 
           {/* Annonces Pro */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <label className="text-base font-bold text-gray-900">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                <label className="text-sm sm:text-base font-bold text-gray-900">
                   🏢 Annonces Pro / Concession
                 </label>
                 <Tooltip
-                  content="Les prix professionnels incluent la marge du vendeur et les services associés (garantie, financement). Un malus de -5% est automatiquement appliqué dans le calcul pour corriger cet écart."
-                  position="right"
+                  content="Les prix professionnels (La Centrale, AutoScout24) incluent les frais de préparation et la garantie. Une décote de -5% est automatiquement appliquée dans le calcul."
+                  position="top"
                 />
               </div>
-              <span className="text-lg font-black text-[#ff6d11]">
+              <span className="text-base sm:text-lg font-black text-[#ff6d11] flex-shrink-0">
                 {ponderations.annoncesPro}%
               </span>
             </div>
@@ -112,17 +119,17 @@ export default function PonderationsSection() {
 
           {/* Rachat Cash */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <label className="text-base font-bold text-gray-900">
-                  💰 Prix de rachat cash
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                <label className="text-sm sm:text-base font-bold text-gray-900">
+                  💰 Offre de rachat (Vendezvotrevoiture.fr…)
                 </label>
                 <Tooltip
-                  content="Le rachat cash (Aramisauto, Cardoen, Autobiz...) est la valeur de reprise immédiate. C'est le prix plancher : si votre véhicule est estimé sous ce seuil, le résultat n'est pas réaliste. Recommandé : 10-15%."
-                  position="right"
+                  content="L'offre de rachat cash (Vendezvotrevoiture.fr, reprise concession) représente la valeur de liquidité immédiate (prix plancher). Recommandé : 10-15%."
+                  position="top"
                 />
               </div>
-              <span className="text-lg font-black text-[#ff6d11]">
+              <span className="text-base sm:text-lg font-black text-[#ff6d11] flex-shrink-0">
                 {ponderations.rachatCash}%
               </span>
             </div>
@@ -139,18 +146,14 @@ export default function PonderationsSection() {
         </div>
 
         {/* Total */}
-        <div className={`mt-6 p-4 rounded-lg border-2 ${
-          isValid 
-            ? 'bg-green-50 border-green-500' 
-            : 'bg-yellow-50 border-yellow-500'
-        }`}>
+        <div
+          className={`mt-6 p-4 rounded-xl border-2 ${
+            isValid ? 'bg-green-50 border-green-500' : 'bg-yellow-50 border-yellow-500'
+          }`}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-base font-black text-gray-900">
-              Total
-            </span>
-            <span className={`text-2xl font-bold ${
-              isValid ? 'text-green-600' : 'text-yellow-600'
-            }`}>
+            <span className="text-sm sm:text-base font-black text-gray-900">Total des pondérations</span>
+            <span className={`text-xl sm:text-2xl font-bold ${isValid ? 'text-green-600' : 'text-yellow-600'}`}>
               {total}%
             </span>
           </div>
@@ -162,19 +165,6 @@ export default function PonderationsSection() {
               </p>
             </div>
           )}
-        </div>
-
-        {/* Recommandations */}
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-          <p className="text-xs font-semibold text-blue-800 mb-2">
-            💡 Recommandations par défaut
-          </p>
-          <ul className="text-xs text-blue-700 space-y-1">
-            <li>• <strong>Cote officielle (42%)</strong> : Référence fiable et standardisée</li>
-            <li>• <strong>Annonces Particulier (28%)</strong> : Prix réels du marché</li>
-            <li>• <strong>Annonces Pro (18%)</strong> : Prix avec garantie et services</li>
-            <li>• <strong>Rachat cash (12%)</strong> : Valeur plancher immédiate</li>
-          </ul>
         </div>
       </div>
     </Card>

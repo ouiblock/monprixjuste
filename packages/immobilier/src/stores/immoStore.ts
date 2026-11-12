@@ -17,7 +17,8 @@ const defaultPropertyData: PropertyData = {
   chambres: 2,
   etage: 2,
   ascenseur: false,
-  anneeConstruction: 2000
+  anneeConstruction: 2000,
+  photos: []
 };
 
 const defaultSources: Sources = {

@@ -4,57 +4,69 @@ import SourcesSection from './SourcesSection';
 import PonderationsSection from './PonderationsSection';
 import AdjustmentsSection from './AdjustmentsSection';
 import CalculationSummary from './CalculationSummary';
-import { Calculator, RotateCcw, AlertCircle } from 'lucide-react';
+import { Calculator, RotateCcw, AlertCircle, ExternalLink } from 'lucide-react';
+import Tooltip from '../../../../apps/web/src/components/Tooltip';
 
 export default function AutoEstimationApp() {
   const { reset } = useAutoStore();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative h-[680px] md:h-[820px] overflow-hidden">
+      <section className="relative min-h-[500px] md:min-h-[680px] py-14 md:py-24 flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src="/voiture.svg" 
-            alt="" 
-            className="w-full h-full object-cover" 
+          <img
+            src="/voiture.svg"
+            alt=""
+            className="w-full h-full object-cover"
           />
-          {/* White Overlay */}
-          <div className="absolute inset-0 bg-white/50"></div>
+          <div className="absolute inset-0 bg-white/60"></div>
         </div>
 
-        <div className="relative z-10 h-full flex items-center justify-center text-center">
-          <div className="container mx-auto px-6 max-w-5xl">
+        <div className="relative z-10 w-full text-center">
+          <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-5">
-                Outil d'estimation — Automobile
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-4">
+                Outil d'estimation hybride — Automobile
               </p>
-              <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-5">
                 Ne bradez plus<br />
                 <span className="text-[#ff6d11]">votre véhicule.</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-                Combinez la cote officielle, les annonces du marché et les offres de rachat pour vendre au prix juste, pas en dessous.
+              <p className="text-base sm:text-lg md:text-xl text-gray-700 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+                Croisez la cote La Centrale, les annonces Leboncoin et les offres de reprise type Vendezvotrevoiture.fr pour éditer un rapport PDF complet avec photos et sources cliquables.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-3 mb-10">
-                {['Cote officielle + marché', 'Ajustements kilométrage & état', 'Zéro algorithme opaque', '100% privé & gratuit'].map((label) => (
-                  <span key={label} className="text-xs font-semibold text-gray-700 bg-gray-900/5 border border-gray-300 px-3 py-1.5 rounded-full">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+                {[
+                  'La Centrale & Vendezvotrevoiture',
+                  'Photos en tête de page PDF',
+                  'Sources cliquables dans le PDF',
+                  '100% privé & gratuit',
+                ].map((label) => (
+                  <span
+                    key={label}
+                    className="text-xs font-semibold text-gray-800 bg-white/80 border border-gray-300 px-3 py-1.5 rounded-full shadow-2xs"
+                  >
                     {label}
                   </span>
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                 <button
-                  onClick={() => window.scrollTo({ top: document.getElementById('vehicule-form')?.offsetTop || 800, behavior: 'smooth' })}
-                  className="flex items-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
+                  type="button"
+                  onClick={() =>
+                    document.getElementById('vehicule-form')?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl"
                 >
                   Démarrer l'estimation <Calculator className="w-5 h-5" />
                 </button>
                 <button
+                  type="button"
                   onClick={reset}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors rounded-lg hover:bg-gray-900/5"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors rounded-lg hover:bg-gray-900/5"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Réinitialiser
@@ -66,10 +78,74 @@ export default function AutoEstimationApp() {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div id="vehicule-form" className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Bandeau Plateformes de Référence Automobile */}
+        <div className="mb-8 p-4 sm:p-5 bg-gradient-to-r from-blue-50 to-indigo-50/60 border border-blue-200 rounded-2xl text-sm">
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+            <span className="font-bold text-blue-950 text-xs sm:text-sm flex items-center gap-1.5">
+              🔍 Où relever vos cotes et annonces comparables ?
+              <Tooltip
+                content="Consultez gratuitement la cote sur La Centrale, l'offre de rachat immédiat sur Vendezvotrevoiture.fr et les annonces similaires sur Leboncoin ou AutoScout24. Collez les liens des annonces pour les rendre cliquables dans votre PDF."
+                position="top"
+              />
+            </span>
+            <span className="text-[11px] font-semibold text-blue-700 bg-white px-2.5 py-0.5 rounded-full border border-blue-200">
+              Portails automobiles de référence
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 mb-3">
+            {(
+              [
+                ['La Centrale (Cote & Pro)', 'https://www.lacentrale.fr/', true],
+                ['Vendezvotrevoiture.fr (Rachat)', 'https://www.vendezvotrevoiture.fr/', true],
+                ['Leboncoin', 'https://www.leboncoin.fr/', false],
+                ['AutoScout24', 'https://www.autoscout24.fr/', false],
+                ['Histovec (Gouv)', 'https://histovec.interieur.gouv.fr/histovec/home', false],
+              ] as const
+            ).map(([label, url, primary]) => (
+              <a
+                key={label}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center justify-center sm:justify-start gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                  primary
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-2xs'
+                    : 'bg-white text-blue-700 border border-blue-200 hover:border-blue-400 hover:bg-blue-50'
+                }`}
+              >
+                <span className="truncate">{label}</span>
+                <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+              </a>
+            ))}
+          </div>
+          <p className="text-blue-800 text-xs leading-relaxed">
+            <strong>Méthode conseillée :</strong> relevez la cote sur{' '}
+            <a
+              href="https://www.lacentrale.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 font-semibold underline hover:no-underline"
+            >
+              La Centrale
+            </a>
+            , une offre de reprise sur{' '}
+            <a
+              href="https://www.vendezvotrevoiture.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 font-semibold underline hover:no-underline"
+            >
+              Vendezvotrevoiture.fr
+            </a>{' '}
+            et 2 à 3 annonces proches sur Leboncoin ou La Centrale.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Left Column - Forms */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8 min-w-0">
             <VehicleForm />
             <SourcesSection />
             <PonderationsSection />
@@ -77,45 +153,33 @@ export default function AutoEstimationApp() {
           </div>
 
           {/* Right Column - Results */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24">
+          <div className="lg:col-span-1 min-w-0">
+            <div className="lg:sticky lg:top-24">
               <CalculationSummary />
             </div>
           </div>
         </div>
 
         {/* Disclaimer renforcé */}
-        <div className="mt-12 p-6 bg-amber-50 rounded-lg border-2 border-amber-600">
-          <h3 className="text-base font-bold text-amber-900 mb-3 flex items-center gap-2">
-            <AlertCircle className="w-5 h-5" />
+        <div className="mt-10 p-4 sm:p-6 bg-amber-50 rounded-xl border-2 border-amber-500/80">
+          <h3 className="text-sm sm:text-base font-bold text-amber-900 mb-2.5 flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
             Avertissement Important
           </h3>
-          <p className="text-sm text-amber-900 leading-relaxed mb-3">
+          <p className="text-xs sm:text-sm text-amber-900 leading-relaxed mb-2.5">
             <strong>MonPrixJuste est un outil indicatif uniquement.</strong> Cette estimation ne remplace en aucun cas :
           </p>
-          <ul className="text-sm text-amber-900 space-y-1 ml-4 mb-3">
+          <ul className="text-xs sm:text-sm text-amber-900 space-y-1 ml-4 mb-2.5">
             <li>• Un contrôle technique professionnel</li>
             <li>• Une expertise automobile certifiée</li>
             <li>• Un avis de valeur d'un expert agréé</li>
           </ul>
-          <p className="text-sm text-amber-900 leading-relaxed">
+          <p className="text-xs sm:text-sm text-amber-900 leading-relaxed">
             Pour toute transaction importante, consultez impérativement un professionnel qualifié. Les données sont saisies manuellement et peuvent contenir des erreurs.
           </p>
-          <p className="text-xs text-amber-800 mt-3">
-            Outil développé par{' '}
-            <a
-              href="https://www.arteandigital.fr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:no-underline"
-            >
-              www.arteandigital.fr
-            </a>{' '}
-            pour l'association HERRICHAIN.
-          </p>
-          <div className="mt-4 pt-4 border-t border-amber-400">
+          <div className="mt-4 pt-3 border-t border-amber-300">
             <p className="text-xs text-amber-800">
-              🔒 <strong>Confidentialité :</strong> Toutes les données sont traitées localement dans votre navigateur. Aucune information n'est envoyée à des serveurs externes.
+              🔒 <strong>Confidentialité :</strong> Toutes les données et photos sont traitées localement dans votre navigateur. Aucune information n'est envoyée à des serveurs externes.
             </p>
           </div>
         </div>

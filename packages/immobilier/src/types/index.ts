@@ -19,6 +19,7 @@ export interface PropertyData {
   etage: number;
   ascenseur: boolean;
   anneeConstruction: number;
+  photos?: string[]; // Photos en base64 JPEG (photos[0] = photo en tête de page)
 }
 
 // Sources de comparables
@@ -29,6 +30,7 @@ export interface DVFTransaction {
   date: string; // date de la transaction DVF
   adresse: string;
   commentaire: string;
+  lien?: string;
 }
 
 export interface AnnoncePAP {
@@ -45,9 +47,10 @@ export interface EstimationAgence {
   id: string;
   prixMin: number;
   prixMax: number;
-  source: string; // "Meilleurs Agents", "Yanport", "Agence locale"
+  source: string; // "Agence locale", "Notaire", "Expert immobilier"
   date: string;
   commentaire: string;
+  lien?: string;
 }
 
 export interface Sources {

@@ -17,7 +17,8 @@ const defaultVehicleData: VehicleData = {
   boite: 'Manuelle',
   carrosserie: 'Berline',
   nombrePortes: 5,
-  couleur: ''
+  couleur: '',
+  photos: []
 };
 
 const defaultSources: Sources = {

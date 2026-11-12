@@ -4,6 +4,7 @@ import type { Sources, Ponderations, Ajustements, CalculationResult, PropertyDat
 function isDVFAncienne(dateStr: string): boolean {
   if (!dateStr) return false;
   const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return false;
   const cinqAnsAvant = new Date();
   cinqAnsAvant.setFullYear(cinqAnsAvant.getFullYear() - 5);
   return date < cinqAnsAvant;

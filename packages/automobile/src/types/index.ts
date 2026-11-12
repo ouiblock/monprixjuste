@@ -19,6 +19,7 @@ export interface VehicleData {
   carrosserie: Carrosserie;
   nombrePortes: number;
   couleur: string;
+  photos?: string[]; // Photos en base64 JPEG (photos[0] = photo en tête de page)
 }
 
 // Sources de comparables
@@ -27,6 +28,7 @@ export interface CoteOfficielle {
   prix: number;
   source: string; // "La Centrale", "Argus", etc.
   commentaire: string;
+  lien?: string;
 }
 
 export interface AnnonceParticulier {
@@ -43,16 +45,18 @@ export interface AnnoncePro {
   prix: number;
   kilometrage: number;
   annee: number;
-  source: string; // "Leboncoin Pro", "AutoScout24", etc.
+  source: string; // "La Centrale", "Leboncoin Pro", "AutoScout24", etc.
   commentaire: string;
+  lien?: string;
 }
 
 export interface RachatCash {
   id: string;
   prix: number;
-  societe: string; // "Aramisauto", "Autohero", "Reezocar", etc.
+  societe: string; // "Vendezvotrevoiture.fr", "La Centrale Rachat", etc.
   date: string;
   conditions: string;
+  lien?: string;
 }
 
 export interface Sources {
