@@ -21,7 +21,12 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between gap-3">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity min-w-0">
-              <img src="/logoblanc.svg" alt="MonPrixJuste" className="h-7 sm:h-8 w-auto flex-shrink-0" />
+              <img
+                src="/logoblanc.svg"
+                alt="MonPrixJuste"
+                className="h-8 max-h-8 w-auto max-w-[36px] object-contain flex-shrink-0"
+                style={{ height: '32px', maxHeight: '32px', width: 'auto' }}
+              />
               <span className="text-base sm:text-lg font-black text-white tracking-tight truncate">MonPrixJuste</span>
             </Link>
 
