@@ -101,7 +101,7 @@ export default function AutoEstimationApp() {
                 ['Vendezvotrevoiture.fr (Rachat)', 'https://www.vendezvotrevoiture.fr/', true],
                 ['Leboncoin', 'https://www.leboncoin.fr/', false],
                 ['AutoScout24', 'https://www.autoscout24.fr/', false],
-                ['Histovec (Gouv)', 'https://histovec.interieur.gouv.fr/histovec/home', false],
+                ['Histovec (Gouv)', 'https://histovec.interieur.gouv.fr/histovec/accueil', false],
               ] as const
             ).map(([label, url, primary]) => (
               <a

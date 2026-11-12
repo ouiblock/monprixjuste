@@ -115,7 +115,7 @@ const FAQ_KNOWLEDGE_BASE: FaqEntry[] = [
     answer:
       "Histovec est le service officiel et gratuit du Ministère de l'Intérieur. Il permet au vendeur de partager l'historique certifié du véhicule (date de 1ère mise en circulation, changements de propriétaires, sinistres graves, situation administrative et relevés de kilométrage aux contrôles techniques).",
     links: [
-      { label: 'Histovec (Site Officiel Gouv)', url: 'https://histovec.interieur.gouv.fr/histovec/home' },
+      { label: 'Histovec (Site Officiel Gouv)', url: 'https://histovec.interieur.gouv.fr/histovec/accueil' },
     ],
   },
   {

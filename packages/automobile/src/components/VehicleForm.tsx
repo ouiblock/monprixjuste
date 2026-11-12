@@ -28,7 +28,7 @@ export default function VehicleForm() {
     }
     setPlaqueError('');
     window.open(
-      `https://histovec.interieur.gouv.fr/histovec/home`,
+      `https://histovec.interieur.gouv.fr/histovec/accueil`,
       '_blank',
       'noopener,noreferrer'
     );

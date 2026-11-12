@@ -780,7 +780,7 @@ export function generateAutoPDF(
     addClickableSourceBadge(doc, 49, refY + 5.5, 'Vendezvotrevoiture.fr ↗', 'https://www.vendezvotrevoiture.fr/', true);
     addClickableSourceBadge(doc, 95, refY + 5.5, 'Leboncoin.fr ↗', 'https://www.leboncoin.fr/', true);
     addClickableSourceBadge(doc, 125, refY + 5.5, 'AutoScout24.fr ↗', 'https://www.autoscout24.fr/', true);
-    addClickableSourceBadge(doc, 161, refY + 5.5, 'Histovec (Gouv) ↗', 'https://histovec.interieur.gouv.fr/histovec/home', true);
+    addClickableSourceBadge(doc, 161, refY + 5.5, 'Histovec (Gouv) ↗', 'https://histovec.interieur.gouv.fr/histovec/accueil', true);
   }
 
   // Pass final pour numéroter toutes les pages exactement

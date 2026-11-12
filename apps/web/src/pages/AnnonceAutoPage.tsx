@@ -235,7 +235,7 @@ export default function AnnonceAutoPage() {
       return;
     }
     setPlaqueError('');
-    window.open('https://histovec.interieur.gouv.fr/histovec/home', '_blank', 'noopener,noreferrer');
+    window.open('https://histovec.interieur.gouv.fr/histovec/accueil', '_blank', 'noopener,noreferrer');
   };
 
   const toggleOption = (id: string) => {
