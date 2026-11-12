@@ -51,8 +51,8 @@ function compressImageToJpeg(file: File, maxWidth = 1200, maxHeight = 800, quali
 export default function PhotoUploader({
   photos = [],
   onChange,
-  title = 'Photos pour le rapport PDF',
-  subtitle = 'Ajoutez une ou plusieurs photos locales. La photo principale sera mise en avant en tête de la première page du PDF.',
+  title = 'Photos du bien',
+  subtitle = 'Ajoutez jusqu\'à 6 photos locales pour documenter votre bien. La première photo servira d\'illustration principale.',
   maxPhotos = 6,
 }: PhotoUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -102,7 +102,7 @@ export default function PhotoUploader({
             {title}
           </h3>
           <Tooltip
-            content="Importez jusqu'à 6 photos depuis votre ordinateur ou votre smartphone. La photo marquée « En-tête PDF » s'affichera en couverture de votre dossier d'estimation PDF, et les autres photos composeront la galerie visuelle du rapport. Tout reste 100% privé dans votre navigateur."
+            content="Ajoutez des photos pour illustrer votre dossier. Vos images sont compressées et restent à 100% sur votre appareil (aucun transfert serveur)."
             position="top"
           />
         </div>
@@ -162,7 +162,7 @@ export default function PhotoUploader({
                 {isLoading
                   ? 'Optimisation des photos en cours...'
                   : photos.length === 0
-                  ? 'Ajouter la photo de couverture (en tête de page PDF) et d\'autres vues'
+                  ? 'Ajouter une photo principale et d\'autres vues'
                   : 'Ajouter d\'autres photos à la galerie'}
               </p>
               <p className="text-xs text-gray-500 mt-0.5">
@@ -200,13 +200,13 @@ export default function PhotoUploader({
                 <div className="aspect-video w-full bg-gray-100 overflow-hidden relative">
                   <img
                     src={src}
-                    alt={isCover ? 'Photo de couverture PDF' : `Photo ${idx + 1}`}
+                    alt={isCover ? 'Photo principale' : `Photo ${idx + 1}`}
                     className="w-full h-full object-cover"
                   />
                   {isCover && (
                     <div className="absolute top-2 left-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ff6d11] text-white text-[11px] font-bold shadow-md">
                       <Star className="w-3 h-3 fill-white" />
-                      En-tête de page PDF
+                      Photo principale
                     </div>
                   )}
                 </div>

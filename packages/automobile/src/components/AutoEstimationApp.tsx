@@ -35,16 +35,16 @@ export default function AutoEstimationApp() {
                 <span className="text-[#ff6d11]">votre véhicule.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-                Croisez la cote La Centrale, les annonces Leboncoin et les offres de rachat Vendezvotrevoiture.fr dans un rapport PDF complet avec photos et sources cliquables.
+                Croisez la cote La Centrale, les annonces Leboncoin et les offres de rachat Vendezvotrevoiture.fr pour évaluer précisément votre véhicule.
               </p>
 
               {/* Badges */}
               <div className="flex flex-wrap justify-center gap-3 mb-10">
                 {[
                   'La Centrale & Vendezvotrevoiture',
-                  'Photos en tête de page PDF',
-                  'Sources cliquables',
+                  'Historique Histovec officiel',
                   '100% privé & gratuit',
+                  'Export PDF disponible',
                 ].map((label) => (
                   <span
                     key={label}

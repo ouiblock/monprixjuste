@@ -13,9 +13,7 @@ import {
   TrendingUp,
   TrendingDown,
   FileText,
-  CheckCircle2,
   Link2,
-  Sparkles,
 } from 'lucide-react';
 import type {
   TypeBien,
@@ -274,16 +272,16 @@ export default function ImmoEstimationApp() {
                 <span className="text-[#ff6d11]">Vendez au juste prix.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-                Combinez les ventes réelles notariées (DVF Etalab & Immo-Data), les annonces du marché et les avis de valeur pour générer un dossier PDF professionnel avec photos et sources cliquables.
+                Combinez les ventes réelles notariées (DVF Etalab & Immo-Data), les annonces du marché et les avis de valeur pour calculer une valeur vénale précise et objective.
               </p>
 
               {/* Badges */}
               <div className="flex flex-wrap justify-center gap-3 mb-10">
                 {[
                   'Ventes DVF & Immo-Data',
-                  'Photos en tête de page PDF',
-                  'Sources cliquables dans le PDF',
+                  'Annonces Leboncoin & SeLoger',
                   '100% privé & gratuit',
+                  'Export PDF disponible',
                 ].map((label) => (
                   <span
                     key={label}
@@ -383,17 +381,17 @@ export default function ImmoEstimationApp() {
               DVF Etalab
             </a>{' '}
             (données publiques des actes notariés).{' '}
-            <strong>2. Marché actuel :</strong> comparez avec les annonces sur Leboncoin, SeLoger ou PAP et collez leurs liens pour les rendre cliquables dans votre PDF.
+            <strong>2. Marché actuel :</strong> comparez avec les annonces sur Leboncoin, SeLoger ou PAP pour ajuster votre prix de vente.
           </p>
         </div>
 
         <div className="space-y-6">
-          {/* ── ÉTAPE 0 : PHOTOS DU BIEN (EN TÊTE DU PDF) ────────── */}
+          {/* ── ÉTAPE 0 : PHOTOS DU BIEN ─────────────────────────── */}
           <PhotoUploader
             photos={photos}
             onChange={setPhotos}
-            title="1. Photos du bien immobilier (En-tête du rapport PDF)"
-            subtitle="Importez une ou plusieurs photos de votre bien (façade, séjour, jardin…). La photo principale illustrera l'en-tête de la première page de votre PDF d'estimation."
+            title="1. Photos du bien immobilier"
+            subtitle="Ajoutez jusqu'à 6 photos (façade, séjour, pièces...). Vos images restent enregistrées localement sur votre appareil."
           />
 
           {/* ── ÉTAPE 1 : INFORMATIONS DU BIEN ───────────────────── */}
@@ -412,7 +410,7 @@ export default function ImmoEstimationApp() {
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                   Titre du dossier d'estimation (facultatif)
                   <Tooltip
-                    content="Ce titre apparaîtra en grand sur la couverture de votre rapport PDF (ex: 'Appartement T3 Biarritz Centre'). S'il est laissé vide, l'adresse sera utilisée."
+                    content="Donnez un nom ou une référence à votre estimation (ex: 'Appartement T3 Biarritz Centre')."
                     position="top"
                   />
                 </label>
@@ -777,10 +775,10 @@ export default function ImmoEstimationApp() {
                 <h3 className="font-bold text-sm sm:text-base text-gray-900 flex items-center gap-1.5 flex-wrap">
                   <span>Annonces immobilières</span>
                   <span className="text-xs text-gray-500 font-normal">
-                    (décote négociation −5% + lien cliquable PDF)
+                    (décote négociation −5%)
                   </span>
                   <Tooltip
-                    content="Les prix affichés sur Leboncoin, SeLoger ou PAP incluent une marge de négociation. Notre algorithme applique automatiquement -5% pour estimer le prix net signé. Collez l'URL de l'annonce pour qu'elle devienne une « Source cliquable » dans le PDF."
+                    content="Les prix affichés sur Leboncoin, SeLoger ou PAP incluent une marge de négociation. Notre algorithme applique automatiquement -5% pour estimer le prix net signé. Vous pouvez renseigner le lien de chaque annonce pour les retrouver facilement."
                     position="top"
                   />
                 </h3>
@@ -851,13 +849,13 @@ export default function ImmoEstimationApp() {
                       </div>
                     </div>
 
-                    {/* Lien de l'annonce pour Source Cliquable PDF */}
+                    {/* Lien de l'annonce */}
                     <div className="pt-2 border-t border-gray-200/70 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                       <div className="relative flex-1 flex items-center gap-2">
                         <Link2 className="w-4 h-4 text-blue-600 flex-shrink-0 hidden sm:block" />
                         <input
                           type="url"
-                          placeholder="URL de l'annonce (deviendra une « Source cliquable » dans le PDF)"
+                          placeholder="Lien web de l'annonce (Leboncoin, SeLoger, PAP...)"
                           value={row.lien || ''}
                           onChange={(e) => updateAnnonce(row.id, 'lien', e.target.value)}
                           className={inp + ' text-xs'}
@@ -872,7 +870,7 @@ export default function ImmoEstimationApp() {
                           title="Vérifier le lien de l'annonce"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
-                          <span>Source cliquable active</span>
+                          <span>Voir l'annonce</span>
                         </a>
                       )}
                     </div>
@@ -1149,7 +1147,7 @@ export default function ImmoEstimationApp() {
               className={btnPrimary + ' flex-1 py-3.5 text-base shadow-md'}
             >
               <Calculator className="w-5 h-5 mr-2" />
-              Calculer l'estimation et préparer le dossier PDF
+              Calculer l'estimation
             </button>
             <button
               type="button"
@@ -1179,10 +1177,10 @@ export default function ImmoEstimationApp() {
                   <button
                     type="button"
                     onClick={handlePDF}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-sm font-bold shadow-md transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold border border-gray-300 transition-all cursor-pointer"
                   >
-                    <Download className="w-4 h-4 text-[#ff6d11]" />
-                    Télécharger le rapport PDF Pro
+                    <Download className="w-3.5 h-3.5 text-[#ff6d11]" />
+                    Exporter en PDF
                   </button>
                 </div>
 
@@ -1373,58 +1371,30 @@ export default function ImmoEstimationApp() {
                 </div>
               </div>
 
-              {/* ── MISE EN AVANT PROPRE & PROFESSIONNELLE DU RAPPORT PDF ── */}
-              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 rounded-2xl p-5 sm:p-8 text-white shadow-xl border border-slate-700">
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                  <div className="space-y-3 flex-1">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff6d11]/20 border border-[#ff6d11]/40 text-[#ff6d11] text-xs font-bold">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Dossier PDF Prêt à Télécharger
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-black text-white leading-snug">
-                      Éditez votre Rapport d'Estimation Immobilier Complet
-                    </h3>
-                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
-                      Un document structuré sur 3 pages au format A4, conçu pour appuyer votre prix lors de vos visites ou échanges avec les acheteurs et professionnels :
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-xs sm:text-sm text-slate-200">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#ff6d11] flex-shrink-0" />
-                        <span>
-                          {photos.length > 0
-                            ? `Photo de couverture en tête de page (${photos.length} photo${photos.length > 1 ? 's' : ''} incluse${photos.length > 1 ? 's' : ''})`
-                            : 'Page de garde exécutive (ajoutez une photo en haut pour l\'illustrer)'}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#ff6d11] flex-shrink-0" />
-                        <span>Annonces & références en mode « Source cliquable »</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#ff6d11] flex-shrink-0" />
-                        <span>Détail des ventes DVF / Immo-Data & pondérations</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#ff6d11] flex-shrink-0" />
-                        <span>Stratégie de prix & conseils de négociation</span>
-                      </div>
-                    </div>
+              {/* ── RAPPEL DISCRET EXPORT PDF ── */}
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0 text-[#ff6d11]">
+                    <FileText className="w-5 h-5" />
                   </div>
-
-                  <div className="w-full md:w-auto flex flex-col items-stretch md:items-end gap-2 flex-shrink-0">
-                    <button
-                      type="button"
-                      onClick={handlePDF}
-                      className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-black text-base rounded-xl shadow-lg hover:shadow-orange-500/25 transition-all cursor-pointer"
-                    >
-                      <FileText className="w-5 h-5" />
-                      Télécharger le PDF officiel
-                    </button>
-                    <span className="text-[11px] text-slate-400 text-center md:text-right">
-                      Génération instantanée • 100% local & confidentiel
-                    </span>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900">
+                      Conserver un récapitulatif de votre estimation
+                    </h4>
+                    <p className="text-xs text-gray-500">
+                      Vous pouvez télécharger un document PDF complet (photos, comparables et calculs) pour vos démarches.
+                    </p>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={handlePDF}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-xs font-bold rounded-lg shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  <Download className="w-4 h-4 text-[#ff6d11]" />
+                  Télécharger le récapitulatif PDF
+                </button>
               </div>
             </div>
           )}

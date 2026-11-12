@@ -1,6 +1,6 @@
 import { Card, Button } from '@monprixjuste/ui';
 import { useAutoStore } from '../stores/autoStore';
-import { Download, TrendingUp, TrendingDown, AlertCircle, FileText, CheckCircle2, Sparkles } from 'lucide-react';
+import { Download, TrendingUp, TrendingDown, AlertCircle, FileText } from 'lucide-react';
 import { generateAutoPDF } from '../pdf/pdfAuto';
 import Tooltip from '../../../../apps/web/src/components/Tooltip';
 
@@ -74,43 +74,6 @@ export default function CalculationSummary() {
 
   return (
     <div className="space-y-5">
-      {/* ── CARTE MISE EN AVANT DU DOSSIER PDF PRO ─────────── */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl border border-slate-700">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ff6d11]/20 border border-[#ff6d11]/40 text-[#ff6d11] text-xs font-bold mb-3">
-          <Sparkles className="w-3.5 h-3.5" />
-          Dossier PDF Professionnel Prêt
-        </div>
-        <h3 className="text-lg font-black text-white mb-2">
-          Téléchargez votre Avis de Valeur PDF
-        </h3>
-        <ul className="space-y-1.5 text-xs text-slate-300 mb-4">
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#ff6d11] flex-shrink-0" />
-            <span>
-              {photosCount > 0
-                ? `Photo en tête de page (${photosCount} photo${photosCount > 1 ? 's' : ''})`
-                : 'Page de garde pro (ajoutez une photo en haut)'}
-            </span>
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#ff6d11] flex-shrink-0" />
-            <span>Annonces & cotes en « Source cliquable »</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#ff6d11] flex-shrink-0" />
-            <span>Arguments de vente & négociation inclus</span>
-          </li>
-        </ul>
-        <button
-          type="button"
-          onClick={handleDownloadPDF}
-          className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-black text-sm rounded-xl shadow-lg transition-all cursor-pointer"
-        >
-          <Download className="w-4 h-4" />
-          Télécharger le rapport PDF Pro
-        </button>
-      </div>
-
       {/* Prix estimé */}
       <Card>
         <div className="p-5 sm:p-6 text-center">
@@ -133,6 +96,22 @@ export default function CalculationSummary() {
           </div>
         </div>
       </Card>
+
+      {/* Téléchargement PDF discret */}
+      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 text-xs text-gray-600">
+          <FileText className="w-4 h-4 text-[#ff6d11] flex-shrink-0" />
+          <span>Besoin d'un récapitulatif pour votre vente ou achat ?</span>
+        </div>
+        <button
+          type="button"
+          onClick={handleDownloadPDF}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3.5 py-2 bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 font-bold text-xs rounded-lg shadow-2xs transition-colors cursor-pointer"
+        >
+          <Download className="w-3.5 h-3.5 text-[#ff6d11]" />
+          Exporter en PDF
+        </button>
+      </div>
 
       {/* Score de confiance & Positionnement */}
       <Card>

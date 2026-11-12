@@ -8,12 +8,11 @@ import {
   Sparkles,
   Building2,
   Car,
-  FileText,
   RotateCcw,
   HelpCircle,
 } from 'lucide-react';
 
-type Category = 'all' | 'immo' | 'auto' | 'pdf';
+type Category = 'all' | 'immo' | 'auto';
 
 interface LinkItem {
   label: string;
@@ -22,7 +21,7 @@ interface LinkItem {
 
 interface FaqEntry {
   id: string;
-  category: 'immo' | 'auto' | 'pdf';
+  category: 'immo' | 'auto';
   question: string;
   keywords: string[];
   answer: string;
@@ -88,7 +87,7 @@ const FAQ_KNOWLEDGE_BASE: FaqEntry[] = [
     question: 'Où trouver la cote et les annonces auto ?',
     keywords: ['cote', 'centrale', 'argus', 'voiture', 'auto', 'annonce', 'autoscout', 'leboncoin', 'occasion'],
     answer:
-      "Pour estimer un véhicule avec précision, croisez la cote de référence sur La Centrale avec 3 à 5 annonces de véhicules proches (même motorisation, année et kilométrage voisin) sur La Centrale, Leboncoin ou AutoScout24. Pensez à copier le lien de chaque annonce pour les retrouver en un clic dans votre PDF !",
+      "Pour estimer un véhicule avec précision, croisez la cote de référence sur La Centrale avec 3 à 5 annonces de véhicules proches (même motorisation, année et kilométrage voisin) sur La Centrale, Leboncoin ou AutoScout24.",
     links: [
       { label: 'La Centrale (Cote & Annonces)', url: 'https://www.lacentrale.fr/cote-voitures.php' },
       { label: 'Leboncoin Voitures', url: 'https://www.leboncoin.fr/c/voitures' },
@@ -126,31 +125,13 @@ const FAQ_KNOWLEDGE_BASE: FaqEntry[] = [
     answer:
       "Le calculateur compare le kilométrage réel de votre véhicule à la moyenne annuelle standard (env. 15 000 km/an). L'impact par kilomètre est pondéré selon la motorisation (ex: un véhicule électrique subit moins d'usure mécanique au kilomètre qu'un moteur thermique, mais l'état de santé batterie SOH reste déterminant).",
   },
-
-  // PDF & PHOTOS & SOURCES CLIQUABLES
   {
-    id: 'pdf-photos',
-    category: 'pdf',
-    question: 'Comment ajouter des photos en en-tête du PDF ?',
-    keywords: ['photo', 'image', 'pdf', 'entete', 'tete', 'couverture', 'upload', 'ajouter', 'galerie'],
+    id: 'privacy-photos',
+    category: 'immo',
+    question: 'Mes photos et mes données restent-elles privées ?',
+    keywords: ['prive', 'confidentialite', 'rgpd', 'serveur', 'stockage', 'securite', 'gratuit', 'photo', 'donnee'],
     answer:
-      "En haut du formulaire (Étape 1 Immobilier ou section Véhicule en Auto), utilisez le bloc « Photos du bien / véhicule ». Vous pouvez importer jusqu'à 6 photos depuis votre téléphone ou ordinateur. La 1ère photo (badge « En-tête PDF ») s'affiche automatiquement en grand en haut de la page 1 de votre rapport PDF, et les suivantes en galerie !",
-  },
-  {
-    id: 'pdf-links',
-    category: 'pdf',
-    question: 'Comment rendre les sources cliquables dans le PDF ?',
-    keywords: ['lien', 'cliquable', 'source', 'url', 'pdf', 'annonce', 'retrouver', 'bouton'],
-    answer:
-      "Lorsque vous ajoutez une vente DVF, une cote ou une annonce (Immo ou Auto), collez l'adresse web (URL) dans le champ « Lien de l'annonce / source ». Dans le PDF généré (Page 2), chaque ligne affiche alors un bouton orange « 🔗 Source cliquable » : cliquez dessus depuis votre lecteur PDF pour ouvrir directement l'annonce originale !",
-  },
-  {
-    id: 'pdf-privacy',
-    category: 'pdf',
-    question: 'Mes photos et mes données sont-elles privées ?',
-    keywords: ['prive', 'confidentialite', 'rgpd', 'serveur', 'stockage', 'securite', 'gratuit'],
-    answer:
-      "Oui, 100 % privées ! Vos photos sont compressées et traitées uniquement dans la mémoire locale de votre navigateur pour générer votre PDF. Aucune photo ni aucune donnée d'estimation n'est envoyée sur un serveur externe.",
+      "Oui, 100 % privées ! Vos photos et vos données d'estimation restent stockées exclusivement dans votre navigateur web local. Aucun envoi n'est réalisé vers des serveurs distants.",
   },
 ];
 
@@ -165,7 +146,7 @@ export default function AssistantChatWidget() {
     {
       id: 'welcome',
       sender: 'bot',
-      text: "Bonjour 👋 Je suis l'assistant MonPrixJuste. Posez-moi une question ou cliquez sur un sujet ci-dessous (Immobilier, Automobile, Photos & Sources PDF) !",
+      text: "Bonjour 👋 Je suis l'assistant MonPrixJuste. Posez-moi une question ou cliquez sur un sujet ci-dessous (Immobilier ou Automobile) !",
       links: [
         { label: 'Immo-Data.fr', url: 'https://www.immo-data.fr/' },
         { label: 'DVF Etalab', url: 'https://app.dvf.etalab.gouv.fr/' },
@@ -312,7 +293,7 @@ export default function AssistantChatWidget() {
               </div>
               <div className="min-w-0">
                 <h3 className="text-sm font-black text-white truncate">Assistant MonPrixJuste</h3>
-                <p className="text-[11px] text-gray-300 truncate">Aide Immo, Auto & Rapport PDF</p>
+                <p className="text-[11px] text-gray-300 truncate">Aide & conseils estimation</p>
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
@@ -342,7 +323,6 @@ export default function AssistantChatWidget() {
               { id: 'all' as Category, label: 'Tout', icon: HelpCircle },
               { id: 'immo' as Category, label: 'Immo', icon: Building2 },
               { id: 'auto' as Category, label: 'Auto', icon: Car },
-              { id: 'pdf' as Category, label: 'PDF & Photos', icon: FileText },
             ].map((tab) => {
               const Icon = tab.icon;
               const active = activeCategory === tab.id;

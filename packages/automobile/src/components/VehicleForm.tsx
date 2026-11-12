@@ -36,12 +36,12 @@ export default function VehicleForm() {
 
   return (
     <div className="space-y-6">
-      {/* ── ÉTAPE 0 : PHOTOS DU VÉHICULE (EN TÊTE DU PDF) ─────── */}
+      {/* ── ÉTAPE 0 : PHOTOS DU VÉHICULE ─────────────────────── */}
       <PhotoUploader
         photos={vehicleData.photos || []}
         onChange={(photos) => setVehicleData({ photos })}
-        title="1. Photos du véhicule (En-tête du rapport PDF)"
-        subtitle="Ajoutez une ou plusieurs photos de votre voiture (vue 3/4 avant, habitacle, compteur…). La photo principale sera affichée en grand en tête de la première page de votre PDF."
+        title="1. Photos du véhicule"
+        subtitle="Ajoutez jusqu'à 6 photos (vue d'ensemble, habitacle, compteur…). Vos photos restent 100% locales sur votre appareil."
       />
 
       <Card>

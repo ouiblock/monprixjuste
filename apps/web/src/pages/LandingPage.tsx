@@ -22,11 +22,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Mes données et mes photos sont-elles confidentielles ?',
-    a: "Absolument. Toutes vos estimations et les photos importées restent dans votre navigateur. Aucune donnée ni photo n'est envoyée à un serveur externe. Elles servent exclusivement à générer votre dossier PDF localement.",
+    a: "Absolument. Toutes vos estimations et photos restent stockées localement dans votre navigateur. Aucune donnée n'est envoyée à un serveur externe. Tout est calculé directement sur votre appareil.",
   },
   {
-    q: 'Que contient le nouveau rapport PDF professionnel ?',
-    a: "Votre rapport PDF (3 pages A4) met en valeur votre bien ou véhicule avec votre photo principale en tête de page, une galerie secondaire, le détail des pondérations, tous les ajustements chiffrés, et surtout des boutons « Source cliquable » permettant d'ouvrir en un clic chaque annonce ou référence ayant servi à l'estimation.",
+    q: 'Peut-on exporter ou conserver son estimation ?',
+    a: "Oui, un bouton vous permet de télécharger à tout moment un récapitulatif complet au format PDF (avec vos photos, le détail des calculs et vos sources) pour vos démarches.",
   },
   {
     q: "Qu'est-ce que le DVF et où trouver ces données ?",
@@ -50,8 +50,8 @@ const WHY_ITEMS = [
   },
   {
     icon: Camera,
-    title: 'Rapport PDF Pro avec Photos & Liens',
-    desc: "Importez jusqu'à 6 photos (dont une en couverture de page 1) et retrouvez toutes vos annonces comparables sous forme de « sources cliquables » directement dans le PDF.",
+    title: 'Synthèse claire & Photos',
+    desc: "Ajoutez des photos pour illustrer votre dossier, comparez vos sources et téléchargez un rapport récapitulatif structuré si vous le souhaitez.",
   },
   {
     icon: Shield,
@@ -61,7 +61,7 @@ const WHY_ITEMS = [
   {
     icon: Banknote,
     title: 'Gratuit sans conditions',
-    desc: '100% gratuit, sans création de compte, sans publicité, avec téléchargement illimité de vos dossiers PDF.',
+    desc: '100% gratuit, sans création de compte, sans publicité, avec accès illimité aux calculateurs.',
   },
 ];
 
@@ -88,15 +88,15 @@ export default function LandingPage() {
                 <span className="text-[#ff6d11]">Achetez en connaissance de cause.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-                Croisez les données officielles (Immo-Data, DVF Etalab, Histovec) et les plateformes de référence (Leboncoin, SeLoger, La Centrale, Vendezvotrevoiture) pour générer un rapport PDF professionnel avec photos et sources cliquables.
+                Croisez les données officielles (Immo-Data, DVF Etalab, Histovec) et les plateformes de référence (Leboncoin, SeLoger, La Centrale, Vendezvotrevoiture) pour estimer vos biens en toute indépendance.
               </p>
 
               <div className="flex flex-wrap justify-center gap-3 mb-10">
                 {[
-                  'Photos en en-tête PDF',
-                  'Sources cliquables dans le PDF',
-                  '100% indépendant & privé',
-                  'Gratuit sans inscription',
+                  'Ventes notariées & cotes officielles',
+                  '100% transparent & sans biais',
+                  '100% privé & gratuit',
+                  'Export PDF optionnel',
                 ].map((label) => (
                   <span
                     key={label}
@@ -134,7 +134,7 @@ export default function LandingPage() {
               Que souhaitez-vous estimer ?
             </h2>
             <p className="text-sm sm:text-base text-gray-500 max-w-xl mx-auto">
-              Deux calculateurs complets avec import de photos et génération d'un dossier d'estimation PDF ultra-pro.
+              Deux calculateurs indépendants et transparents pour évaluer vos biens au plus juste.
             </p>
           </div>
 
@@ -151,10 +151,10 @@ export default function LandingPage() {
                 </p>
                 <ul className="space-y-2 mb-7 flex-1">
                   {[
-                    'Ajout de photos du bien (photo de couverture PDF)',
-                    'Ventes notariées via Immo-Data.fr & DVF Etalab',
-                    'Liens des annonces en mode « Source cliquable » dans le PDF',
-                    'Simulation frais de notaire, crédit et stratégie de négociation',
+                    'Ventes notariées réelles via Immo-Data.fr & DVF Etalab',
+                    'Annonces du marché avec décote de négociation',
+                    'Ajustements personnalisés (DPE, état, étage, calme…)',
+                    'Synthèse financière (frais de notaire, crédit) & export PDF',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#ff6d11] mt-2 flex-shrink-0" />
@@ -180,10 +180,10 @@ export default function LandingPage() {
                 </p>
                 <ul className="space-y-2 mb-7 flex-1">
                   {[
-                    'Ajout de photos du véhicule en en-tête du rapport PDF',
-                    'Sources cliquables vers La Centrale, Leboncoin, Vendezvotrevoiture',
-                    'Vérification historique officiel via Histovec',
-                    'Ajustements kilométrage, motorisation, état et équipements',
+                    'Cote La Centrale & reprise cash Vendezvotrevoiture.fr',
+                    'Vérification historique officiel via Histovec (plaque)',
+                    'Ajustements kilométrage, motorisation et équipements',
+                    'Indice de confiance & synthèse téléchargeable',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#ff6d11] mt-2 flex-shrink-0" />
@@ -200,20 +200,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Mise en avant du Rapport PDF Professionnel ───────── */}
-      <section className="py-14 sm:py-16 bg-gray-900 text-white">
+      {/* ── Méthode & Accompagnement ───────────────────────── */}
+      <section className="py-12 sm:py-14 bg-gray-900 text-white">
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
           <div className="grid md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-7 space-y-4">
+            <div className="md:col-span-8 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff6d11]/20 border border-[#ff6d11]/40 text-[#ff6d11] text-xs font-bold uppercase tracking-wider">
                 <FileCheck2 className="w-4 h-4" />
-                Nouveau • Dossier PDF Ultra-Pro
+                Méthode transparente & indépendante
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">
-                Un rapport PDF de 3 pages prêt à présenter à votre acheteur, vendeur ou banquier
+                Une estimation appuyée sur les données réelles du marché
               </h2>
               <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-                Chaque estimation génère un véritable dossier exécutif : photo de couverture en tête de page, synthèse financière, méthodologie pondérée et tableau des comparables avec boutons <strong className="text-white">« Source cliquable »</strong> pour vérifier chaque annonce en direct.
+                Chaque calcul combine les données publiques de l'État (DVF Etalab, Histovec) et les cotations de marché pour vous donner une vision claire, sans algorithme opaque ni démarchage commercial. Vous pouvez également éditer un récapitulatif clair de votre estimation.
               </p>
               <div className="flex flex-wrap gap-2 pt-2">
                 {[
@@ -238,27 +238,28 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="md:col-span-5 bg-gray-800/90 border border-gray-700 rounded-2xl p-5 space-y-3 shadow-xl">
-              <div className="flex items-center justify-between border-b border-gray-700 pb-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[#ff6d11]">
-                  Aperçu structure PDF (A4)
-                </span>
-                <span className="text-xs text-gray-400 font-semibold">3 pages</span>
-              </div>
-              <div className="space-y-2.5 text-xs">
-                <div className="p-3 rounded-xl bg-gray-900/70 border border-gray-700">
-                  <div className="font-bold text-white mb-0.5">Page 1 — Couverture & Synthèse</div>
-                  <p className="text-gray-400">Photo principale en en-tête, galerie photos, prix estimé, fourchette, indice de fiabilité et fiche technique.</p>
-                </div>
-                <div className="p-3 rounded-xl bg-gray-900/70 border border-gray-700">
-                  <div className="font-bold text-white mb-0.5">Page 2 — Sources Cliquables & Ajustements</div>
-                  <p className="text-gray-400">Détail de chaque vente DVF, cote ou annonce avec badge cliquable (« Source cliquable ») ouvrant le lien web.</p>
-                </div>
-                <div className="p-3 rounded-xl bg-gray-900/70 border border-gray-700">
-                  <div className="font-bold text-white mb-0.5">Page 3 — Budget, Stratégie & Liens Officiels</div>
-                  <p className="text-gray-400">Frais de notaire / crédit, recommandation de négociation et accès direct aux plateformes de référence.</p>
-                </div>
-              </div>
+            <div className="md:col-span-4 bg-gray-800/90 border border-gray-700 rounded-2xl p-5 space-y-3 shadow-xl">
+              <span className="text-xs font-black uppercase tracking-wider text-[#ff6d11]">
+                En résumé
+              </span>
+              <ul className="space-y-2.5 text-xs text-gray-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#ff6d11] font-bold">✓</span>
+                  <span>Prix réellement signés et cotes constatées</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#ff6d11] font-bold">✓</span>
+                  <span>Pondérations et ajustements 100% personnalisables</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#ff6d11] font-bold">✓</span>
+                  <span>Vos données restent dans votre navigateur</span>
+                </li>
+                <li className="flex items-start gap-2 text-gray-400 pt-1 border-t border-gray-700/60">
+                  <FileText className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 mt-0.5" />
+                  <span>Possibilité de télécharger un dossier récapitulatif PDF pour vos démarches.</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
