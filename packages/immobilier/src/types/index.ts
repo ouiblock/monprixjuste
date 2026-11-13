@@ -9,6 +9,7 @@ export type Exposition = 'Nord' | 'Sud' | 'Est' | 'Ouest' | 'Double' | 'Triple' 
 export interface PropertyData {
   estimationName: string;
   date: string;
+  role?: 'vendeur' | 'acheteur';
   typeBien: TypeBien;
   adresse: string;
   ville: string;

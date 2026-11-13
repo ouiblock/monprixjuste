@@ -9,6 +9,7 @@ export type AccidentGravite = 'Aucun' | 'Léger cosmétique' | 'Moyen / structur
 export interface VehicleData {
   estimationName: string;
   date: string;
+  role?: 'vendeur' | 'acheteur';
   marque: string;
   modele: string;
   version: string;

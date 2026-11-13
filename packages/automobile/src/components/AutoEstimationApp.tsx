@@ -13,7 +13,7 @@ export default function AutoEstimationApp() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative h-[680px] md:h-[820px] overflow-hidden">
+      <section className="relative min-h-[540px] sm:h-[680px] md:h-[820px] py-14 sm:py-0 overflow-hidden flex items-center">
         <div className="absolute inset-0">
           <img
             src="/voiture.svg"
@@ -24,22 +24,22 @@ export default function AutoEstimationApp() {
           <div className="absolute inset-0 bg-white/50"></div>
         </div>
 
-        <div className="relative z-10 h-full flex items-center justify-center text-center">
-          <div className="container mx-auto px-6 max-w-5xl">
+        <div className="relative z-10 w-full flex items-center justify-center text-center">
+          <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-5">
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-4 sm:mb-5">
                 Estimation hybride — Automobile
               </p>
-              <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-5 sm:mb-6">
                 Ne bradez plus<br />
                 <span className="text-[#ff6d11]">votre véhicule.</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-gray-800 font-medium mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
                 Croisez la cote La Centrale, les annonces Leboncoin et les offres de rachat Vendezvotrevoiture.fr pour évaluer précisément votre véhicule.
               </p>
 
               {/* Badges */}
-              <div className="flex flex-wrap justify-center gap-3 mb-10">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
                 {[
                   'La Centrale & Vendezvotrevoiture',
                   'Historique Histovec officiel',
@@ -48,7 +48,7 @@ export default function AutoEstimationApp() {
                 ].map((label) => (
                   <span
                     key={label}
-                    className="text-xs font-semibold text-gray-700 bg-gray-900/5 border border-gray-300 px-3 py-1.5 rounded-full"
+                    className="text-xs font-semibold text-gray-800 bg-white/80 border border-gray-300 px-3 py-1.5 rounded-full shadow-2xs"
                   >
                     ✓ {label}
                   </span>

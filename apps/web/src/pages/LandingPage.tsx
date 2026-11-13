@@ -71,27 +71,27 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative h-[680px] md:h-[820px] overflow-hidden">
+      <section className="relative min-h-[560px] sm:h-[680px] md:h-[820px] py-16 sm:py-0 overflow-hidden flex items-center">
         <div className="absolute inset-0">
           <img src="/header.svg" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-white/50" />
         </div>
 
-        <div className="relative z-10 h-full flex items-center justify-center text-center">
-          <div className="container mx-auto px-6 max-w-5xl">
+        <div className="relative z-10 w-full flex items-center justify-center text-center">
+          <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-5">
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-4 sm:mb-5">
                 Outil d'estimation hybride — Immobilier & Automobile
               </p>
-              <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-5 sm:mb-6">
                 Vendez au juste prix.<br />
                 <span className="text-[#ff6d11]">Achetez en connaissance de cause.</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-gray-800 font-medium mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
                 Croisez les données officielles (Immo-Data, DVF Etalab, Histovec) et les plateformes de référence (Leboncoin, SeLoger, La Centrale, Vendezvotrevoiture) pour estimer vos biens en toute indépendance.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-3 mb-10">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
                 {[
                   'Ventes notariées & cotes officielles',
                   '100% transparent & sans biais',
@@ -100,22 +100,22 @@ export default function LandingPage() {
                 ].map((label) => (
                   <span
                     key={label}
-                    className="text-xs font-semibold text-gray-700 bg-gray-900/5 border border-gray-300 px-3 py-1.5 rounded-full"
+                    className="text-xs font-semibold text-gray-800 bg-white/80 border border-gray-300 px-3 py-1.5 rounded-full shadow-2xs"
                   >
                     {label}
                   </span>
                 ))}
               </div>
 
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/immobilier">
-                  <button className="flex items-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform">
+              <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+                <Link to="/immobilier" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform">
                     <Building2 className="w-5 h-5" />
                     Estimer un bien immobilier
                   </button>
                 </Link>
-                <Link to="/auto">
-                  <button className="flex items-center gap-2 px-7 py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold text-base rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 transform">
+                <Link to="/auto" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 transform">
                     <Car className="w-5 h-5" />
                     Estimer un véhicule
                   </button>
@@ -200,67 +200,119 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Méthode & Accompagnement ───────────────────────── */}
-      <section className="py-12 sm:py-14 bg-gray-900 text-white">
+      {/* ── Méthode & Sources (Scindées Immo / Auto) ───────── */}
+      <section className="py-12 sm:py-16 bg-slate-900 text-white">
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
-          <div className="grid md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff6d11]/20 border border-[#ff6d11]/40 text-[#ff6d11] text-xs font-bold uppercase tracking-wider">
-                <FileCheck2 className="w-4 h-4" />
-                Méthode transparente & indépendante
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff6d11]/20 border border-[#ff6d11]/50 text-[#ff8a3d] text-xs font-bold uppercase tracking-wider mb-4">
+              <FileCheck2 className="w-4 h-4" />
+              Méthode transparente & indépendante
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-3">
+              Des estimations appuyées sur les vraies données de chaque marché
+            </h2>
+            <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
+              Sans algorithme opaque ni démarchage commercial : chaque univers s'appuie sur ses bases publiques officielles et ses plateformes de référence.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Carte Immobilier */}
+            <div className="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-lg">
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#ff6d11]/20 border border-[#ff6d11]/40 flex items-center justify-center flex-shrink-0">
+                    <Building2 className="w-5 h-5 text-[#ff8a3d]" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-white">Sources Immobilier</h3>
+                    <p className="text-xs text-slate-300">Actes notariés & annonces locales</p>
+                  </div>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed mb-4">
+                  Croisez les prix réellement signés chez le notaire (DVF) avec les biens actuellement en vente et ajustez selon l'état, le DPE ou l'exposition.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {[
+                    { label: 'Immo-Data.fr', url: 'https://www.immo-data.fr/' },
+                    { label: 'DVF Etalab', url: 'https://app.dvf.etalab.gouv.fr/' },
+                    { label: 'Leboncoin Immo', url: 'https://www.leboncoin.fr/c/ventes_immobilieres' },
+                    { label: 'SeLoger', url: 'https://www.seloger.com/' },
+                    { label: 'PAP', url: 'https://www.pap.fr/' },
+                  ].map((p) => (
+                    <a
+                      key={p.label}
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-600 hover:bg-[#ff6d11] hover:border-[#ff6d11] text-xs font-bold text-white transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+                      {p.label}
+                    </a>
+                  ))}
+                </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">
-                Une estimation appuyée sur les données réelles du marché
-              </h2>
-              <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-                Chaque calcul combine les données publiques de l'État (DVF Etalab, Histovec) et les cotations de marché pour vous donner une vision claire, sans algorithme opaque ni démarchage commercial. Vous pouvez également éditer un récapitulatif clair de votre estimation.
-              </p>
-              <div className="flex flex-wrap gap-2 pt-2">
-                {[
-                  { label: 'Immo-Data.fr', url: 'https://www.immo-data.fr/' },
-                  { label: 'DVF Etalab', url: 'https://app.dvf.etalab.gouv.fr/' },
-                  { label: 'La Centrale', url: 'https://www.lacentrale.fr/' },
-                  { label: 'Vendezvotrevoiture.fr', url: 'https://www.vendezvotrevoiture.fr/' },
-                  { label: 'Leboncoin', url: 'https://www.leboncoin.fr/' },
-                  { label: 'SeLoger', url: 'https://www.seloger.com/' },
-                ].map((p) => (
-                  <a
-                    key={p.label}
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#ff6d11] text-xs font-bold text-white transition-colors"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    {p.label}
-                  </a>
-                ))}
-              </div>
+              <Link
+                to="/immobilier"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff8a3d] hover:text-white transition-colors pt-3 border-t border-slate-700"
+              >
+                Accéder au calculateur immobilier <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            <div className="md:col-span-4 bg-gray-800/90 border border-gray-700 rounded-2xl p-5 space-y-3 shadow-xl">
-              <span className="text-xs font-black uppercase tracking-wider text-[#ff6d11]">
-                En résumé
-              </span>
-              <ul className="space-y-2.5 text-xs text-gray-300">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#ff6d11] font-bold">✓</span>
-                  <span>Prix réellement signés et cotes constatées</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#ff6d11] font-bold">✓</span>
-                  <span>Pondérations et ajustements 100% personnalisables</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#ff6d11] font-bold">✓</span>
-                  <span>Vos données restent dans votre navigateur</span>
-                </li>
-                <li className="flex items-start gap-2 text-gray-400 pt-1 border-t border-gray-700/60">
-                  <FileText className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 mt-0.5" />
-                  <span>Possibilité de télécharger un dossier récapitulatif PDF pour vos démarches.</span>
-                </li>
-              </ul>
+            {/* Carte Automobile */}
+            <div className="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-lg">
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#ff6d11]/20 border border-[#ff6d11]/40 flex items-center justify-center flex-shrink-0">
+                    <Car className="w-5 h-5 text-[#ff8a3d]" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-white">Sources Automobile</h3>
+                    <p className="text-xs text-slate-300">Cotes, reprise cash & historique officiel</p>
+                  </div>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed mb-4">
+                  Comparez la cote de référence, les annonces de particuliers ou professionnels, le rachat immédiat et vérifiez l'historique via la plaque sur Histovec.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {[
+                    { label: 'La Centrale', url: 'https://www.lacentrale.fr/' },
+                    { label: 'Vendezvotrevoiture.fr', url: 'https://www.vendezvotrevoiture.fr/' },
+                    { label: 'Histovec (Gouv)', url: 'https://histovec.interieur.gouv.fr/histovec/accueil' },
+                    { label: 'Leboncoin Auto', url: 'https://www.leboncoin.fr/c/voitures' },
+                    { label: 'AutoScout24', url: 'https://www.autoscout24.fr/' },
+                  ].map((p) => (
+                    <a
+                      key={p.label}
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-600 hover:bg-[#ff6d11] hover:border-[#ff6d11] text-xs font-bold text-white transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+                      {p.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <Link
+                to="/auto"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff8a3d] hover:text-white transition-colors pt-3 border-t border-slate-700"
+              >
+                Accéder au calculateur automobile <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-300">
+            <span>✓ Calculs 100% locaux dans votre navigateur</span>
+            <span>✓ Aucun compte requis</span>
+            <span className="inline-flex items-center gap-1.5 text-slate-300">
+              <FileText className="w-3.5 h-3.5 text-[#ff8a3d]" />
+              Export récapitulatif PDF optionnel
+            </span>
           </div>
         </div>
       </section>

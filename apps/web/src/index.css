@@ -7,28 +7,30 @@
 }
 
 /* Base styles & Mobile Overflow Prevention */
-html,
-body {
-  background-color: #FFFFFF;
-  color: #1F2937;
-  font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  max-width: 100vw;
-  overflow-wrap: anywhere;
-}
+@layer base {
+  html,
+  body {
+    background-color: #FFFFFF;
+    color: #1F2937;
+    font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    max-width: 100vw;
+    overflow-wrap: anywhere;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  color: #1F2937;
-  text-wrap: balance;
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: #1F2937;
+    text-wrap: balance;
+  }
 
-img,
-video {
-  max-inline-size: 100%;
-  block-size: auto;
+  img,
+  video {
+    max-inline-size: 100%;
+    block-size: auto;
+  }
 }
 
 /* Focus rings */

@@ -11,6 +11,8 @@ const BLUE_LINK = '#1D4ED8';
 const BLUE_BG = '#EFF6FF';
 const WHITE = '#FFFFFF';
 
+const M = 16; // Page margin (mm)
+
 const DISCLAIMER =
   'AVERTISSEMENT IMPORTANT — Document à usage strictement indicatif. ' +
   'Cette estimation hybride, réalisée avec l\'outil MonPrixJuste (version bêta), ne constitue ni un avis de valeur professionnel, ni une expertise immobilière certifiée, ni un mandat de vente ou d\'achat, ni une offre d\'achat ou de vente. ' +
@@ -18,7 +20,7 @@ const DISCLAIMER =
   'Les données utilisées sont saisies manuellement par l\'utilisateur ; MonPrixJuste n\'en garantit ni l\'exactitude, ni l\'exhaustivité. ' +
   'Pour toute décision d\'achat, de vente ou de financement, consultez un professionnel qualifié (notaire, agent immobilier, expert immobilier certifié). ' +
   'MonPrixJuste est un projet porté par l\'association HERRICHAIN (Loi 1901, RNA : W641015204). ' +
-  'Code source propriété exclusive d\'Artean Digital (SAS BASK\'IN BIARRITZ, SIRET 92991521300011).';
+  'Code source propriété exclusive d\'Artean Digital (SAS BASK\'IN BIARRITZ, capital 100 €, SIRET 92991521300011).';
 
 function isDVFAncienne(dateStr: string): boolean {
   if (!dateStr) return false;
@@ -36,10 +38,11 @@ function formatShortUrl(url: string): string {
     const host = parsed.hostname.replace(/^www\./, '');
     let path = parsed.pathname;
     if (path === '/') path = '';
-    if (path.length > 26) {
-      path = path.slice(0, 14) + '…' + path.slice(-8);
+    if (path.length > 20) {
+      path = path.slice(0, 11) + '…' + path.slice(-6);
     }
-    return `${host}${path}`;
+    const res = `${host}${path}`;
+    return res.length > 30 ? res.slice(0, 27) + '…' : res;
   } catch {
     const clean = url.replace(/^https?:\/\/(www\.)?/, '').trim();
     return clean.length > 28 ? clean.slice(0, 25) + '…' : clean;
@@ -80,64 +83,76 @@ function formatDate(dateStr: string): string {
   }
 }
 
-function addPageHeader(doc: jsPDF, pageNum: number, totalPages: number, refCode: string) {
-  const w = doc.internal.pageSize.getWidth();
-  doc.setFillColor(DARK);
-  doc.rect(0, 0, w, 13, 'F');
+function drawDiscreetLogo(doc: jsPDF, x: number, y: number) {
   doc.setFillColor(ORANGE);
-  doc.rect(0, 13, w, 1.2, 'F');
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10.5);
-  doc.setTextColor(WHITE);
-  doc.text('MonPrixJuste', 14, 8.8);
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(203, 213, 225);
-  doc.text(`Dossier d'estimation immobilière • Réf. ${refCode}`, 44, 8.8);
-
+  doc.roundedRect(x, y, 6.5, 6.5, 1.5, 1.5, 'F');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
   doc.setTextColor(WHITE);
-  doc.text(`Page ${pageNum} / ${totalPages}`, w - 14, 8.8, { align: 'right' });
+  doc.text('M', x + 3.25, y + 4.7, { align: 'center' });
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(SLATE);
+  doc.text('MonPrixJuste', x + 8.5, y + 4.7);
+}
+
+function addPageHeader(doc: jsPDF, pageNum: number, totalPages: number, refCode: string) {
+  const w = doc.internal.pageSize.getWidth();
+  drawDiscreetLogo(doc, M, 7);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(GRAY);
+  doc.text(`Estimation immobilière • Réf. ${refCode}`, w / 2, 11.5, { align: 'center' });
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(SLATE);
+  doc.text(`Page ${pageNum} / ${totalPages}`, w - M, 11.5, { align: 'right' });
+
+  doc.setDrawColor(BORDER_GRAY);
+  doc.setLineWidth(0.3);
+  doc.line(M, 16, w - M, 16);
 }
 
 function addPageFooter(doc: jsPDF) {
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
-  doc.setFillColor(LIGHT_GRAY);
-  doc.rect(0, h - 19, w, 19, 'F');
   doc.setDrawColor(BORDER_GRAY);
-  doc.setLineWidth(0.3);
-  doc.line(14, h - 19, w - 14, h - 19);
+  doc.setLineWidth(0.25);
+  doc.line(M, h - 14, w - M, h - 14);
 
-  doc.setFontSize(6);
+  doc.setFontSize(6.5);
   doc.setTextColor(GRAY);
-  doc.setFont('helvetica', 'italic');
-  const lines = doc.splitTextToSize(DISCLAIMER, w - 28);
-  doc.text(lines, 14, h - 14.5);
+  doc.setFont('helvetica', 'normal');
+  doc.text(
+    'MonPrixJuste — Document indicatif généré localement • Ne constitue pas une expertise immobilière certifiée.',
+    w / 2,
+    h - 9,
+    { align: 'center' }
+  );
 }
 
 function addSectionTitle(doc: jsPDF, title: string, y: number, subtitle?: string): number {
   const w = doc.internal.pageSize.getWidth();
   doc.setFillColor(ORANGE);
-  doc.roundedRect(14, y, 3.5, 7, 1, 1, 'F');
+  doc.roundedRect(M, y, 3, 6.5, 1, 1, 'F');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
+  doc.setFontSize(11.5);
   doc.setTextColor(DARK);
-  doc.text(title, 20.5, y + 5.3);
+  doc.text(title, M + 6, y + 5);
 
   if (subtitle) {
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(GRAY);
-    doc.text(subtitle, w - 14, y + 5.3, { align: 'right' });
+    doc.text(subtitle, w - M, y + 5, { align: 'right' });
   }
 
   doc.setDrawColor(BORDER_GRAY);
   doc.setLineWidth(0.25);
-  doc.line(14, y + 9, w - 14, y + 9);
+  doc.line(M, y + 8.5, w - M, y + 8.5);
   return y + 13;
 }
 
@@ -148,13 +163,13 @@ function addClickableSourceBadge(
   label: string,
   url: string,
   isDirectLink: boolean
-) {
+): number {
   const validUrl = getValidUrl(url);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   const textWidth = doc.getTextWidth(label);
-  const pillW = textWidth + 8;
-  const pillH = 5.5;
+  const pillW = Math.min(textWidth + 8, 92);
+  const pillH = 5.8;
 
   if (isDirectLink) {
     doc.setFillColor(BLUE_BG);
@@ -168,29 +183,41 @@ function addClickableSourceBadge(
 
   doc.setLineWidth(0.25);
   doc.roundedRect(x, y, pillW, pillH, 1.5, 1.5, 'FD');
-  doc.textWithLink(label, x + 4, y + 3.9, { url: validUrl });
+  doc.textWithLink(label, x + 4, y + 4.1, { url: validUrl });
   doc.link(x, y, pillW, pillH, { url: validUrl });
+  return pillW;
 }
 
 function addRow(doc: jsPDF, label: string, value: string, y: number, highlight = false): number {
   const w = doc.internal.pageSize.getWidth();
+  const cw = w - M * 2;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  const valWidth = doc.getTextWidth(value);
+  const maxLabelWidth = Math.max(55, cw - valWidth - 12);
+
+  doc.setFont('helvetica', 'normal');
+  const labelLines = doc.splitTextToSize(label, maxLabelWidth);
+  const rowH = Math.max(9, labelLines.length * 4.5 + 4.5);
+
   if (highlight) {
     doc.setFillColor(255, 237, 213);
-    doc.roundedRect(14, y - 0.5, w - 28, 8.5, 1.5, 1.5, 'F');
+    doc.roundedRect(M, y - 0.5, cw, rowH, 1.5, 1.5, 'F');
   }
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
+
   doc.setTextColor(SLATE);
-  doc.text(label, 17, y + 5);
+  doc.text(labelLines, M + 3, y + 5.2);
+
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(highlight ? ORANGE : DARK);
-  doc.text(value, w - 17, y + 5, { align: 'right' });
+  doc.text(value, w - M - 3, y + 5.2, { align: 'right' });
+
   if (!highlight) {
     doc.setDrawColor(235, 238, 242);
     doc.setLineWidth(0.2);
-    doc.line(14, y + 7.5, w - 14, y + 7.5);
+    doc.line(M, y + rowH - 1, w - M, y + rowH - 1);
   }
-  return y + 9.5;
+  return y + rowH + 1.5;
 }
 
 export function generateImmoPDF(
@@ -203,209 +230,173 @@ export function generateImmoPDF(
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
+  const cw = w - M * 2;
   const refCode = `IMMO-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
   const photos = (propertyData.photos || []).filter(Boolean);
+  const role: 'vendeur' | 'acheteur' = propertyData.role === 'acheteur' ? 'acheteur' : 'vendeur';
 
   // ═══════════════════════════════════════════════════════════
-  // PAGE 1 — PAGE DE GARDE & PHOTO EN TÊTE DE PAGE
+  // PAGE 1 — PAGE DE GARDE AÉRÉE (LOGO DISCRET, IMAGE, PRIX, DISCLAIMER)
   // ═══════════════════════════════════════════════════════════
-  let y = 19;
-
-  // Bandeau Titre Exécutif
-  doc.setFillColor(DARK);
-  doc.roundedRect(14, y, w - 28, 26, 3, 3, 'F');
-  doc.setFillColor(ORANGE);
-  doc.roundedRect(14, y, 4, 26, 1.5, 1.5, 'F');
-
-  doc.setFont('helvetica', 'bold');
+  drawDiscreetLogo(doc, M, 14);
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(ORANGE);
-  doc.text('DOSSIER D\'ESTIMATION IMMOBILIÈRE HYBRIDE', 22, y + 7.5);
+  doc.setTextColor(GRAY);
+  doc.text(`Réf. ${refCode} • Édité le ${formatDate(new Date().toISOString())}`, w - M, 18.7, { align: 'right' });
 
+  doc.setDrawColor(BORDER_GRAY);
+  doc.setLineWidth(0.3);
+  doc.line(M, 24, w - M, 24);
+
+  let y = 33;
+
+  // Badge Profil + Catégorie
+  doc.setFillColor(255, 247, 237);
+  doc.setDrawColor(253, 186, 116);
+  doc.roundedRect(M, y, 76, 6.5, 1.5, 1.5, 'FD');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
-  doc.setTextColor(WHITE);
+  doc.setFontSize(7.5);
+  doc.setTextColor(ORANGE);
+  doc.text(
+    `ESTIMATION IMMOBILIÈRE • PROFIL ${role.toUpperCase()}`,
+    M + 38,
+    y + 4.4,
+    { align: 'center' }
+  );
+
+  y += 12;
+
+  // Titre du bien
   const propTitle =
     propertyData.estimationName && propertyData.estimationName !== 'Estimation'
       ? propertyData.estimationName
       : `${propertyData.typeBien} ${propertyData.surface} m²${propertyData.ville ? ` — ${propertyData.ville}` : ''}`;
-  doc.text(propTitle.slice(0, 58), 22, y + 15.5);
 
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(19);
+  doc.setTextColor(DARK);
+  const titleLines = doc.splitTextToSize(propTitle, cw);
+  doc.text(titleLines, M, y);
+  y += titleLines.length * 8 + 2;
+
+  // Localisation
+  const fullAddr =
+    [propertyData.adresse, `${propertyData.codePostal || ''} ${propertyData.ville || ''}`.trim()]
+      .filter(Boolean)
+      .join(' • ') || 'Localisation non renseignée';
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(203, 213, 225);
-  const fullAddr = [propertyData.adresse, `${propertyData.codePostal || ''} ${propertyData.ville || ''}`.trim()]
-    .filter(Boolean)
-    .join(' • ') || 'Localisation non renseignée';
-  doc.text(`${fullAddr}  |  Édité le ${formatDate(new Date().toISOString())}`, 22, y + 22);
+  doc.setFontSize(10);
+  doc.setTextColor(GRAY);
+  const addrLines = doc.splitTextToSize(fullAddr, cw);
+  doc.text(addrLines, M, y);
+  y += addrLines.length * 5 + 8;
 
-  y += 30;
-
-  // ── BLOC PHOTO EN TÊTE DE PAGE + CARTE DE VALORISATION ──
+  // Photo principale en couverture (si présente)
   if (photos.length > 0) {
-    const coverPhoto = photos[0];
-    const leftW = 92;
-    const rightW = w - 28 - leftW - 4;
-    const rightX = 14 + leftW + 4;
-    const blockH = photos.length > 1 ? 72 : 58;
-    const mainPhotoH = photos.length > 1 ? 52 : 58;
-
-    // Cadre photo principale en tête de page
+    const mainPhotoH = photos.length > 1 ? 74 : 88;
     doc.setFillColor(LIGHT_GRAY);
     doc.setDrawColor(BORDER_GRAY);
     doc.setLineWidth(0.4);
-    doc.roundedRect(14, y, leftW, mainPhotoH, 2.5, 2.5, 'FD');
+    doc.roundedRect(M, y, cw, mainPhotoH, 3, 3, 'FD');
     try {
-      doc.addImage(coverPhoto, 'JPEG', 14.8, y + 0.8, leftW - 1.6, mainPhotoH - 1.6, undefined, 'FAST');
+      doc.addImage(photos[0], 'JPEG', M + 1, y + 1, cw - 2, mainPhotoH - 2, undefined, 'FAST');
     } catch {
-      // Fallback si format d'image non reconnu
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setTextColor(GRAY);
-      doc.text('Photo principale', 14 + leftW / 2, y + mainPhotoH / 2, { align: 'center' });
+      doc.text('Photo principale du bien', w / 2, y + mainPhotoH / 2, { align: 'center' });
     }
+    y += mainPhotoH + 4;
 
-    // Badge sur la photo de couverture
-    doc.setFillColor(DARK);
-    doc.roundedRect(16.5, y + 2.5, 34, 5.5, 1.2, 1.2, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(6.5);
-    doc.setTextColor(WHITE);
-    doc.text('★ VUE PRINCIPALE DU BIEN', 18.5, y + 6.2);
-
-    // Miniatures supplémentaires si plusieurs photos ont été chargées
     if (photos.length > 1) {
-      const extraPhotos = photos.slice(1, 4);
-      const thumbGap = 2;
-      const thumbW = (leftW - thumbGap * 2) / 3;
-      const thumbH = 17.5;
-      const thumbY = y + mainPhotoH + 2.5;
-
-      extraPhotos.forEach((p, idx) => {
-        const tx = 14 + idx * (thumbW + thumbGap);
+      const extra = photos.slice(1, 4);
+      const gap = 3;
+      const thumbW = (cw - gap * 2) / 3;
+      const thumbH = 22;
+      extra.forEach((p, idx) => {
+        const tx = M + idx * (thumbW + gap);
         doc.setFillColor(LIGHT_GRAY);
         doc.setDrawColor(BORDER_GRAY);
-        doc.roundedRect(tx, thumbY, thumbW, thumbH, 1.5, 1.5, 'FD');
+        doc.roundedRect(tx, y, thumbW, thumbH, 2, 2, 'FD');
         try {
-          doc.addImage(p, 'JPEG', tx + 0.5, thumbY + 0.5, thumbW - 1, thumbH - 1, undefined, 'FAST');
+          doc.addImage(p, 'JPEG', tx + 0.6, y + 0.6, thumbW - 1.2, thumbH - 1.2, undefined, 'FAST');
         } catch {
           // ignore
         }
       });
+      y += thumbH + 8;
+    } else {
+      y += 4;
     }
-
-    // Carte Prix Estimé à droite de la photo
-    doc.setFillColor(255, 247, 237); // orange-50
-    doc.setDrawColor(ORANGE);
-    doc.setLineWidth(0.6);
-    doc.roundedRect(rightX, y, rightW, blockH, 3, 3, 'FD');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(SLATE);
-    doc.text('VALEUR ESTIMÉE DU BIEN', rightX + rightW / 2, y + 9, { align: 'center' });
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(23);
-    doc.setTextColor(ORANGE);
-    doc.text(formatPrice(result.prixFinal), rightX + rightW / 2, y + 21, { align: 'center' });
-
-    if (propertyData.surface > 0) {
-      doc.setFillColor(WHITE);
-      doc.setDrawColor(253, 186, 116);
-      doc.roundedRect(rightX + rightW / 2 - 22, y + 24.5, 44, 6.5, 2, 2, 'FD');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      doc.setTextColor(DARK);
-      doc.text(
-        `${Math.round(result.prixFinal / propertyData.surface).toLocaleString('fr-FR')} € / m²`,
-        rightX + rightW / 2,
-        y + 29,
-        { align: 'center' }
-      );
-    }
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(SLATE);
-    doc.text('Fourchette de marché recommandée :', rightX + rightW / 2, y + 38, { align: 'center' });
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(DARK);
-    doc.text(
-      `${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`,
-      rightX + rightW / 2,
-      y + 43.5,
-      { align: 'center' }
-    );
-
-    // Positionnement + Score dans la carte droite
-    doc.setDrawColor(254, 215, 170);
-    doc.line(rightX + 6, y + 47.5, rightX + rightW - 6, y + 47.5);
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(7.5);
-    doc.setTextColor(SLATE);
-    doc.text(`Positionnement : ${result.positionMarche}`, rightX + 6, y + 53);
-
-    const scoreColor = result.scoreConfiance >= 70 ? '#10b981' : result.scoreConfiance >= 50 ? ORANGE : '#ef4444';
-    doc.text(`Indice de confiance : ${result.scoreConfiance}/100`, rightX + 6, y + (photos.length > 1 ? 61 : 56.5));
-    if (photos.length > 1) {
-      doc.setFillColor(226, 232, 240);
-      doc.roundedRect(rightX + 6, y + 63.5, rightW - 12, 3.5, 1.5, 1.5, 'F');
-      doc.setFillColor(scoreColor);
-      doc.roundedRect(rightX + 6, y + 63.5, ((rightW - 12) * result.scoreConfiance) / 100, 3.5, 1.5, 1.5, 'F');
-    }
-
-    y += blockH + 7;
   } else {
-    // Sans photo : Grand bloc de valorisation pleine largeur
-    doc.setFillColor(255, 247, 237);
-    doc.setDrawColor(ORANGE);
-    doc.setLineWidth(0.6);
-    doc.roundedRect(14, y, w - 28, 38, 3, 3, 'FD');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(SLATE);
-    doc.text('PRIX FINAL ESTIMÉ (MÉTHODE HYBRIDE)', w / 2, y + 8.5, { align: 'center' });
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(26);
-    doc.setTextColor(ORANGE);
-    doc.text(formatPrice(result.prixFinal), w / 2, y + 20, { align: 'center' });
-
-    const subPrice =
-      propertyData.surface > 0
-        ? `${Math.round(result.prixFinal / propertyData.surface).toLocaleString('fr-FR')} €/m²   •   Fourchette : ${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`
-        : `Fourchette : ${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9.5);
-    doc.setTextColor(DARK);
-    doc.text(subPrice, w / 2, y + 28, { align: 'center' });
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(GRAY);
-    doc.text(
-      `Prix de base pondéré : ${formatPrice(result.prixBase)}   •   Positionnement marché : ${result.positionMarche}   •   Confiance : ${result.scoreConfiance}/100`,
-      w / 2,
-      y + 34.5,
-      { align: 'center' }
-    );
-
-    y += 45;
+    y += 10;
   }
 
-  // ── FICHE DESCRIPTIVE DU BIEN (GRILLE 2 COLONNES) ──
-  y = addSectionTitle(doc, 'Caractéristiques déclarées du bien', y, `État : ${ajustements.etatGeneral} • DPE : ${ajustements.dpe}`);
+  // Bloc Prix Estimé Aéré
+  const priceCardH = 44;
+  doc.setFillColor(255, 247, 237);
+  doc.setDrawColor(ORANGE);
+  doc.setLineWidth(0.6);
+  doc.roundedRect(M, y, cw, priceCardH, 3, 3, 'FD');
 
-  const specsLeft: [string, string][] = [
-    ['Type de bien', propertyData.typeBien],
-    ['Surface habitable', `${propertyData.surface} m²`],
-    ['Pièces / Chambres', `${propertyData.pieces || '—'} pièces / ${propertyData.chambres || '—'} ch.`],
-    ['Étage / Ascenseur', `${propertyData.etage || 'RDC'}${propertyData.ascenseur ? ' (avec ascenseur)' : ''}`],
-    ['Année construction', String(propertyData.anneeConstruction || 'Non renseignée')],
-  ];
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(SLATE);
+  doc.text('VALEUR VÉNALE ESTIMÉE', w / 2, y + 9.5, { align: 'center' });
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(26);
+  doc.setTextColor(ORANGE);
+  doc.text(formatPrice(result.prixFinal), w / 2, y + 22, { align: 'center' });
+
+  const subMetrics: string[] = [];
+  if (propertyData.surface > 0) {
+    subMetrics.push(`${Math.round(result.prixFinal / propertyData.surface).toLocaleString('fr-FR')} €/m²`);
+  }
+  subMetrics.push(`Fourchette : ${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`);
+  subMetrics.push(`Confiance : ${result.scoreConfiance}/100`);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(DARK);
+  doc.text(subMetrics.join('   •   '), w / 2, y + 32, { align: 'center' });
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(GRAY);
+  doc.text(
+    `Positionnement : ${result.positionMarche}   •   Sources analysées : ${sources.dvf.length + sources.annonces.length + sources.estimations.length}`,
+    w / 2,
+    y + 38.5,
+    { align: 'center' }
+  );
+
+  // Disclaimer complet sur la page de garde (en bas, bien encadré)
+  const discLines = doc.splitTextToSize(DISCLAIMER, cw - 10);
+  const discH = discLines.length * 3.3 + 8;
+  const discY = h - M - discH;
+  doc.setFillColor(LIGHT_GRAY);
+  doc.setDrawColor(BORDER_GRAY);
+  doc.setLineWidth(0.3);
+  doc.roundedRect(M, discY, cw, discH, 2, 2, 'FD');
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(6.5);
+  doc.setTextColor(GRAY);
+  doc.text(discLines, M + 5, discY + 5.5);
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGE 2 — CARACTÉRISTIQUES & SOURCES COMPARABLES CLIQUABLES
+  // ═══════════════════════════════════════════════════════════
+  doc.addPage();
+  y = 24;
+
+  const ensureSpace = (needed: number) => {
+    if (y + needed > h - 22) {
+      doc.addPage();
+      y = 24;
+    }
+  };
+
+  y = addSectionTitle(doc, 'Caractéristiques déclarées du bien', y, `État : ${ajustements.etatGeneral} • DPE : ${ajustements.dpe}`);
 
   const equipActifs: string[] = [];
   if (ajustements.balcon) equipActifs.push('Balcon');
@@ -417,167 +408,104 @@ export function generateImmoPDF(
   if (ajustements.calme) equipActifs.push('Calme');
   if (ajustements.travauxRecents) equipActifs.push('Travaux récents');
 
+  const specsLeft: [string, string][] = [
+    ['Type de bien', propertyData.typeBien],
+    ['Surface habitable', `${propertyData.surface} m²`],
+    ['Pièces / Chambres', `${propertyData.pieces || '—'} p. / ${propertyData.chambres || '—'} ch.`],
+    ['Étage / Ascenseur', `${propertyData.etage || 'RDC'}${propertyData.ascenseur ? ' (ascenseur)' : ''}`],
+    ['Année construction', String(propertyData.anneeConstruction || 'Non renseignée')],
+  ];
+
   const specsRight: [string, string][] = [
     ['Localisation', `${propertyData.codePostal || ''} ${propertyData.ville || 'Non renseignée'}`.trim()],
     ['État général', ajustements.etatGeneral],
     ['Classe DPE', ajustements.dpe],
     ['Exposition', ajustements.exposition],
-    ['Atouts & équipements', equipActifs.length > 0 ? equipActifs.slice(0, 4).join(', ') : 'Standard'],
+    ['Atouts', equipActifs.length > 0 ? equipActifs.slice(0, 3).join(', ') : 'Standard'],
   ];
 
-  const colW = (w - 32) / 2;
+  const colW = (cw - 6) / 2;
   const startGridY = y;
-  specsLeft.forEach(([lbl, val], i) => {
-    const rowY = startGridY + i * 8.5;
-    if (i % 2 === 0) {
-      doc.setFillColor(LIGHT_GRAY);
-      doc.rect(14, rowY - 1, colW, 8, 'F');
-    }
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(GRAY);
-    doc.text(lbl, 16, rowY + 4.3);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(DARK);
-    doc.text(val.slice(0, 28), 14 + colW - 2, rowY + 4.3, { align: 'right' });
-  });
+  const drawSpecCol = (items: [string, string][], startX: number) => {
+    items.forEach(([lbl, val], i) => {
+      const rowY = startGridY + i * 8.5;
+      if (i % 2 === 0) {
+        doc.setFillColor(LIGHT_GRAY);
+        doc.rect(startX, rowY - 1, colW, 8, 'F');
+      }
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(GRAY);
+      doc.text(lbl, startX + 2.5, rowY + 4.3);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(DARK);
+      const safeVal = val.length > 26 ? val.slice(0, 24) + '…' : val;
+      doc.text(safeVal, startX + colW - 2.5, rowY + 4.3, { align: 'right' });
+    });
+  };
+  drawSpecCol(specsLeft, M);
+  drawSpecCol(specsRight, M + colW + 6);
+  y = startGridY + specsLeft.length * 8.5 + 8;
 
-  specsRight.forEach(([lbl, val], i) => {
-    const rowY = startGridY + i * 8.5;
-    const rx = 18 + colW;
-    if (i % 2 === 0) {
-      doc.setFillColor(LIGHT_GRAY);
-      doc.rect(rx, rowY - 1, colW, 8, 'F');
-    }
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(GRAY);
-    doc.text(lbl, rx + 2, rowY + 4.3);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(DARK);
-    doc.text(val.slice(0, 28), rx + colW - 2, rowY + 4.3, { align: 'right' });
-  });
-
-  y = startGridY + specsLeft.length * 8.5 + 6;
-
-  // ── SYNTHÈSE DES SOURCES SUR LA PAGE 1 ──
-  y = addSectionTitle(doc, 'Synthèse de la pondération hybride', y, '3 familles de données croisées');
-
+  // Pondération
+  ensureSpace(42);
+  y = addSectionTitle(doc, 'Pondération des sources', y);
   const cards = [
     {
       title: 'Ventes DVF / Immo-Data',
       weight: `${ponderations.dvf}%`,
       avg: result.detailsSources.dvf.moyenne > 0 ? formatPrice(result.detailsSources.dvf.moyenne) : 'Non utilisé',
-      contrib: `Contribution : ${formatPrice(result.detailsSources.dvf.contribution)}`,
-      count: `${sources.dvf.length} transaction(s)`,
+      contrib: `Contrib. : ${formatPrice(result.detailsSources.dvf.contribution)}`,
+      count: `${sources.dvf.length} vente(s)`,
     },
     {
-      title: 'Annonces du marché (-5%)',
+      title: 'Annonces marché (-5%)',
       weight: `${ponderations.annonces}%`,
       avg: result.detailsSources.annonces.moyenne > 0 ? formatPrice(result.detailsSources.annonces.moyenne) : 'Non utilisé',
-      contrib: `Contribution : ${formatPrice(result.detailsSources.annonces.contribution)}`,
+      contrib: `Contrib. : ${formatPrice(result.detailsSources.annonces.contribution)}`,
       count: `${sources.annonces.length} annonce(s)`,
     },
     {
-      title: 'Estimations professionnelles',
+      title: 'Avis professionnels',
       weight: `${ponderations.estimations}%`,
       avg: result.detailsSources.estimations.moyenne > 0 ? formatPrice(result.detailsSources.estimations.moyenne) : 'Non utilisé',
-      contrib: `Contribution : ${formatPrice(result.detailsSources.estimations.contribution)}`,
-      count: `${sources.estimations.length} évaluation(s)`,
+      contrib: `Contrib. : ${formatPrice(result.detailsSources.estimations.contribution)}`,
+      count: `${sources.estimations.length} avis`,
     },
   ];
-
-  const cardW = (w - 28 - 8) / 3;
+  const cardW = (cw - 8) / 3;
   cards.forEach((c, idx) => {
-    const cx = 14 + idx * (cardW + 4);
+    const cx = M + idx * (cardW + 4);
     doc.setFillColor(LIGHT_GRAY);
     doc.setDrawColor(BORDER_GRAY);
     doc.setLineWidth(0.3);
     doc.roundedRect(cx, y, cardW, 25, 2, 2, 'FD');
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(SLATE);
     doc.text(c.title, cx + 3, y + 6);
 
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
     doc.setTextColor(ORANGE);
     doc.text(c.weight, cx + cardW - 3, y + 6, { align: 'right' });
 
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
+    doc.setFontSize(10.5);
     doc.setTextColor(DARK);
     doc.text(c.avg, cx + 3, y + 13.5);
 
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
+    doc.setFontSize(7);
     doc.setTextColor(GRAY);
     doc.text(`${c.count} • ${c.contrib}`, cx + 3, y + 20.5);
   });
+  y += 32;
 
-  y += 31;
-
-  // Barre de confiance en bas de Page 1
-  if (y < h - 38) {
-    const scoreLabel =
-      result.scoreConfiance >= 70
-        ? 'Fiabilité élevée (sources croisées et homogènes)'
-        : result.scoreConfiance >= 50
-        ? 'Fiabilité correcte (recommandé : ajouter des comparables)'
-        : 'Fiabilité limitée (peu de sources ou forte dispersion)';
-    doc.setFillColor(LIGHT_GRAY);
-    doc.setDrawColor(BORDER_GRAY);
-    doc.roundedRect(14, y, w - 28, 16, 2, 2, 'FD');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(DARK);
-    doc.text(`Indice de confiance global : ${result.scoreConfiance}% — ${scoreLabel}`, 18, y + 6.5);
-
-    doc.setFillColor(226, 232, 240);
-    doc.roundedRect(18, y + 9.5, w - 36, 3.5, 1.5, 1.5, 'F');
-    const scoreColor = result.scoreConfiance >= 70 ? '#10b981' : result.scoreConfiance >= 50 ? ORANGE : '#ef4444';
-    doc.setFillColor(scoreColor);
-    doc.roundedRect(18, y + 9.5, ((w - 36) * result.scoreConfiance) / 100, 3.5, 1.5, 1.5, 'F');
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // PAGE 2 — MÉTHODOLOGIE & SOURCES CLIQUABLES
-  // ═══════════════════════════════════════════════════════════
-  doc.addPage();
-  y = 20;
-
-  y = addSectionTitle(doc, 'Méthodologie & Traçabilité des Sources Cliquables', y, 'Cliquez sur les badges bleus pour ouvrir les sources');
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(SLATE);
-  const methText =
-    'Ce rapport croise les transactions notariées officielles (DVF Etalab / Immo-Data), les annonces en ligne ' +
-    '(Leboncoin, SeLoger, PAP, Bien\'ici — avec décote automatique de négociation de -5%) et les évaluations professionnelles. ' +
-    'Toutes les annonces et références utilisées ci-dessous intègrent un lien « Source cliquable » vous permettant d\'ouvrir directement l\'annonce ou la base officielle.';
-  const methLines = doc.splitTextToSize(methText, w - 28);
-  doc.text(methLines, 14, y);
-  y += methLines.length * 4.5 + 5;
-
-  const ensureSpace = (needed: number) => {
-    if (y + needed > h - 24) {
-      doc.addPage();
-      y = 20;
-    }
-  };
-
-  // 1. Sources DVF / Immo-Data
+  // Sources détaillées avec liens cliquables (Leboncoin, SeLoger, DVF, etc.)
   if (sources.dvf.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Transactions notariées DVF / Immo-Data (${sources.dvf.length})`,
-      y,
-      `Pondération : ${ponderations.dvf}%`
-    );
-
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Transactions notariées DVF / Immo-Data (${sources.dvf.length})`, y, `Pondération : ${ponderations.dvf}%`);
     for (const dvf of sources.dvf) {
-      ensureSpace(18);
+      ensureSpace(20);
       const ancienne = isDVFAncienne(dvf.date);
       const label =
         dvf.adresse && dvf.adresse.trim() !== ''
@@ -586,97 +514,81 @@ export function generateImmoPDF(
       const val = `${formatPrice(dvf.prix)} (${Math.round(dvf.prix / dvf.surface).toLocaleString('fr-FR')} €/m²)`;
       const hasDate = Boolean(dvf.date && dvf.date.trim() !== '');
       const dateLabel = hasDate
-        ? `Acte du ${formatDate(dvf.date)}${ancienne ? ' (plus de 5 ans : décote -30%)' : ''}`
-        : 'Date d\'acte non précisée';
+        ? `Acte du ${formatDate(dvf.date)}${ancienne ? ' (>5 ans : -30%)' : ''}`
+        : 'Date non précisée';
 
       doc.setFillColor(ancienne ? '#FFFBEB' : LIGHT_GRAY);
       doc.setDrawColor(ancienne ? '#FDE68A' : BORDER_GRAY);
       doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 15, 2, 2, 'FD');
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
 
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(DARK);
-      doc.text(label.slice(0, 62), 17, y + 5.2);
+      doc.text(label.slice(0, 52), M + 3.5, y + 5.5);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
       doc.setTextColor(ORANGE);
-      doc.text(val, w - 17, y + 5.2, { align: 'right' });
+      doc.text(val, w - M - 3.5, y + 5.5, { align: 'right' });
 
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7.8);
+      doc.setFontSize(7.5);
       doc.setTextColor(ancienne ? '#92400E' : GRAY);
-      doc.text(dateLabel, 17, y + 11.2);
+      doc.text(dateLabel, M + 3.5, y + 12.2);
 
       const hasCustomLink = Boolean(dvf.lien && dvf.lien.trim() !== '');
       const targetUrl = hasCustomLink ? dvf.lien! : 'https://www.immo-data.fr/';
       const badgeLabel = hasCustomLink
-        ? `Source cliquable : ${formatShortUrl(dvf.lien!)} ↗`
-        : 'Source officielle : immo-data.fr ↗';
-      const badgeW = doc.getTextWidth(badgeLabel) + 10;
-      addClickableSourceBadge(doc, w - 16 - badgeW, y + 7.5, badgeLabel, targetUrl, true);
+        ? `Source : ${formatShortUrl(dvf.lien!)} ↗`
+        : 'Immo-Data.fr ↗';
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      const badgeW = Math.min(doc.getTextWidth(badgeLabel) + 8, 92);
+      addClickableSourceBadge(doc, w - M - 3.5 - badgeW, y + 8.5, badgeLabel, targetUrl, true);
 
-      y += 17.5;
+      y += 19;
     }
     y += 3;
   }
 
-  // 2. Sources Annonces Marché
   if (sources.annonces.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Annonces immobilières comparables (${sources.annonces.length})`,
-      y,
-      `Pondération : ${ponderations.annonces}% • Décote négo -5%`
-    );
-
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Annonces immobilières comparables (${sources.annonces.length})`, y, `Pondération : ${ponderations.annonces}% • Décote -5%`);
     for (const a of sources.annonces) {
-      ensureSpace(18);
+      ensureSpace(20);
       const hasLink = Boolean(a.lien && a.lien.trim() !== '');
-      const label = `${a.source || 'Annonce'} — ${a.surface} m²${a.pieces ? ` — ${a.pieces} p.` : ''}`;
+      const label = `${a.source || 'Annonce'} — ${a.surface} m²${a.pieces ? ` (${a.pieces} p.)` : ''}`;
       const netPrice = Math.round(a.prix * 0.95);
-      const val = `${formatPrice(a.prix)} affiché (${Math.round(netPrice / a.surface).toLocaleString('fr-FR')} €/m² net)`;
+      const val = `${formatPrice(a.prix)} (${Math.round(netPrice / a.surface).toLocaleString('fr-FR')} €/m² net)`;
 
       doc.setFillColor(LIGHT_GRAY);
       doc.setDrawColor(BORDER_GRAY);
       doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 15, 2, 2, 'FD');
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
 
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(DARK);
-      doc.text(label, 17, y + 5.2);
+      doc.text(label.slice(0, 52), M + 3.5, y + 5.5);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
       doc.setTextColor(ORANGE);
-      doc.text(val, w - 17, y + 5.2, { align: 'right' });
+      doc.text(val, w - M - 3.5, y + 5.5, { align: 'right' });
 
       const targetUrl = hasLink ? a.lien : getPlatformFallbackUrl(a.source);
       const badgeLabel = hasLink
-        ? `Source cliquable : ouvrir l'annonce (${formatShortUrl(a.lien)}) ↗`
-        : `Plateforme source : ${formatShortUrl(targetUrl)} ↗`;
-      addClickableSourceBadge(doc, 17, y + 7.5, badgeLabel, targetUrl, hasLink);
+        ? `Annonce ${a.source || ''} : ${formatShortUrl(a.lien)} ↗`
+        : `Rechercher sur ${formatShortUrl(targetUrl)} ↗`;
+      addClickableSourceBadge(doc, M + 3.5, y + 8.5, badgeLabel, targetUrl, hasLink);
 
-      y += 17.5;
+      y += 19;
     }
     y += 3;
   }
 
-  // 3. Sources Estimations Pro
   if (sources.estimations.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Évaluations & Avis de valeur (${sources.estimations.length})`,
-      y,
-      `Pondération : ${ponderations.estimations}%`
-    );
-
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Évaluations & Avis de valeur (${sources.estimations.length})`, y, `Pondération : ${ponderations.estimations}%`);
     for (const e of sources.estimations) {
-      ensureSpace(18);
+      ensureSpace(20);
       const hasLink = Boolean(e.lien && e.lien.trim() !== '');
       const hasDate = Boolean(e.date && e.date.trim() !== '');
       const label = `${e.source || 'Avis de valeur'}${hasDate ? ` — ${formatDate(e.date)}` : ''}`;
@@ -686,121 +598,125 @@ export function generateImmoPDF(
       doc.setFillColor(LIGHT_GRAY);
       doc.setDrawColor(BORDER_GRAY);
       doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 15, 2, 2, 'FD');
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
 
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(DARK);
-      doc.text(label, 17, y + 5.2);
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(DARK);
-      doc.text(val, w - 17, y + 5.2, { align: 'right' });
+      doc.text(label.slice(0, 52), M + 3.5, y + 5.5);
+      doc.text(val, w - M - 3.5, y + 5.5, { align: 'right' });
 
       if (hasLink) {
-        const badgeLabel = `Source cliquable : consulter le document (${formatShortUrl(e.lien!)}) ↗`;
-        addClickableSourceBadge(doc, 17, y + 7.5, badgeLabel, e.lien!, true);
+        const badgeLabel = `Consulter le document : ${formatShortUrl(e.lien!)} ↗`;
+        addClickableSourceBadge(doc, M + 3.5, y + 8.5, badgeLabel, e.lien!, true);
       } else {
         doc.setFont('helvetica', 'italic');
         doc.setFontSize(7.5);
         doc.setTextColor(GRAY);
-        doc.text('Évaluation saisie manuellement (aucun lien externe associé)', 17, y + 11.2);
+        doc.text('Évaluation saisie manuellement', M + 3.5, y + 12.2);
       }
-
-      y += 17.5;
+      y += 19;
     }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // PAGE 3 — DÉTAIL FINANCIER, AJUSTEMENTS & CONSEILS PRO
+  // PAGE 3 — SYNTHÈSE FINANCIÈRE, AJUSTEMENTS & CONSEILS NÉGOCIATION
   // ═══════════════════════════════════════════════════════════
   doc.addPage();
-  y = 20;
+  y = 24;
 
-  y = addSectionTitle(doc, 'Synthèse financière & Indicateurs acquéreur', y);
+  y = addSectionTitle(doc, 'Synthèse financière & Indicateurs', y);
   const fraisNotaire = Math.round(result.prixFinal * 0.08);
   const mensualite = Math.round((result.prixFinal * (0.035 / 12)) / (1 - Math.pow(1 + 0.035 / 12, -240)));
 
   const resultRows: [string, string, boolean][] = [
     ['Prix de base pondéré (avant ajustements)', formatPrice(result.prixBase), false],
-    ['Prix final estimé net vendeur', formatPrice(result.prixFinal), true],
+    ['Valeur finale estimée net vendeur', formatPrice(result.prixFinal), true],
     ['Prix au m² estimé', `${result.prixM2.toLocaleString('fr-FR')} €/m²`, false],
-    ['Fourchette basse de négociation', formatPrice(result.fourchetteBasse), false],
-    ['Fourchette haute du marché', formatPrice(result.fourchetteHaute), false],
-    ['Budget total acquéreur (frais de notaire ~8% inclus)', `${formatPrice(result.prixFinal + fraisNotaire)} (dont ~${formatPrice(fraisNotaire)} de frais)`, false],
-    ['Mensualité crédit indicative (20 ans à 3,5% hors apport)', `~${mensualite.toLocaleString('fr-FR')} € / mois`, false],
+    ['Fourchette basse / haute', `${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`, false],
+    ['Budget acquéreur (frais de notaire ~8% inclus)', `${formatPrice(result.prixFinal + fraisNotaire)} (dont ~${formatPrice(fraisNotaire)})`, false],
+    ['Mensualité crédit indicative (20 ans à 3,5%)', `~${mensualite.toLocaleString('fr-FR')} € / mois`, false],
   ];
   for (const [label, value, hl] of resultRows) {
+    ensureSpace(12);
     y = addRow(doc, label, value, y, hl);
   }
-  y += 5;
+  y += 6;
 
-  // Ajustements appliqués
   if (result.ajustementsAppliques.length > 0) {
-    y = addSectionTitle(doc, 'Détail des ajustements qualitatifs appliqués (plafonnés à ±20%)', y);
+    ensureSpace(22);
+    y = addSectionTitle(doc, 'Ajustements qualitatifs appliqués', y, 'Cumul plafonné à ±20%');
     for (const aj of result.ajustementsAppliques) {
+      ensureSpace(11);
       const sign = aj.valeur >= 0 ? '+' : '';
       const val = `${sign}${aj.valeur.toFixed(1)}% (${sign}${Math.round(aj.impact).toLocaleString('fr-FR')} €)`;
       y = addRow(doc, aj.nom, val, y);
     }
-    y += 5;
+    y += 6;
   }
 
-  // Conseils vendeur
-  y = addSectionTitle(doc, 'Recommandations stratégiques de mise en vente', y);
-  const conseils = getConseilsVendeur(result, propertyData);
+  // Conseils de négociation adaptés au profil (Vendeur ou Acheteur) et aux critères remplis
+  ensureSpace(30);
+  const sectionTitleConseils =
+    role === 'acheteur'
+      ? 'Conseils de négociation — Profil Acheteur'
+      : 'Conseils de négociation — Profil Vendeur';
+  y = addSectionTitle(doc, sectionTitleConseils, y, 'Personnalisés selon vos critères');
+
+  const conseils =
+    role === 'acheteur'
+      ? getConseilsAcheteurImmo(result, propertyData, ajustements, sources)
+      : getConseilsVendeurImmo(result, propertyData, ajustements);
+
   for (const conseil of conseils) {
-    const lines = doc.splitTextToSize(`• ${conseil}`, w - 34);
-    const boxH = lines.length * 4.5 + 4;
-    if (y + boxH > h - 45) break;
+    const lines = doc.splitTextToSize(`• ${conseil}`, cw - 8);
+    const boxH = lines.length * 4.5 + 5;
+    ensureSpace(boxH + 3);
     doc.setFillColor(LIGHT_GRAY);
     doc.setDrawColor(BORDER_GRAY);
-    doc.roundedRect(14, y, w - 28, boxH, 1.5, 1.5, 'FD');
+    doc.roundedRect(M, y, cw, boxH, 1.5, 1.5, 'FD');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(DARK);
-    doc.text(lines, 17, y + 4.2);
-    y += boxH + 2.5;
+    doc.text(lines, M + 4, y + 4.8);
+    y += boxH + 3;
   }
 
-  // Conseils négociation
+  // Bandeau ressources cliquables avec retour à la ligne automatique (zéro hors-champ)
+  const refLinks = [
+    { label: 'Immo-Data.fr ↗', url: 'https://www.immo-data.fr/' },
+    { label: 'DVF Etalab ↗', url: 'https://app.dvf.etalab.gouv.fr/' },
+    { label: 'Leboncoin.fr ↗', url: 'https://www.leboncoin.fr/c/ventes_immobilieres' },
+    { label: 'SeLoger.com ↗', url: 'https://www.seloger.com/' },
+    { label: 'PAP.fr ↗', url: 'https://www.pap.fr/' },
+  ];
+  ensureSpace(22);
   y += 3;
-  if (y < h - 55) {
-    y = addSectionTitle(doc, 'Stratégie de négociation', y);
-    const negoConseils = getConseilsNegociation(result);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    for (const conseil of negoConseils) {
-      const lines = doc.splitTextToSize(`• ${conseil}`, w - 32);
-      if (y + lines.length * 4.5 > h - 38) break;
-      doc.setTextColor(SLATE);
-      doc.text(lines, 16, y + 3);
-      y += lines.length * 4.5 + 2.5;
-    }
-  }
+  doc.setFillColor(BLUE_BG);
+  doc.setDrawColor(191, 219, 254);
+  doc.roundedRect(M, y, cw, 16, 2, 2, 'FD');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(DARK);
+  doc.text('Bases publiques & portails de référence :', M + 4, y + 5);
 
-  // Bandeau de ressources officielles cliquables en bas de page 3
-  if (y < h - 34) {
-    const refY = Math.max(y + 2, h - 34);
-    doc.setFillColor(BLUE_BG);
-    doc.setDrawColor(191, 219, 254);
-    doc.roundedRect(14, refY, w - 28, 12, 2, 2, 'FD');
+  let bx = M + 4;
+  let by = y + 7.5;
+  for (const link of refLinks) {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7.5);
-    doc.setTextColor(DARK);
-    doc.text('Bases de données & plateformes de référence :', 17, refY + 4.5);
-
-    addClickableSourceBadge(doc, 17, refY + 5.5, 'Immo-Data.fr ↗', 'https://www.immo-data.fr/', true);
-    addClickableSourceBadge(doc, 48, refY + 5.5, 'DVF Etalab (Gouv) ↗', 'https://app.dvf.etalab.gouv.fr/', true);
-    addClickableSourceBadge(doc, 88, refY + 5.5, 'Leboncoin.fr ↗', 'https://www.leboncoin.fr/', true);
-    addClickableSourceBadge(doc, 120, refY + 5.5, 'SeLoger.com ↗', 'https://www.seloger.com/', true);
-    addClickableSourceBadge(doc, 152, refY + 5.5, 'PAP.fr ↗', 'https://www.pap.fr/', true);
+    const neededW = Math.min(doc.getTextWidth(link.label) + 8, 92);
+    if (bx + neededW > w - M - 4) {
+      bx = M + 4;
+      by += 7;
+    }
+    const usedW = addClickableSourceBadge(doc, bx, by, link.label, link.url, true);
+    bx += usedW + 3;
   }
 
-  // Pass final pour numéroter toutes les pages exactement
+  // Pass final pour numéroter les pages 2..N (la page 1 est la page de garde)
   const totalPages = doc.getNumberOfPages();
-  for (let p = 1; p <= totalPages; p++) {
+  for (let p = 2; p <= totalPages; p++) {
     doc.setPage(p);
     addPageHeader(doc, p, totalPages, refCode);
     addPageFooter(doc);
@@ -810,63 +726,107 @@ export function generateImmoPDF(
   doc.save(filename);
 }
 
-function getConseilsVendeur(result: CalculationResult, propertyData: PropertyData): string[] {
+function getConseilsVendeurImmo(
+  result: CalculationResult,
+  propertyData: PropertyData,
+  ajustements: Ajustements
+): string[] {
   const conseils: string[] = [];
   const ratio = result.prixFinal / result.prixBase;
 
-  if (result.scoreConfiance < 50) {
+  conseils.push(
+    `Prix d'affichage conseillé en annonce : entre ${formatPrice(result.prixFinal * 1.02)} et ${formatPrice(result.prixFinal * 1.05)} pour intégrer une marge de négociation maîtrisée de 2 à 5%, sans descendre sous votre seuil plancher de ${formatPrice(result.fourchetteBasse)}.`
+  );
+
+  if (ajustements.dpe === 'F' || ajustements.dpe === 'G') {
     conseils.push(
-      'Votre score de confiance est inférieur à 50%. Ajoutez au moins 2 à 3 ventes DVF sur Immo-Data.fr et 2 annonces locales pour consolider votre prix.'
+      `DPE classé ${ajustements.dpe} : anticipez la négociation des acquéreurs sur le coût de la rénovation énergétique en présentant l'audit énergétique obligatoire et 1 ou 2 devis d'isolation chiffrés.`
+    );
+  } else if (ajustements.dpe === 'A' || ajustements.dpe === 'B') {
+    conseils.push(
+      `Excellent DPE (${ajustements.dpe}) : utilisez ce critère pour refuser les demandes de rabais excessives en mettant en avant les économies de charges et l'absence de travaux thermiques.`
     );
   }
 
-  if (ratio > 1.10) {
+  if (ajustements.etatGeneral === 'À rénover' || ajustements.etatGeneral === 'À rafraîchir') {
     conseils.push(
-      'Votre bien ressort au-dessus des comparables bruts grâce à ses qualités intrinsèques. Préparez les justificatifs (DPE, factures de travaux, charges) pour défendre cette valorisation.'
+      `Bien déclaré « ${ajustements.etatGeneral} » : chiffrez les postes principaux par devis pour cadrer la discussion et éviter que les acheteurs n'appliquent une décote forfaitaire excessive.`
     );
-  } else if (ratio < 0.90) {
+  } else if (ratio > 1.06) {
     conseils.push(
-      'Votre estimation intègre une décote liée aux ajustements déclarés. Chiffrez les éventuels travaux avec un devis précis pour éviter une négociation excessive des acheteurs.'
+      'Votre valorisation intègre des atouts qualitatifs supérieurs à la moyenne. Rassemblez factures de travaux, DPE et comparables DVF de ce dossier pour défendre cet écart face aux offres basses.'
     );
-  } else {
+  }
+
+  const atouts: string[] = [];
+  if (ajustements.terrasse) atouts.push('terrasse');
+  if (ajustements.jardin) atouts.push('jardin');
+  if (ajustements.balcon) atouts.push('balcon');
+  if (ajustements.parking) atouts.push('stationnement');
+  if (atouts.length > 0) {
     conseils.push(
-      'Votre bien se situe au cœur du marché local : c\'est le positionnement idéal pour déclencher des visites qualifiées dès les 15 premiers jours de diffusion.'
+      `Leviers de défense du prix : appuyez-vous sur la rareté de vos équipements (${atouts.join(', ')}) dans le secteur pour maintenir votre prix face aux biens standards.`
     );
   }
 
   if (propertyData.typeBien === 'Appartement') {
     conseils.push(
-      'Pour un appartement, préparez le pré-état daté, les 3 derniers PV d\'assemblée générale, le DPE et le décompte des charges de copropriété avant la première visite.'
-    );
-  } else if (propertyData.typeBien === 'Maison') {
-    conseils.push(
-      'Pour une maison, rassemblez les diagnostics complets, la taxe foncière, le contrôle d\'assainissement et les factures d\'entretien toiture/chauffage.'
+      'Préparez dès la première visite les 3 derniers PV d\'AG, le montant des charges et le pré-état daté : un dossier transparent limite les renégociations après offre.'
     );
   }
 
-  conseils.push(
-    `Prix d'affichage conseillé en annonce : entre ${formatPrice(result.prixFinal * 1.02)} et ${formatPrice(result.prixFinal * 1.05)} afin de conserver une marge de négociation maîtrisée de 2 à 5%.`
-  );
+  if (result.scoreConfiance < 50) {
+    conseils.push(
+      'Indice de confiance < 50% : ajoutez 2 à 3 ventes notariées DVF supplémentaires sur Immo-Data.fr pour renforcer votre argumentaire.'
+    );
+  }
 
   return conseils;
 }
 
-function getConseilsNegociation(result: CalculationResult): string[] {
+function getConseilsAcheteurImmo(
+  result: CalculationResult,
+  propertyData: PropertyData,
+  ajustements: Ajustements,
+  sources: Sources
+): string[] {
   const conseils: string[] = [];
-  const ecart = result.fourchetteHaute - result.fourchetteBasse;
-  const ecartPct = Math.round((ecart / result.prixFinal) * 100);
 
   conseils.push(
-    `L'amplitude de la fourchette est de ${ecartPct}% (${formatPrice(result.fourchetteBasse)} à ${formatPrice(result.fourchetteHaute)}). Fixez votre prix plancher autour de ${formatPrice(result.fourchetteBasse)}.`
+    `Cible de négociation : formulez une première offre argumentée autour de ${formatPrice(result.fourchetteBasse)} avec un plafond raisonnable à ${formatPrice(result.prixFinal)} (soit un budget acte en main d'environ ${formatPrice(result.prixFinal * 1.08)} avec frais de notaire).`
   );
 
-  if (result.scoreConfiance >= 70) {
+  if (ajustements.dpe === 'F' || ajustements.dpe === 'G') {
     conseils.push(
-      'Appuyez-vous sur ce rapport PDF et ses sources cliquables (ventes notariées DVF / Immo-Data) lors des discussions : les données factuelles limitent les offres agressives.'
+      `DPE classé ${ajustements.dpe} : levier majeur de négociation. Exigez l'audit énergétique réglementaire et chiffrez le bouquet de travaux (isolation, fenêtres, chauffage) pour justifier une décote directe sur le prix affiché.`
+    );
+  }
+
+  if (ajustements.etatGeneral === 'À rénover' || ajustements.etatGeneral === 'À rafraîchir') {
+    conseils.push(
+      `État « ${ajustements.etatGeneral} » : faites chiffrer les travaux par un artisan avant ou pendant la contre-visite et joignez les estimations chiffrées à votre offre d'achat.`
+    );
+  }
+
+  if (propertyData.typeBien === 'Appartement' && propertyData.etage >= 3 && !propertyData.ascenseur) {
+    conseils.push(
+      `Étage ${propertyData.etage} sans ascenseur : utilisez cette contrainte d'accessibilité et de revente future pour négocier vers le bas de la fourchette.`
+    );
+  }
+
+  if (sources.dvf.length > 0 && result.detailsSources.annonces.moyenne > result.detailsSources.dvf.moyenne * 1.05) {
+    conseils.push(
+      `Les annonces en ligne affichent des prix supérieurs aux ventes notariées réelles (DVF : ${formatPrice(result.detailsSources.dvf.moyenne)}). Appuyez-vous sur les actes notariés de ce dossier pour ramener le vendeur au prix réel du marché.`
+    );
+  }
+
+  if (propertyData.typeBien === 'Appartement') {
+    conseils.push(
+      'Vérifiez les 3 derniers PV d\'assemblée générale avant l\'offre : d\'éventuels travaux votés ou à venir (ravalement, toiture, chaudière) constituent un argument direct de baisse de prix.'
     );
   } else {
     conseils.push(
-      'En cas d\'offre basse, demandez toujours à l\'acquéreur de justifier sa proposition par des biens réellement vendus dans le même secteur.'
+      'Inspectez les postes coûteux (toiture, assainissement, humidité, taxe foncière) : tout défaut constaté lors de la visite doit être chiffré pour ajuster votre offre.'
     );
   }
 

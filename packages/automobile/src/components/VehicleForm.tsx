@@ -46,14 +46,41 @@ export default function VehicleForm() {
 
       <Card>
         <div className="p-4 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-5 flex items-center gap-2 flex-wrap">
-            <Car className="w-6 h-6 text-[#ff6d11] flex-shrink-0" />
-            <span>2. Informations du véhicule</span>
-            <Tooltip
-              content="Renseignez les caractéristiques exactes du véhicule. Le kilométrage et la motorisation permettent de calculer automatiquement le bonus ou malus kilométrique."
-              position="top"
-            />
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-2 flex-wrap">
+              <Car className="w-6 h-6 text-[#ff6d11] flex-shrink-0" />
+              <span>2. Informations du véhicule</span>
+              <Tooltip
+                content="Renseignez les caractéristiques exactes du véhicule. Le kilométrage et la motorisation permettent de calculer automatiquement le bonus ou malus kilométrique."
+                position="top"
+              />
+            </h2>
+
+            <div className="inline-flex items-center gap-1 p-1 bg-gray-100 rounded-xl self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setVehicleData({ role: 'vendeur' })}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  (vehicleData.role ?? 'vendeur') === 'vendeur'
+                    ? 'bg-[#ff6d11] text-white shadow-xs'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Je suis Vendeur
+              </button>
+              <button
+                type="button"
+                onClick={() => setVehicleData({ role: 'acheteur' })}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  vehicleData.role === 'acheteur'
+                    ? 'bg-[#ff6d11] text-white shadow-xs'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Je suis Acheteur
+              </button>
+            </div>
+          </div>
 
           {/* ── Section lookup plaque ───────────────────────────── */}
           <div className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200">

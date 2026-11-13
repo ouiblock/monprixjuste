@@ -65,6 +65,7 @@ export default function ImmoEstimationApp() {
   const [photos, setPhotos] = useState<string[]>([]);
 
   // ── Bien ────────────────────────────────────────────────
+  const [role, setRole] = useState<'vendeur' | 'acheteur'>('vendeur');
   const [estimationName, setEstimationName] = useState('');
   const [typeBien, setTypeBien] = useState<TypeBien>('Appartement');
   const [adresse, setAdresse] = useState('');
@@ -170,6 +171,7 @@ export default function ImmoEstimationApp() {
   const buildPropertyData = () => ({
     estimationName: estimationName.trim() || adresse || `${typeBien} ${ville || ''}`.trim() || 'Estimation',
     date: new Date().toISOString().slice(0, 10),
+    role,
     typeBien,
     adresse,
     ville,
@@ -250,7 +252,7 @@ export default function ImmoEstimationApp() {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative h-[680px] md:h-[820px] overflow-hidden">
+      <section className="relative min-h-[540px] sm:h-[680px] md:h-[820px] py-14 sm:py-0 overflow-hidden flex items-center">
         <div className="absolute inset-0">
           <img
             src="/appartement.svg"
@@ -261,22 +263,22 @@ export default function ImmoEstimationApp() {
           <div className="absolute inset-0 bg-white/50"></div>
         </div>
 
-        <div className="relative z-10 h-full flex items-center justify-center text-center">
-          <div className="container mx-auto px-6 max-w-5xl">
+        <div className="relative z-10 w-full flex items-center justify-center text-center">
+          <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-5">
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#ff6d11] mb-4 sm:mb-5">
                 Outil d'estimation — Immobilier
               </p>
-              <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-5 sm:mb-6">
                 Estimez votre bien.<br />
                 <span className="text-[#ff6d11]">Vendez au juste prix.</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-gray-800 font-medium mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
                 Combinez les ventes réelles notariées (DVF Etalab & Immo-Data), les annonces du marché et les avis de valeur pour calculer une valeur vénale précise et objective.
               </p>
 
               {/* Badges */}
-              <div className="flex flex-wrap justify-center gap-3 mb-10">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
                 {[
                   'Ventes DVF & Immo-Data',
                   'Annonces Leboncoin & SeLoger',
@@ -285,7 +287,7 @@ export default function ImmoEstimationApp() {
                 ].map((label) => (
                   <span
                     key={label}
-                    className="text-xs font-semibold text-gray-700 bg-gray-900/5 border border-gray-300 px-3 py-1.5 rounded-full"
+                    className="text-xs font-semibold text-gray-800 bg-white/80 border border-gray-300 px-3 py-1.5 rounded-full shadow-2xs"
                   >
                     {label}
                   </span>
@@ -396,14 +398,41 @@ export default function ImmoEstimationApp() {
 
           {/* ── ÉTAPE 1 : INFORMATIONS DU BIEN ───────────────────── */}
           <div className={card + ' p-4 sm:p-6'}>
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-              <Home className="w-5 h-5 text-[#ff6d11] flex-shrink-0" />
-              <span>2. Informations du bien</span>
-              <Tooltip
-                content="Renseignez les caractéristiques principales de votre bien. La surface habitable est indispensable pour calculer le prix au m² à partir des ventes DVF et des annonces comparables."
-                position="top"
-              />
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Home className="w-5 h-5 text-[#ff6d11] flex-shrink-0" />
+                <span>2. Informations du bien</span>
+                <Tooltip
+                  content="Renseignez les caractéristiques principales de votre bien. La surface habitable est indispensable pour calculer le prix au m² à partir des ventes DVF et des annonces comparables."
+                  position="top"
+                />
+              </h2>
+
+              <div className="inline-flex items-center gap-1 p-1 bg-gray-100 rounded-xl self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setRole('vendeur')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    role === 'vendeur'
+                      ? 'bg-[#ff6d11] text-white shadow-xs'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Je suis Vendeur
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('acheteur')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    role === 'acheteur'
+                      ? 'bg-[#ff6d11] text-white shadow-xs'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Je suis Acheteur
+                </button>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <div className="sm:col-span-2 md:col-span-3 space-y-1">
@@ -457,7 +486,7 @@ export default function ImmoEstimationApp() {
                   min="0"
                   placeholder="Ex: 80"
                   value={surface || ''}
-                  onChange={(e) => setSurface(Number(e.target.value))}
+                  onChange={(e) => setSurface(Math.max(0, Number(e.target.value)))}
                 />
               </div>
 
@@ -475,7 +504,7 @@ export default function ImmoEstimationApp() {
                   min="0"
                   placeholder="Ex: 4"
                   value={pieces || ''}
-                  onChange={(e) => setPieces(Number(e.target.value))}
+                  onChange={(e) => setPieces(Math.max(0, Number(e.target.value)))}
                 />
               </div>
 
@@ -545,7 +574,7 @@ export default function ImmoEstimationApp() {
                   min="0"
                   placeholder="Ex: 2"
                   value={chambres || ''}
-                  onChange={(e) => setChambres(Number(e.target.value))}
+                  onChange={(e) => setChambres(Math.max(0, Number(e.target.value)))}
                 />
               </div>
 
@@ -562,7 +591,7 @@ export default function ImmoEstimationApp() {
                   type="number"
                   min="0"
                   value={etage || ''}
-                  onChange={(e) => setEtage(Number(e.target.value))}
+                  onChange={(e) => setEtage(Math.max(0, Number(e.target.value)))}
                 />
               </div>
 
@@ -693,18 +722,20 @@ export default function ImmoEstimationApp() {
                       <div className="sm:col-span-5">
                         <input
                           type="number"
+                          min="0"
                           placeholder="Prix de vente net € *"
                           value={row.prix || ''}
-                          onChange={(e) => updateDvf(row.id, 'prix', Number(e.target.value))}
+                          onChange={(e) => updateDvf(row.id, 'prix', Math.max(0, Number(e.target.value)))}
                           className={inp}
                         />
                       </div>
                       <div className="sm:col-span-3">
                         <input
                           type="number"
+                          min="0"
                           placeholder="Surface m² *"
                           value={row.surface || ''}
-                          onChange={(e) => updateDvf(row.id, 'surface', Number(e.target.value))}
+                          onChange={(e) => updateDvf(row.id, 'surface', Math.max(0, Number(e.target.value)))}
                           className={inp}
                         />
                       </div>
@@ -803,18 +834,20 @@ export default function ImmoEstimationApp() {
                       <div className="sm:col-span-4">
                         <input
                           type="number"
+                          min="0"
                           placeholder="Prix affiché € *"
                           value={row.prix || ''}
-                          onChange={(e) => updateAnnonce(row.id, 'prix', Number(e.target.value))}
+                          onChange={(e) => updateAnnonce(row.id, 'prix', Math.max(0, Number(e.target.value)))}
                           className={inp}
                         />
                       </div>
                       <div className="sm:col-span-2">
                         <input
                           type="number"
+                          min="0"
                           placeholder="Surface m² *"
                           value={row.surface || ''}
-                          onChange={(e) => updateAnnonce(row.id, 'surface', Number(e.target.value))}
+                          onChange={(e) => updateAnnonce(row.id, 'surface', Math.max(0, Number(e.target.value)))}
                           className={inp}
                         />
                       </div>
@@ -911,18 +944,20 @@ export default function ImmoEstimationApp() {
                       <div className="sm:col-span-4">
                         <input
                           type="number"
+                          min="0"
                           placeholder="Fourchette basse € *"
                           value={row.prixMin || ''}
-                          onChange={(e) => updateEstimation(row.id, 'prixMin', Number(e.target.value))}
+                          onChange={(e) => updateEstimation(row.id, 'prixMin', Math.max(0, Number(e.target.value)))}
                           className={inp}
                         />
                       </div>
                       <div className="sm:col-span-4">
                         <input
                           type="number"
+                          min="0"
                           placeholder="Fourchette haute € *"
                           value={row.prixMax || ''}
-                          onChange={(e) => updateEstimation(row.id, 'prixMax', Number(e.target.value))}
+                          onChange={(e) => updateEstimation(row.id, 'prixMax', Math.max(0, Number(e.target.value)))}
                           className={inp}
                         />
                       </div>

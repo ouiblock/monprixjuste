@@ -11,6 +11,8 @@ const BLUE_LINK = '#1D4ED8';
 const BLUE_BG = '#EFF6FF';
 const WHITE = '#FFFFFF';
 
+const M = 16; // Page margin (mm)
+
 const DISCLAIMER =
   'AVIS DE VALEUR INDICATIF — Document à usage strictement privé et indicatif. ' +
   'Cette estimation, réalisée avec l\'outil MonPrixJuste (version bêta), ne constitue ni un avis de valeur professionnel, ni un rapport d\'expertise, ni une garantie de prix d\'achat ou de vente. ' +
@@ -18,7 +20,7 @@ const DISCLAIMER =
   'Toute déclaration inexacte invalide la présente estimation. ' +
   'Pour toute transaction, consultez un expert automobile agréé ou un professionnel de l\'automobile. ' +
   'MonPrixJuste est un projet porté par l\'association HERRICHAIN (Loi 1901, RNA : W641015204). ' +
-  'Artean Digital (SAS BASK\'IN BIARRITZ, SIRET 92991521300011) décline toute responsabilité quant à l\'usage de cette estimation.';
+  'Artean Digital (SAS BASK\'IN BIARRITZ, capital 100 €, SIRET 92991521300011) décline toute responsabilité quant à l\'usage de cette estimation.';
 
 function formatPrice(n: number): string {
   return Math.round(n).toLocaleString('fr-FR') + ' €';
@@ -42,10 +44,11 @@ function formatShortUrl(url: string): string {
     const host = parsed.hostname.replace(/^www\./, '');
     let path = parsed.pathname;
     if (path === '/') path = '';
-    if (path.length > 26) {
-      path = path.slice(0, 14) + '…' + path.slice(-8);
+    if (path.length > 20) {
+      path = path.slice(0, 11) + '…' + path.slice(-6);
     }
-    return `${host}${path}`;
+    const res = `${host}${path}`;
+    return res.length > 30 ? res.slice(0, 27) + '…' : res;
   } catch {
     const clean = url.replace(/^https?:\/\/(www\.)?/, '').trim();
     return clean.length > 28 ? clean.slice(0, 25) + '…' : clean;
@@ -74,64 +77,76 @@ function getAutoPlatformFallbackUrl(sourceName: string, category: 'cote' | 'part
   return 'https://www.leboncoin.fr/';
 }
 
-function addPageHeader(doc: jsPDF, pageNum: number, totalPages: number, refCode: string) {
-  const w = doc.internal.pageSize.getWidth();
-  doc.setFillColor(DARK);
-  doc.rect(0, 0, w, 13, 'F');
+function drawDiscreetLogo(doc: jsPDF, x: number, y: number) {
   doc.setFillColor(ORANGE);
-  doc.rect(0, 13, w, 1.2, 'F');
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10.5);
-  doc.setTextColor(WHITE);
-  doc.text('MonPrixJuste', 14, 8.8);
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(203, 213, 225);
-  doc.text(`Dossier d'estimation automobile • Réf. ${refCode}`, 44, 8.8);
-
+  doc.roundedRect(x, y, 6.5, 6.5, 1.5, 1.5, 'F');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
   doc.setTextColor(WHITE);
-  doc.text(`Page ${pageNum} / ${totalPages}`, w - 14, 8.8, { align: 'right' });
+  doc.text('M', x + 3.25, y + 4.7, { align: 'center' });
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(SLATE);
+  doc.text('MonPrixJuste', x + 8.5, y + 4.7);
+}
+
+function addPageHeader(doc: jsPDF, pageNum: number, totalPages: number, refCode: string) {
+  const w = doc.internal.pageSize.getWidth();
+  drawDiscreetLogo(doc, M, 7);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(GRAY);
+  doc.text(`Estimation automobile • Réf. ${refCode}`, w / 2, 11.5, { align: 'center' });
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(SLATE);
+  doc.text(`Page ${pageNum} / ${totalPages}`, w - M, 11.5, { align: 'right' });
+
+  doc.setDrawColor(BORDER_GRAY);
+  doc.setLineWidth(0.3);
+  doc.line(M, 16, w - M, 16);
 }
 
 function addPageFooter(doc: jsPDF) {
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
-  doc.setFillColor(LIGHT_GRAY);
-  doc.rect(0, h - 19, w, 19, 'F');
   doc.setDrawColor(BORDER_GRAY);
-  doc.setLineWidth(0.3);
-  doc.line(14, h - 19, w - 14, h - 19);
+  doc.setLineWidth(0.25);
+  doc.line(M, h - 14, w - M, h - 14);
 
-  doc.setFontSize(6);
+  doc.setFontSize(6.5);
   doc.setTextColor(GRAY);
-  doc.setFont('helvetica', 'italic');
-  const lines = doc.splitTextToSize(DISCLAIMER, w - 28);
-  doc.text(lines, 14, h - 14.5);
+  doc.setFont('helvetica', 'normal');
+  doc.text(
+    'MonPrixJuste — Document indicatif généré localement • Ne constitue pas une expertise automobile agréée.',
+    w / 2,
+    h - 9,
+    { align: 'center' }
+  );
 }
 
 function addSectionTitle(doc: jsPDF, title: string, y: number, subtitle?: string): number {
   const w = doc.internal.pageSize.getWidth();
   doc.setFillColor(ORANGE);
-  doc.roundedRect(14, y, 3.5, 7, 1, 1, 'F');
+  doc.roundedRect(M, y, 3, 6.5, 1, 1, 'F');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
+  doc.setFontSize(11.5);
   doc.setTextColor(DARK);
-  doc.text(title, 20.5, y + 5.3);
+  doc.text(title, M + 6, y + 5);
 
   if (subtitle) {
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(GRAY);
-    doc.text(subtitle, w - 14, y + 5.3, { align: 'right' });
+    doc.text(subtitle, w - M, y + 5, { align: 'right' });
   }
 
   doc.setDrawColor(BORDER_GRAY);
   doc.setLineWidth(0.25);
-  doc.line(14, y + 9, w - 14, y + 9);
+  doc.line(M, y + 8.5, w - M, y + 8.5);
   return y + 13;
 }
 
@@ -142,13 +157,13 @@ function addClickableSourceBadge(
   label: string,
   url: string,
   isDirectLink: boolean
-) {
+): number {
   const validUrl = getValidUrl(url);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   const textWidth = doc.getTextWidth(label);
-  const pillW = textWidth + 8;
-  const pillH = 5.5;
+  const pillW = Math.min(textWidth + 8, 92);
+  const pillH = 5.8;
 
   if (isDirectLink) {
     doc.setFillColor(BLUE_BG);
@@ -162,29 +177,41 @@ function addClickableSourceBadge(
 
   doc.setLineWidth(0.25);
   doc.roundedRect(x, y, pillW, pillH, 1.5, 1.5, 'FD');
-  doc.textWithLink(label, x + 4, y + 3.9, { url: validUrl });
+  doc.textWithLink(label, x + 4, y + 4.1, { url: validUrl });
   doc.link(x, y, pillW, pillH, { url: validUrl });
+  return pillW;
 }
 
 function addRow(doc: jsPDF, label: string, value: string, y: number, highlight = false): number {
   const w = doc.internal.pageSize.getWidth();
+  const cw = w - M * 2;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  const valWidth = doc.getTextWidth(value);
+  const maxLabelWidth = Math.max(55, cw - valWidth - 12);
+
+  doc.setFont('helvetica', 'normal');
+  const labelLines = doc.splitTextToSize(label, maxLabelWidth);
+  const rowH = Math.max(9, labelLines.length * 4.5 + 4.5);
+
   if (highlight) {
     doc.setFillColor(255, 237, 213);
-    doc.roundedRect(14, y - 0.5, w - 28, 8.5, 1.5, 1.5, 'F');
+    doc.roundedRect(M, y - 0.5, cw, rowH, 1.5, 1.5, 'F');
   }
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
+
   doc.setTextColor(SLATE);
-  doc.text(label, 17, y + 5);
+  doc.text(labelLines, M + 3, y + 5.2);
+
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(highlight ? ORANGE : DARK);
-  doc.text(value, w - 17, y + 5, { align: 'right' });
+  doc.text(value, w - M - 3, y + 5.2, { align: 'right' });
+
   if (!highlight) {
     doc.setDrawColor(235, 238, 242);
     doc.setLineWidth(0.2);
-    doc.line(14, y + 7.5, w - 14, y + 7.5);
+    doc.line(M, y + rowH - 1, w - M, y + rowH - 1);
   }
-  return y + 9.5;
+  return y + rowH + 1.5;
 }
 
 export function generateAutoPDF(
@@ -197,595 +224,482 @@ export function generateAutoPDF(
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
+  const cw = w - M * 2;
   const refCode = `AUTO-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
   const photos = (vehicleData.photos || []).filter(Boolean);
+  const role: 'vendeur' | 'acheteur' = vehicleData.role === 'acheteur' ? 'acheteur' : 'vendeur';
 
   // ═══════════════════════════════════════════════════════════
-  // PAGE 1 — PAGE DE GARDE & PHOTO EN TÊTE DE PAGE
+  // PAGE 1 — PAGE DE GARDE AÉRÉE (LOGO DISCRET, IMAGE, PRIX, DISCLAIMER)
   // ═══════════════════════════════════════════════════════════
-  let y = 19;
-
-  // Bandeau Titre Exécutif
-  doc.setFillColor(DARK);
-  doc.roundedRect(14, y, w - 28, 26, 3, 3, 'F');
-  doc.setFillColor(ORANGE);
-  doc.roundedRect(14, y, 4, 26, 1.5, 1.5, 'F');
-
-  doc.setFont('helvetica', 'bold');
+  drawDiscreetLogo(doc, M, 14);
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(ORANGE);
-  doc.text('DOSSIER D\'ESTIMATION AUTOMOBILE HYBRIDE', 22, y + 7.5);
+  doc.setTextColor(GRAY);
+  doc.text(`Réf. ${refCode} • Édité le ${formatDate(new Date().toISOString())}`, w - M, 18.7, { align: 'right' });
 
+  doc.setDrawColor(BORDER_GRAY);
+  doc.setLineWidth(0.3);
+  doc.line(M, 24, w - M, 24);
+
+  let y = 33;
+
+  // Badge Profil + Catégorie
+  doc.setFillColor(255, 247, 237);
+  doc.setDrawColor(253, 186, 116);
+  doc.roundedRect(M, y, 76, 6.5, 1.5, 1.5, 'FD');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(15);
-  doc.setTextColor(WHITE);
+  doc.setFontSize(7.5);
+  doc.setTextColor(ORANGE);
+  doc.text(
+    `ESTIMATION AUTOMOBILE • PROFIL ${role.toUpperCase()}`,
+    M + 38,
+    y + 4.4,
+    { align: 'center' }
+  );
+
+  y += 12;
+
+  // Titre du véhicule
   const vehicleTitle =
     vehicleData.estimationName ||
     `${vehicleData.marque || 'Véhicule'} ${vehicleData.modele || ''} ${vehicleData.version ? `(${vehicleData.version})` : ''} — ${vehicleData.annee}`.trim();
-  doc.text(vehicleTitle.slice(0, 58), 22, y + 15.5);
 
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(19);
+  doc.setTextColor(DARK);
+  const titleLines = doc.splitTextToSize(vehicleTitle, cw);
+  doc.text(titleLines, M, y);
+  y += titleLines.length * 8 + 2;
+
+  // Sous-titre caractéristiques clés
+  const subInfo = `${vehicleData.kilometrage.toLocaleString('fr-FR')} km • ${vehicleData.motorisation} • ${vehicleData.boite}`;
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(203, 213, 225);
-  doc.text(
-    `${vehicleData.kilometrage.toLocaleString('fr-FR')} km • ${vehicleData.motorisation} • ${vehicleData.boite}  |  Édité le ${formatDate(new Date().toISOString())}`,
-    22,
-    y + 22
-  );
+  doc.setFontSize(10);
+  doc.setTextColor(GRAY);
+  doc.text(subInfo, M, y);
+  y += 10;
 
-  y += 30;
-
-  // ── BLOC PHOTO EN TÊTE DE PAGE + CARTE DE VALORISATION ──
+  // Photo principale en couverture (si présente)
   if (photos.length > 0) {
-    const coverPhoto = photos[0];
-    const leftW = 92;
-    const rightW = w - 28 - leftW - 4;
-    const rightX = 14 + leftW + 4;
-    const blockH = photos.length > 1 ? 72 : 58;
-    const mainPhotoH = photos.length > 1 ? 52 : 58;
-
+    const mainPhotoH = photos.length > 1 ? 74 : 88;
     doc.setFillColor(LIGHT_GRAY);
     doc.setDrawColor(BORDER_GRAY);
     doc.setLineWidth(0.4);
-    doc.roundedRect(14, y, leftW, mainPhotoH, 2.5, 2.5, 'FD');
+    doc.roundedRect(M, y, cw, mainPhotoH, 3, 3, 'FD');
     try {
-      doc.addImage(coverPhoto, 'JPEG', 14.8, y + 0.8, leftW - 1.6, mainPhotoH - 1.6, undefined, 'FAST');
+      doc.addImage(photos[0], 'JPEG', M + 1, y + 1, cw - 2, mainPhotoH - 2, undefined, 'FAST');
     } catch {
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setTextColor(GRAY);
-      doc.text('Photo du véhicule', 14 + leftW / 2, y + mainPhotoH / 2, { align: 'center' });
+      doc.text('Photo principale du véhicule', w / 2, y + mainPhotoH / 2, { align: 'center' });
     }
-
-    doc.setFillColor(DARK);
-    doc.roundedRect(16.5, y + 2.5, 38, 5.5, 1.2, 1.2, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(6.5);
-    doc.setTextColor(WHITE);
-    doc.text('★ VUE PRINCIPALE VÉHICULE', 18.5, y + 6.2);
+    y += mainPhotoH + 4;
 
     if (photos.length > 1) {
-      const extraPhotos = photos.slice(1, 4);
-      const thumbGap = 2;
-      const thumbW = (leftW - thumbGap * 2) / 3;
-      const thumbH = 17.5;
-      const thumbY = y + mainPhotoH + 2.5;
-
-      extraPhotos.forEach((p, idx) => {
-        const tx = 14 + idx * (thumbW + thumbGap);
+      const extra = photos.slice(1, 4);
+      const gap = 3;
+      const thumbW = (cw - gap * 2) / 3;
+      const thumbH = 22;
+      extra.forEach((p, idx) => {
+        const tx = M + idx * (thumbW + gap);
         doc.setFillColor(LIGHT_GRAY);
         doc.setDrawColor(BORDER_GRAY);
-        doc.roundedRect(tx, thumbY, thumbW, thumbH, 1.5, 1.5, 'FD');
+        doc.roundedRect(tx, y, thumbW, thumbH, 2, 2, 'FD');
         try {
-          doc.addImage(p, 'JPEG', tx + 0.5, thumbY + 0.5, thumbW - 1, thumbH - 1, undefined, 'FAST');
+          doc.addImage(p, 'JPEG', tx + 0.6, y + 0.6, thumbW - 1.2, thumbH - 1.2, undefined, 'FAST');
         } catch {
           // ignore
         }
       });
+      y += thumbH + 8;
+    } else {
+      y += 4;
     }
-
-    // Carte Prix Estimé à droite
-    doc.setFillColor(255, 247, 237);
-    doc.setDrawColor(ORANGE);
-    doc.setLineWidth(0.6);
-    doc.roundedRect(rightX, y, rightW, blockH, 3, 3, 'FD');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(SLATE);
-    doc.text('COTE & VALEUR ESTIMÉE', rightX + rightW / 2, y + 9, { align: 'center' });
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(23);
-    doc.setTextColor(ORANGE);
-    doc.text(formatPrice(result.prixFinal), rightX + rightW / 2, y + 21, { align: 'center' });
-
-    doc.setFillColor(WHITE);
-    doc.setDrawColor(253, 186, 116);
-    doc.roundedRect(rightX + 8, y + 24.5, rightW - 16, 6.5, 2, 2, 'FD');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(DARK);
-    doc.text(`Base pondérée : ${formatPrice(result.prixBase)}`, rightX + rightW / 2, y + 29, { align: 'center' });
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(SLATE);
-    doc.text('Fourchette de transaction :', rightX + rightW / 2, y + 38, { align: 'center' });
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(DARK);
-    doc.text(
-      `${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`,
-      rightX + rightW / 2,
-      y + 43.5,
-      { align: 'center' }
-    );
-
-    doc.setDrawColor(254, 215, 170);
-    doc.line(rightX + 6, y + 47.5, rightX + rightW - 6, y + 47.5);
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(7.5);
-    doc.setTextColor(SLATE);
-    doc.text(`Positionnement : ${result.positionMarche}`, rightX + 6, y + 53);
-
-    const scoreColor = result.scoreConfiance >= 70 ? '#10b981' : result.scoreConfiance >= 50 ? ORANGE : '#ef4444';
-    doc.text(`Indice de confiance : ${result.scoreConfiance}/100`, rightX + 6, y + (photos.length > 1 ? 61 : 56.5));
-    if (photos.length > 1) {
-      doc.setFillColor(226, 232, 240);
-      doc.roundedRect(rightX + 6, y + 63.5, rightW - 12, 3.5, 1.5, 1.5, 'F');
-      doc.setFillColor(scoreColor);
-      doc.roundedRect(rightX + 6, y + 63.5, ((rightW - 12) * result.scoreConfiance) / 100, 3.5, 1.5, 1.5, 'F');
-    }
-
-    y += blockH + 7;
   } else {
-    // Sans photo
-    doc.setFillColor(255, 247, 237);
-    doc.setDrawColor(ORANGE);
-    doc.setLineWidth(0.6);
-    doc.roundedRect(14, y, w - 28, 38, 3, 3, 'FD');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(SLATE);
-    doc.text('PRIX FINAL ESTIMÉ DU VÉHICULE (MÉTHODE HYBRIDE)', w / 2, y + 8.5, { align: 'center' });
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(26);
-    doc.setTextColor(ORANGE);
-    doc.text(formatPrice(result.prixFinal), w / 2, y + 20, { align: 'center' });
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9.5);
-    doc.setTextColor(DARK);
-    doc.text(
-      `Fourchette : ${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`,
-      w / 2,
-      y + 28,
-      { align: 'center' }
-    );
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(GRAY);
-    doc.text(
-      `Prix de base pondéré : ${formatPrice(result.prixBase)}   •   Positionnement marché : ${result.positionMarche}   •   Confiance : ${result.scoreConfiance}/100`,
-      w / 2,
-      y + 34.5,
-      { align: 'center' }
-    );
-
-    y += 45;
+    y += 10;
   }
 
-  // ── FICHE TECHNIQUE DU VÉHICULE (GRILLE 2 COLONNES) ──
-  y = addSectionTitle(doc, 'Fiche technique & État déclaré du véhicule', y, `État : ${ajustements.etatGeneral}`);
+  // Bloc Prix Estimé Aéré
+  const priceCardH = 44;
+  doc.setFillColor(255, 247, 237);
+  doc.setDrawColor(ORANGE);
+  doc.setLineWidth(0.6);
+  doc.roundedRect(M, y, cw, priceCardH, 3, 3, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(SLATE);
+  doc.text('VALEUR ESTIMÉE DU VÉHICULE', w / 2, y + 9.5, { align: 'center' });
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(26);
+  doc.setTextColor(ORANGE);
+  doc.text(formatPrice(result.prixFinal), w / 2, y + 22, { align: 'center' });
+
+  const totalSourcesCount =
+    sources.coteOfficielle.length +
+    sources.annoncesParticulier.length +
+    sources.annoncesPro.length +
+    sources.rachatCash.length;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(DARK);
+  doc.text(
+    `Fourchette : ${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}   •   Confiance : ${result.scoreConfiance}/100`,
+    w / 2,
+    y + 32,
+    { align: 'center' }
+  );
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(GRAY);
+  doc.text(
+    `Positionnement : ${result.positionMarche}   •   Sources analysées : ${totalSourcesCount}`,
+    w / 2,
+    y + 38.5,
+    { align: 'center' }
+  );
+
+  // Disclaimer complet sur la page de garde (en bas, bien encadré)
+  const discLines = doc.splitTextToSize(DISCLAIMER, cw - 10);
+  const discH = discLines.length * 3.3 + 8;
+  const discY = h - M - discH;
+  doc.setFillColor(LIGHT_GRAY);
+  doc.setDrawColor(BORDER_GRAY);
+  doc.setLineWidth(0.3);
+  doc.roundedRect(M, discY, cw, discH, 2, 2, 'FD');
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(6.5);
+  doc.setTextColor(GRAY);
+  doc.text(discLines, M + 5, discY + 5.5);
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGE 2 — CARACTÉRISTIQUES & SOURCES COMPARABLES CLIQUABLES
+  // ═══════════════════════════════════════════════════════════
+  doc.addPage();
+  y = 24;
+
+  const ensureSpace = (needed: number) => {
+    if (y + needed > h - 22) {
+      doc.addPage();
+      y = 24;
+    }
+  };
+
+  y = addSectionTitle(doc, 'Fiche technique du véhicule', y, `État : ${ajustements.etatGeneral}`);
 
   const specsLeft: [string, string][] = [
     ['Marque / Modèle', `${vehicleData.marque || '—'} ${vehicleData.modele || ''}`.trim()],
     ['Version / Finition', vehicleData.version || 'Standard'],
-    ['Année de mise en circ.', String(vehicleData.annee)],
-    ['Kilométrage déclaré', `${vehicleData.kilometrage.toLocaleString('fr-FR')} km`],
+    ['Année', String(vehicleData.annee || '—')],
+    ['Kilométrage', `${vehicleData.kilometrage.toLocaleString('fr-FR')} km`],
     ['Motorisation', vehicleData.motorisation],
   ];
 
   const specsRight: [string, string][] = [
     ['Boîte de vitesses', vehicleData.boite],
-    ['Carrosserie / Portes', `${vehicleData.carrosserie} (${vehicleData.nombrePortes} portes)`],
+    ['Carrosserie', `${vehicleData.carrosserie} (${vehicleData.nombrePortes || 5} p.)`],
     ['Couleur', vehicleData.couleur || 'Non renseignée'],
     ['État général', ajustements.etatGeneral],
-    ['Sinistre / Accident', ajustements.accidentDeclare],
+    ['Sinistre déclaré', ajustements.accidentDeclare],
   ];
 
-  const colW = (w - 32) / 2;
+  const colW = (cw - 6) / 2;
   const startGridY = y;
-  specsLeft.forEach(([lbl, val], i) => {
-    const rowY = startGridY + i * 8.5;
-    if (i % 2 === 0) {
-      doc.setFillColor(LIGHT_GRAY);
-      doc.rect(14, rowY - 1, colW, 8, 'F');
-    }
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(GRAY);
-    doc.text(lbl, 16, rowY + 4.3);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(DARK);
-    doc.text(val.slice(0, 28), 14 + colW - 2, rowY + 4.3, { align: 'right' });
-  });
+  const drawSpecCol = (items: [string, string][], startX: number) => {
+    items.forEach(([lbl, val], i) => {
+      const rowY = startGridY + i * 8.5;
+      if (i % 2 === 0) {
+        doc.setFillColor(LIGHT_GRAY);
+        doc.rect(startX, rowY - 1, colW, 8, 'F');
+      }
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(GRAY);
+      doc.text(lbl, startX + 2.5, rowY + 4.3);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(DARK);
+      const safeVal = val.length > 26 ? val.slice(0, 24) + '…' : val;
+      doc.text(safeVal, startX + colW - 2.5, rowY + 4.3, { align: 'right' });
+    });
+  };
+  drawSpecCol(specsLeft, M);
+  drawSpecCol(specsRight, M + colW + 6);
+  y = startGridY + specsLeft.length * 8.5 + 8;
 
-  specsRight.forEach(([lbl, val], i) => {
-    const rowY = startGridY + i * 8.5;
-    const rx = 18 + colW;
-    if (i % 2 === 0) {
-      doc.setFillColor(LIGHT_GRAY);
-      doc.rect(rx, rowY - 1, colW, 8, 'F');
-    }
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(GRAY);
-    doc.text(lbl, rx + 2, rowY + 4.3);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(DARK);
-    doc.text(val.slice(0, 28), rx + colW - 2, rowY + 4.3, { align: 'right' });
-  });
-
-  y = startGridY + specsLeft.length * 8.5 + 6;
-
-  // ── SYNTHÈSE DES 4 FAMILLES DE SOURCES SUR LA PAGE 1 ──
-  y = addSectionTitle(doc, 'Synthèse de la pondération hybride', y, '4 familles de sources croisées');
-
+  // Pondération
+  ensureSpace(42);
+  y = addSectionTitle(doc, 'Pondération des sources', y);
   const cards = [
     {
-      title: 'Cote officielle',
+      title: 'Cotes réf.',
       weight: `${ponderations.coteOfficielle}%`,
-      avg: result.detailsSources.coteOfficielle.moyenne > 0 ? formatPrice(result.detailsSources.coteOfficielle.moyenne) : '—',
-      contrib: `Contrib. ${formatPrice(result.detailsSources.coteOfficielle.contribution)}`,
+      avg: result.detailsSources.coteOfficielle.moyenne > 0 ? formatPrice(result.detailsSources.coteOfficielle.moyenne) : 'Non utilisé',
+      count: `${sources.coteOfficielle.length} cote(s)`,
     },
     {
       title: 'Particuliers',
       weight: `${ponderations.annoncesParticulier}%`,
-      avg: result.detailsSources.annoncesParticulier.moyenne > 0 ? formatPrice(result.detailsSources.annoncesParticulier.moyenne) : '—',
-      contrib: `Contrib. ${formatPrice(result.detailsSources.annoncesParticulier.contribution)}`,
+      avg: result.detailsSources.annoncesParticulier.moyenne > 0 ? formatPrice(result.detailsSources.annoncesParticulier.moyenne) : 'Non utilisé',
+      count: `${sources.annoncesParticulier.length} ann.`,
     },
     {
-      title: 'Pros / Concessions',
+      title: 'Pros (-10%)',
       weight: `${ponderations.annoncesPro}%`,
-      avg: result.detailsSources.annoncesPro.moyenne > 0 ? formatPrice(result.detailsSources.annoncesPro.moyenne) : '—',
-      contrib: `Contrib. ${formatPrice(result.detailsSources.annoncesPro.contribution)}`,
+      avg: result.detailsSources.annoncesPro.moyenne > 0 ? formatPrice(result.detailsSources.annoncesPro.moyenne) : 'Non utilisé',
+      count: `${sources.annoncesPro.length} ann.`,
     },
     {
-      title: 'Rachat cash',
+      title: 'Rachat (+15%)',
       weight: `${ponderations.rachatCash}%`,
-      avg: result.detailsSources.rachatCash.moyenne > 0 ? formatPrice(result.detailsSources.rachatCash.moyenne) : '—',
-      contrib: `Contrib. ${formatPrice(result.detailsSources.rachatCash.contribution)}`,
+      avg: result.detailsSources.rachatCash.moyenne > 0 ? formatPrice(result.detailsSources.rachatCash.moyenne) : 'Non utilisé',
+      count: `${sources.rachatCash.length} offre(s)`,
     },
   ];
-
-  const cardW = (w - 28 - 9) / 4;
+  const cardW = (cw - 9) / 4;
   cards.forEach((c, idx) => {
-    const cx = 14 + idx * (cardW + 3);
+    const cx = M + idx * (cardW + 3);
     doc.setFillColor(LIGHT_GRAY);
     doc.setDrawColor(BORDER_GRAY);
     doc.setLineWidth(0.3);
     doc.roundedRect(cx, y, cardW, 24, 2, 2, 'FD');
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(7.5);
+    doc.setFontSize(7.2);
     doc.setTextColor(SLATE);
     doc.text(c.title, cx + 2.5, y + 6);
 
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(7.5);
     doc.setTextColor(ORANGE);
     doc.text(c.weight, cx + cardW - 2.5, y + 6, { align: 'right' });
 
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10.5);
+    doc.setFontSize(9.5);
     doc.setTextColor(DARK);
     doc.text(c.avg, cx + 2.5, y + 13.5);
 
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
+    doc.setFontSize(6.8);
     doc.setTextColor(GRAY);
-    doc.text(c.contrib, cx + 2.5, y + 19.5);
+    doc.text(c.count, cx + 2.5, y + 19.8);
   });
-
   y += 30;
 
-  if (y < h - 38) {
-    const scoreLabel =
-      result.scoreConfiance >= 70
-        ? 'Fiabilité élevée (sources croisées et homogènes)'
-        : result.scoreConfiance >= 50
-        ? 'Fiabilité correcte (recommandé : enrichir les comparables)'
-        : 'Fiabilité limitée (peu de sources renseignées)';
-    doc.setFillColor(LIGHT_GRAY);
-    doc.setDrawColor(BORDER_GRAY);
-    doc.roundedRect(14, y, w - 28, 16, 2, 2, 'FD');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(DARK);
-    doc.text(`Indice de confiance global : ${result.scoreConfiance}% — ${scoreLabel}`, 18, y + 6.5);
-
-    doc.setFillColor(226, 232, 240);
-    doc.roundedRect(18, y + 9.5, w - 36, 3.5, 1.5, 1.5, 'F');
-    const scoreColor = result.scoreConfiance >= 70 ? '#10b981' : result.scoreConfiance >= 50 ? ORANGE : '#ef4444';
-    doc.setFillColor(scoreColor);
-    doc.roundedRect(18, y + 9.5, ((w - 36) * result.scoreConfiance) / 100, 3.5, 1.5, 1.5, 'F');
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // PAGE 2 — MÉTHODOLOGIE & SOURCES CLIQUABLES
-  // ═══════════════════════════════════════════════════════════
-  doc.addPage();
-  y = 20;
-
-  y = addSectionTitle(doc, 'Méthodologie & Traçabilité des Sources Cliquables', y, 'Cliquez sur les badges bleus pour ouvrir les annonces');
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(SLATE);
-  const methText =
-    'MonPrixJuste combine quatre catégories de références : la cote officielle (La Centrale, Argus), les annonces de particuliers ' +
-    '(Leboncoin, ParuVendu), les annonces professionnelles (La Centrale, AutoScout24 — corrigées de la marge pro de -5%) ' +
-    'et les offres de reprise/rachat immédiat (Vendezvotrevoiture.fr, etc.). Chaque source ci-dessous comporte un bouton « Source cliquable » permettant d\'accéder directement à l\'annonce ou au portail utilisé.';
-  const methLines = doc.splitTextToSize(methText, w - 28);
-  doc.text(methLines, 14, y);
-  y += methLines.length * 4.5 + 5;
-
-  const ensureSpace = (needed: number) => {
-    if (y + needed > h - 24) {
-      doc.addPage();
-      y = 20;
-    }
-  };
-
-  // 1. Cotes officielles
+  // Sources détaillées avec liens cliquables
   if (sources.coteOfficielle.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Cotes officielles (${sources.coteOfficielle.length})`,
-      y,
-      `Pondération : ${ponderations.coteOfficielle}%`
-    );
-
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Cotes de référence (${sources.coteOfficielle.length})`, y, `Pondération : ${ponderations.coteOfficielle}%`);
     for (const c of sources.coteOfficielle) {
-      ensureSpace(17);
+      ensureSpace(20);
       const hasLink = Boolean(c.lien && c.lien.trim() !== '');
-      const label = `${c.source || 'La Centrale'}${c.commentaire ? ` — ${c.commentaire}` : ''}`;
-
-      doc.setFillColor(LIGHT_GRAY);
-      doc.setDrawColor(BORDER_GRAY);
-      doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 14.5, 2, 2, 'FD');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(DARK);
-      doc.text(label.slice(0, 62), 17, y + 5.2);
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
-      doc.setTextColor(ORANGE);
-      doc.text(formatPrice(c.prix), w - 17, y + 5.2, { align: 'right' });
-
       const targetUrl = hasLink ? c.lien! : getAutoPlatformFallbackUrl(c.source, 'cote');
       const badgeLabel = hasLink
-        ? `Source cliquable : consulter la cote (${formatShortUrl(c.lien!)}) ↗`
-        : `Plateforme de cote : ${formatShortUrl(targetUrl)} ↗`;
-      addClickableSourceBadge(doc, 17, y + 7.2, badgeLabel, targetUrl, hasLink);
+        ? `Source : ${formatShortUrl(c.lien!)} ↗`
+        : `Portail : ${formatShortUrl(targetUrl)} ↗`;
 
-      y += 17;
+      doc.setFillColor(LIGHT_GRAY);
+      doc.setDrawColor(BORDER_GRAY);
+      doc.setLineWidth(0.25);
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(DARK);
+      doc.text((c.source || 'Cote officielle').slice(0, 52), M + 3.5, y + 5.5);
+
+      doc.setTextColor(ORANGE);
+      doc.text(formatPrice(c.prix), w - M - 3.5, y + 5.5, { align: 'right' });
+
+      addClickableSourceBadge(doc, M + 3.5, y + 8.5, badgeLabel, targetUrl, hasLink);
+      y += 19;
     }
     y += 3;
   }
 
-  // 2. Annonces particuliers
   if (sources.annoncesParticulier.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Annonces particuliers comparables (${sources.annoncesParticulier.length})`,
-      y,
-      `Pondération : ${ponderations.annoncesParticulier}%`
-    );
-
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Annonces particuliers (${sources.annoncesParticulier.length})`, y, `Pondération : ${ponderations.annoncesParticulier}%`);
     for (const a of sources.annoncesParticulier) {
-      ensureSpace(17);
+      ensureSpace(20);
       const hasLink = Boolean(a.lien && a.lien.trim() !== '');
-      const label = `Annonce particulier — Année ${a.annee} — ${a.kilometrage.toLocaleString('fr-FR')} km`;
+      const targetUrl = hasLink ? a.lien : getAutoPlatformFallbackUrl('', 'particulier');
+      const badgeLabel = hasLink
+        ? `Annonce : ${formatShortUrl(a.lien)} ↗`
+        : `Rechercher sur ${formatShortUrl(targetUrl)} ↗`;
 
       doc.setFillColor(LIGHT_GRAY);
       doc.setDrawColor(BORDER_GRAY);
       doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 14.5, 2, 2, 'FD');
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
 
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(DARK);
-      doc.text(label, 17, y + 5.2);
+      doc.text(`Particulier — ${a.annee} • ${a.kilometrage.toLocaleString('fr-FR')} km`, M + 3.5, y + 5.5);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
       doc.setTextColor(ORANGE);
-      doc.text(formatPrice(a.prix), w - 17, y + 5.2, { align: 'right' });
+      doc.text(formatPrice(a.prix), w - M - 3.5, y + 5.5, { align: 'right' });
 
-      const targetUrl = hasLink ? a.lien : getAutoPlatformFallbackUrl('Leboncoin', 'particulier');
-      const badgeLabel = hasLink
-        ? `Source cliquable : ouvrir l'annonce (${formatShortUrl(a.lien)}) ↗`
-        : `Plateforme source : ${formatShortUrl(targetUrl)} ↗`;
-      addClickableSourceBadge(doc, 17, y + 7.2, badgeLabel, targetUrl, hasLink);
-
-      y += 17;
+      addClickableSourceBadge(doc, M + 3.5, y + 8.5, badgeLabel, targetUrl, hasLink);
+      y += 19;
     }
     y += 3;
   }
 
-  // 3. Annonces professionnelles
   if (sources.annoncesPro.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Annonces professionnelles (${sources.annoncesPro.length})`,
-      y,
-      `Pondération : ${ponderations.annoncesPro}% • Correction marge pro -5%`
-    );
-
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Annonces professionnels (${sources.annoncesPro.length})`, y, `Pondération : ${ponderations.annoncesPro}% • Décote -10%`);
     for (const a of sources.annoncesPro) {
-      ensureSpace(17);
+      ensureSpace(20);
       const hasLink = Boolean(a.lien && a.lien.trim() !== '');
-      const label = `${a.source || 'Professionnel'} — Année ${a.annee} — ${a.kilometrage.toLocaleString('fr-FR')} km`;
-
-      doc.setFillColor(LIGHT_GRAY);
-      doc.setDrawColor(BORDER_GRAY);
-      doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 14.5, 2, 2, 'FD');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(DARK);
-      doc.text(label, 17, y + 5.2);
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
-      doc.setTextColor(ORANGE);
-      doc.text(`${formatPrice(a.prix)} (${formatPrice(a.prix * 0.95)} net)`, w - 17, y + 5.2, { align: 'right' });
-
       const targetUrl = hasLink ? a.lien! : getAutoPlatformFallbackUrl(a.source, 'pro');
       const badgeLabel = hasLink
-        ? `Source cliquable : ouvrir l'annonce pro (${formatShortUrl(a.lien!)}) ↗`
-        : `Plateforme source : ${formatShortUrl(targetUrl)} ↗`;
-      addClickableSourceBadge(doc, 17, y + 7.2, badgeLabel, targetUrl, hasLink);
-
-      y += 17;
-    }
-    y += 3;
-  }
-
-  // 4. Offres de rachat cash
-  if (sources.rachatCash.length > 0) {
-    ensureSpace(24);
-    y = addSectionTitle(
-      doc,
-      `Offres de reprise / rachat cash (${sources.rachatCash.length})`,
-      y,
-      `Pondération : ${ponderations.rachatCash}%`
-    );
-
-    for (const r of sources.rachatCash) {
-      ensureSpace(17);
-      const hasLink = Boolean(r.lien && r.lien.trim() !== '');
-      const label = `${r.societe || 'Vendezvotrevoiture.fr'} — ${formatDate(r.date)}${r.conditions ? ` (${r.conditions})` : ''}`;
+        ? `Annonce ${a.source || ''} : ${formatShortUrl(a.lien!)} ↗`
+        : `Portail : ${formatShortUrl(targetUrl)} ↗`;
 
       doc.setFillColor(LIGHT_GRAY);
       doc.setDrawColor(BORDER_GRAY);
       doc.setLineWidth(0.25);
-      doc.roundedRect(14, y, w - 28, 14.5, 2, 2, 'FD');
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
 
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(DARK);
-      doc.text(label.slice(0, 62), 17, y + 5.2);
+      doc.text(`${a.source || 'Pro'} — ${a.annee} • ${a.kilometrage.toLocaleString('fr-FR')} km`, M + 3.5, y + 5.5);
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
       doc.setTextColor(ORANGE);
-      doc.text(formatPrice(r.prix), w - 17, y + 5.2, { align: 'right' });
+      doc.text(`${formatPrice(a.prix)} (${formatPrice(a.prix * 0.9)} net)`, w - M - 3.5, y + 5.5, { align: 'right' });
 
+      addClickableSourceBadge(doc, M + 3.5, y + 8.5, badgeLabel, targetUrl, hasLink);
+      y += 19;
+    }
+    y += 3;
+  }
+
+  if (sources.rachatCash.length > 0) {
+    ensureSpace(26);
+    y = addSectionTitle(doc, `Offres de rachat cash (${sources.rachatCash.length})`, y, `Pondération : ${ponderations.rachatCash}% • +15%`);
+    for (const r of sources.rachatCash) {
+      ensureSpace(20);
+      const hasLink = Boolean(r.lien && r.lien.trim() !== '');
       const targetUrl = hasLink ? r.lien! : getAutoPlatformFallbackUrl(r.societe, 'rachat');
       const badgeLabel = hasLink
-        ? `Source cliquable : voir l'offre (${formatShortUrl(r.lien!)}) ↗`
-        : `Plateforme de reprise : ${formatShortUrl(targetUrl)} ↗`;
-      addClickableSourceBadge(doc, 17, y + 7.2, badgeLabel, targetUrl, hasLink);
+        ? `Offre : ${formatShortUrl(r.lien!)} ↗`
+        : `Portail : ${formatShortUrl(targetUrl)} ↗`;
 
-      y += 17;
+      doc.setFillColor(LIGHT_GRAY);
+      doc.setDrawColor(BORDER_GRAY);
+      doc.setLineWidth(0.25);
+      doc.roundedRect(M, y, cw, 16.5, 2, 2, 'FD');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(DARK);
+      doc.text(`${r.societe || 'Reprise pro'}${r.date ? ` — ${formatDate(r.date)}` : ''}`, M + 3.5, y + 5.5);
+
+      doc.setTextColor(ORANGE);
+      doc.text(`${formatPrice(r.prix)} (équiv. ${formatPrice(r.prix * 1.15)} part.)`, w - M - 3.5, y + 5.5, { align: 'right' });
+
+      addClickableSourceBadge(doc, M + 3.5, y + 8.5, badgeLabel, targetUrl, hasLink);
+      y += 19;
     }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // PAGE 3 — RÉSULTAT, AJUSTEMENTS & CONSEILS DE VENTE
+  // PAGE 3 — SYNTHÈSE FINANCIÈRE, AJUSTEMENTS & CONSEILS NÉGOCIATION
   // ═══════════════════════════════════════════════════════════
   doc.addPage();
-  y = 20;
+  y = 24;
 
-  y = addSectionTitle(doc, 'Synthèse financière de l\'estimation', y);
+  y = addSectionTitle(doc, 'Synthèse financière & Détail du calcul', y);
   const resultRows: [string, string, boolean][] = [
     ['Prix de base pondéré (avant ajustements)', formatPrice(result.prixBase), false],
-    ['Prix final estimé', formatPrice(result.prixFinal), true],
-    ['Fourchette basse (prix plancher conseillé)', formatPrice(result.fourchetteBasse), false],
-    ['Fourchette haute (prix d\'affichage optimiste)', formatPrice(result.fourchetteHaute), false],
-    ['Positionnement sur le marché', result.positionMarche, false],
+    ['Ajustement kilométrique appliqué', `${ajustements.kilometrageBonus >= 0 ? '+' : ''}${ajustements.kilometrageBonus.toFixed(1)}%`, false],
+    ['Valeur finale estimée', formatPrice(result.prixFinal), true],
+    ['Fourchette basse / haute', `${formatPrice(result.fourchetteBasse)} — ${formatPrice(result.fourchetteHaute)}`, false],
+    ['Positionnement marché', result.positionMarche, false],
   ];
   for (const [label, value, hl] of resultRows) {
+    ensureSpace(12);
     y = addRow(doc, label, value, y, hl);
   }
-  y += 5;
+  y += 6;
 
   if (result.ajustementsAppliques.length > 0) {
+    ensureSpace(22);
     y = addSectionTitle(doc, 'Ajustements qualitatifs & équipements appliqués', y);
     for (const aj of result.ajustementsAppliques) {
+      ensureSpace(11);
       const sign = aj.valeur >= 0 ? '+' : '';
       const val = `${sign}${aj.valeur.toFixed(1)}% (${sign}${Math.round(aj.impact).toLocaleString('fr-FR')} €)`;
       y = addRow(doc, aj.nom, val, y);
-      if (y > h - 65) break;
     }
-    y += 5;
+    y += 6;
   }
 
-  y = addSectionTitle(doc, 'Conseils personnalisés pour la mise en vente', y);
-  const conseils = getConseilsVendeur(result, vehicleData, ajustements);
+  // Conseils de négociation adaptés au profil (Vendeur ou Acheteur) et aux critères remplis
+  ensureSpace(30);
+  const sectionTitleConseils =
+    role === 'acheteur'
+      ? 'Conseils de négociation — Profil Acheteur'
+      : 'Conseils de négociation — Profil Vendeur';
+  y = addSectionTitle(doc, sectionTitleConseils, y, 'Personnalisés selon vos critères');
+
+  const conseils =
+    role === 'acheteur'
+      ? getConseilsAcheteurAuto(result, vehicleData, ajustements, sources)
+      : getConseilsVendeurAuto(result, vehicleData, ajustements, sources);
+
   for (const conseil of conseils) {
-    const lines = doc.splitTextToSize(`• ${conseil}`, w - 34);
-    const boxH = lines.length * 4.5 + 4;
-    if (y + boxH > h - 45) break;
+    const lines = doc.splitTextToSize(`• ${conseil}`, cw - 8);
+    const boxH = lines.length * 4.5 + 5;
+    ensureSpace(boxH + 3);
     doc.setFillColor(LIGHT_GRAY);
     doc.setDrawColor(BORDER_GRAY);
-    doc.roundedRect(14, y, w - 28, boxH, 1.5, 1.5, 'FD');
+    doc.roundedRect(M, y, cw, boxH, 1.5, 1.5, 'FD');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(DARK);
-    doc.text(lines, 17, y + 4.2);
-    y += boxH + 2.5;
+    doc.text(lines, M + 4, y + 4.8);
+    y += boxH + 3;
   }
 
+  // Bandeau portails cliquables avec retour à la ligne automatique (zéro hors-champ)
+  const refLinks = [
+    { label: 'LaCentrale.fr ↗', url: 'https://www.lacentrale.fr/' },
+    { label: 'Vendezvotrevoiture.fr ↗', url: 'https://www.vendezvotrevoiture.fr/' },
+    { label: 'Leboncoin.fr ↗', url: 'https://www.leboncoin.fr/c/voitures' },
+    { label: 'AutoScout24.fr ↗', url: 'https://www.autoscout24.fr/' },
+    { label: 'Histovec (Gouv) ↗', url: 'https://histovec.interieur.gouv.fr/histovec/accueil' },
+  ];
+  ensureSpace(24);
   y += 3;
-  if (y < h - 55) {
-    y = addSectionTitle(doc, 'Stratégie de négociation', y);
-    const negoConseils = getConseilsNegociation(result, ajustements);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    for (const conseil of negoConseils) {
-      const lines = doc.splitTextToSize(`• ${conseil}`, w - 32);
-      if (y + lines.length * 4.5 > h - 38) break;
-      doc.setTextColor(SLATE);
-      doc.text(lines, 16, y + 3);
-      y += lines.length * 4.5 + 2.5;
-    }
-  }
+  doc.setFillColor(BLUE_BG);
+  doc.setDrawColor(191, 219, 254);
+  doc.roundedRect(M, y, cw, 22, 2, 2, 'FD');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(DARK);
+  doc.text('Portails automobiles & historique officiel :', M + 4, y + 5);
 
-  // Bandeau de ressources officielles cliquables en bas de page 3
-  if (y < h - 34) {
-    const refY = Math.max(y + 2, h - 34);
-    doc.setFillColor(BLUE_BG);
-    doc.setDrawColor(191, 219, 254);
-    doc.roundedRect(14, refY, w - 28, 12, 2, 2, 'FD');
+  let bx = M + 4;
+  let by = y + 7.5;
+  for (const link of refLinks) {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7.5);
-    doc.setTextColor(DARK);
-    doc.text('Portails de référence & historique officiel :', 17, refY + 4.5);
-
-    addClickableSourceBadge(doc, 17, refY + 5.5, 'LaCentrale.fr ↗', 'https://www.lacentrale.fr/', true);
-    addClickableSourceBadge(doc, 49, refY + 5.5, 'Vendezvotrevoiture.fr ↗', 'https://www.vendezvotrevoiture.fr/', true);
-    addClickableSourceBadge(doc, 95, refY + 5.5, 'Leboncoin.fr ↗', 'https://www.leboncoin.fr/', true);
-    addClickableSourceBadge(doc, 125, refY + 5.5, 'AutoScout24.fr ↗', 'https://www.autoscout24.fr/', true);
-    addClickableSourceBadge(doc, 161, refY + 5.5, 'Histovec (Gouv) ↗', 'https://histovec.interieur.gouv.fr/histovec/accueil', true);
+    const neededW = Math.min(doc.getTextWidth(link.label) + 8, 92);
+    if (bx + neededW > w - M - 4) {
+      bx = M + 4;
+      by += 7;
+    }
+    const usedW = addClickableSourceBadge(doc, bx, by, link.label, link.url, true);
+    bx += usedW + 3;
   }
 
-  // Pass final pour numéroter toutes les pages exactement
+  // Pass final pour numéroter les pages 2..N (la page 1 est la page de garde)
   const totalPages = doc.getNumberOfPages();
-  for (let p = 1; p <= totalPages; p++) {
+  for (let p = 2; p <= totalPages; p++) {
     doc.setPage(p);
     addPageHeader(doc, p, totalPages, refCode);
     addPageFooter(doc);
@@ -795,73 +709,94 @@ export function generateAutoPDF(
   doc.save(filename);
 }
 
-function getConseilsVendeur(result: CalculationResult, vehicleData: VehicleData, ajustements: Ajustements): string[] {
+function getConseilsVendeurAuto(
+  result: CalculationResult,
+  vehicleData: VehicleData,
+  ajustements: Ajustements,
+  sources: Sources
+): string[] {
   const conseils: string[] = [];
-  const ratio = result.prixFinal / result.prixBase;
   const ageVehicule = new Date().getFullYear() - vehicleData.annee;
 
-  if (result.scoreConfiance < 50) {
-    conseils.push(
-      'Votre score de confiance est inférieur à 50%. Ajoutez une cote La Centrale, 2 annonces Leboncoin et une offre Vendezvotrevoiture.fr pour consolider votre prix.'
-    );
-  }
-
-  if (ajustements.accidentDeclare !== 'Aucun') {
-    conseils.push(
-      `Votre véhicule a un sinistre déclaré (${ajustements.accidentDeclare}). Soyez transparent dans votre annonce et présentez le rapport d'expertise ou les factures de réparation.`
-    );
-  }
-
-  if (vehicleData.kilometrage > 150000) {
-    conseils.push(
-      'Au-delà de 150 000 km, préparez le carnet d\'entretien complet, le rapport Histovec et les factures des pièces d\'usure (distribution, embrayage, freins).'
-    );
-  } else if (vehicleData.kilometrage < 50000) {
-    conseils.push(
-      'Votre faible kilométrage est un atout majeur : mettez-le en avant dès le titre de l\'annonce et certifiez-le avec le rapport officiel Histovec.'
-    );
-  }
-
-  if (ageVehicule >= 4) {
-    conseils.push(
-      'Pour toute vente à un particulier d\'un véhicule de plus de 4 ans, un contrôle technique de moins de 6 mois est légalement obligatoire.'
-    );
-  }
-
-  if (ratio > 1.08) {
-    conseils.push(
-      'Votre véhicule se situe au-dessus de la moyenne grâce à ses options et son état. Détaillez chaque équipement optionnel et l\'historique d\'entretien dans l\'annonce.'
-    );
-  }
-
   conseils.push(
-    `Prix d'annonce conseillé : entre ${formatPrice(result.prixFinal * 1.03)} et ${formatPrice(result.prixFinal * 1.06)} pour conserver une marge de négociation de 3 à 6%.`
+    `Prix d'affichage conseillé en annonce : entre ${formatPrice(result.prixFinal * 1.03)} et ${formatPrice(result.prixFinal * 1.06)} pour conserver une marge de négociation de 3 à 6%, tout en gardant ${formatPrice(result.fourchetteBasse)} comme prix plancher.`
   );
 
-  return conseils;
-}
-
-function getConseilsNegociation(result: CalculationResult, ajustements: Ajustements): string[] {
-  const conseils: string[] = [];
-
-  conseils.push(
-    `La fourchette estimée s'étend de ${formatPrice(result.fourchetteBasse)} à ${formatPrice(result.fourchetteHaute)}. Ne descendez pas sous ${formatPrice(result.fourchetteBasse)}.`
-  );
-
-  if (result.scoreConfiance >= 70) {
+  if (sources.rachatCash.length > 0 && result.detailsSources.rachatCash.moyenne > 0) {
     conseils.push(
-      'Présentez ce dossier PDF avec ses annonces sources cliquables lors de l\'essai du véhicule : cela démontre le sérieux de votre chiffrage.'
+      `Vous disposez d'une référence de rachat cash (${formatPrice(result.detailsSources.rachatCash.moyenne)}) : utilisez ce montant comme filet de sécurité pour refuser les offres de particuliers trop basses.`
     );
   }
 
   if (ajustements.garantieConstructeur) {
     conseils.push(
-      'La garantie constructeur transférable rassure fortement l\'acheteur particulier et limite les demandes de rabais.'
+      'Garantie constructeur active : mettez-la en avant dès le début de la discussion pour bloquer les demandes de rabais liées au risque mécanique.'
+    );
+  }
+
+  if (ajustements.accidentDeclare !== 'Aucun') {
+    conseils.push(
+      `Sinistre déclaré (${ajustements.accidentDeclare}) : jouez la transparence avec les factures de réparation et le rapport Histovec afin d'éviter une renégociation brutale sur place.`
+    );
+  }
+
+  if (vehicleData.kilometrage > 140000) {
+    conseils.push(
+      `À ${vehicleData.kilometrage.toLocaleString('fr-FR')} km, anticipez les questions sur l'entretien coûteux (distribution, embrayage, freins, pneus) en préparant toutes les factures.`
+    );
+  } else if (vehicleData.kilometrage < 60000) {
+    conseils.push(
+      `Faible kilométrage (${vehicleData.kilometrage.toLocaleString('fr-FR')} km) : certifiez-le par le rapport officiel Histovec pour justifier un prix ferme.`
+    );
+  }
+
+  if (ageVehicule >= 4) {
+    conseils.push(
+      'Véhicule de plus de 4 ans : fournissez un contrôle technique de moins de 6 mois et privilégiez un paiement sécurisé (virement instantané ou chèque de banque vérifié).'
+    );
+  }
+
+  return conseils;
+}
+
+function getConseilsAcheteurAuto(
+  result: CalculationResult,
+  vehicleData: VehicleData,
+  ajustements: Ajustements,
+  sources: Sources
+): string[] {
+  const conseils: string[] = [];
+
+  conseils.push(
+    `Offre cible recommandée : débutez la négociation autour de ${formatPrice(result.fourchetteBasse)} avec un prix maximum cohérent à ${formatPrice(result.prixFinal)} par rapport aux comparables relevés.`
+  );
+
+  if (vehicleData.kilometrage > 120000) {
+    conseils.push(
+      `À ${vehicleData.kilometrage.toLocaleString('fr-FR')} km, vérifiez l'historique des grosses échéances (courroie de distribution, embrayage, amortisseurs, pneus) : toute opération à prévoir justifie une décote directe.`
+    );
+  }
+
+  if (ajustements.accidentDeclare !== 'Aucun') {
+    conseils.push(
+      `Sinistre déclaré (${ajustements.accidentDeclare}) : exigez le rapport d'expertise complet et les factures de carrosserie, et négociez une décote de prudence.`
+    );
+  }
+
+  if (!ajustements.garantieConstructeur) {
+    conseils.push(
+      'Absence de garantie constructeur : prévoyez une marge de sécurité sur votre offre pour couvrir d\'éventuels aléas mécaniques après l\'achat.'
+    );
+  }
+
+  if (sources.coteOfficielle.length > 0 && result.detailsSources.coteOfficielle.moyenne > 0) {
+    conseils.push(
+      `Appuyez votre offre sur la cote de référence (${formatPrice(result.detailsSources.coteOfficielle.moyenne)}) et les annonces similaires du dossier pour objectiver votre proposition.`
     );
   }
 
   conseils.push(
-    'Privilégiez un paiement sécurisé (chèque de banque vérifié aux heures d\'ouverture ou virement instantané) lors de la cession.'
+    'Exigez systématiquement le rapport officiel Histovec partagé par le vendeur ainsi que le dernier contrôle technique avant tout versement d\'acompte.'
   );
 
   return conseils;

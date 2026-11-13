@@ -15,25 +15,25 @@ export default function MentionsLegalesPage() {
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4">
             Mentions Légales
           </h1>
-          <p className="text-lg text-gray-500">
+          <p className="text-base sm:text-lg text-gray-500">
             Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Éditeur */}
           <Card>
-            <div className="p-8">
-              <h2 className="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                <Scale className="w-6 h-6 text-[#ff6d11]" />
+            <div className="p-5 sm:p-8">
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-5 flex items-center gap-3">
+                <Scale className="w-6 h-6 text-[#ff6d11] flex-shrink-0" />
                 1. Éditeur du site
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p><strong>ARTEAN DIGITAL (SAS BASK'IN BIARRITZ)</strong></p>
-                <p>Société par Actions Simplifiée (SAS) au capital de 1 000 €</p>
+                <p>Société par Actions Simplifiée (SAS) au capital de 100 €</p>
                 <p><strong>SIRET :</strong> 92991521300011</p>
                 <p><strong>Siège social :</strong> Biarritz, France</p>
                 <p><strong>Site web :</strong> <a href="https://www.arteandigital.fr" target="_blank" rel="noopener noreferrer" className="text-[#ff6d11] hover:underline">www.arteandigital.fr</a></p>
