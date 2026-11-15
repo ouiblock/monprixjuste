@@ -301,9 +301,9 @@ export default function ImmoEstimationApp() {
                   onClick={() =>
                     document.getElementById('calculateur')?.scrollIntoView({ behavior: 'smooth' })
                   }
-                  className="flex items-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
+                  className="px-8 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
                 >
-                  Démarrer l'estimation <ChevronDown className="w-5 h-5" />
+                  J'estime
                 </button>
                 <button
                   type="button"

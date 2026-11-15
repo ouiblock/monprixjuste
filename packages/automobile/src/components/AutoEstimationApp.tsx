@@ -4,7 +4,7 @@ import SourcesSection from './SourcesSection';
 import PonderationsSection from './PonderationsSection';
 import AdjustmentsSection from './AdjustmentsSection';
 import CalculationSummary from './CalculationSummary';
-import { Calculator, RotateCcw, AlertCircle, ExternalLink } from 'lucide-react';
+import { RotateCcw, AlertCircle, ExternalLink } from 'lucide-react';
 import Tooltip from '../../../../apps/web/src/components/Tooltip';
 
 export default function AutoEstimationApp() {
@@ -62,9 +62,9 @@ export default function AutoEstimationApp() {
                   onClick={() =>
                     document.getElementById('vehicule-form')?.scrollIntoView({ behavior: 'smooth' })
                   }
-                  className="flex items-center gap-2 px-7 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
+                  className="px-8 py-4 bg-[#ff6d11] hover:bg-[#e65a00] text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
                 >
-                  Démarrer l'estimation <Calculator className="w-5 h-5" />
+                  J'estime
                 </button>
                 <button
                   type="button"
